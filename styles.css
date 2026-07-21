@@ -65,12 +65,17 @@ p, h1, h2 { margin: 0; }
   line-height: 1;
 }
 .site-header nav { display: flex; gap: clamp(24px, 3vw, 42px); }
-.site-header nav a {
+.site-header nav a,
+.site-header nav .nav-placeholder {
   color: rgba(255,255,255,.84);
   font-size: 13px;
   transition: color .2s ease;
 }
 .site-header nav a:hover { color: #fff; }
+.site-header nav .nav-placeholder {
+  color: rgba(255,255,255,.42);
+  cursor: default;
+}
 .header-cta {
   min-height: 42px;
   justify-self: end;

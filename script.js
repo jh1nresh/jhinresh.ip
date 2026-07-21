@@ -31,9 +31,9 @@ const featureData = {
   save: {
     kicker: "Consumer AI · iOS",
     title: "SAV-E",
-    thesis: "Private place memory with evidence before certainty.",
+    thesis: "A private, evidence-backed memory for saved places.",
     description:
-      "Turns social, map, web, voice, and Takeout clues into reviewable receipts and confirmed Map Stamps—without inventing places when evidence is weak.",
+      "Turns social posts, maps, web pages, voice notes, and Google Takeout into reviewable evidence and confirmed Map Stamps—without guessing.",
     stack: "SwiftUI · MapKit · App Intents · PostgreSQL",
     href: "https://sav-e-app.vercel.app",
     linkLabel: "Open SAV-E",
@@ -41,9 +41,9 @@ const featureData = {
   maiat: {
     kicker: "Agent trust · Base",
     title: "Maiat + Dojo",
-    thesis: "Reputation clearing for agent work.",
+    thesis: "Verifiable reputation for AI agent work.",
     description:
-      "Work orders, evaluator decisions, settlement receipts, and behavioral signals update who gets trusted with future work.",
+      "Dojo is the work-order surface; Maiat turns evaluator decisions, settlement receipts, and behavioral signals into reputation for future work.",
     stack: "Solidity · Foundry · TypeScript · EAS",
     href: "https://app.maiat.io",
     linkLabel: "Open Maiat",
@@ -51,32 +51,32 @@ const featureData = {
   sllr: {
     kicker: "Commerce agents · Execution",
     title: "SLL-R",
-    thesis: "Merchant-backed order execution.",
+    thesis: "Merchant-backed ordering for AI agents.",
     description:
-      "Binds an exact merchant quote to buyer consent, creates one idempotent order, tracks fulfillment, and issues a canonical receipt.",
+      "Locks an exact merchant quote to buyer consent, prevents duplicate orders, tracks fulfillment, and issues one canonical receipt.",
     stack: "TypeScript · MCP · Payments · Receipt lifecycle",
     href: "https://github.com/jh1nresh/SLL-R",
-    linkLabel: "Inspect SLL-R",
+    linkLabel: "View SLL-R Source",
   },
   match: {
     kicker: "Settlement · Merkle proof",
-    title: "Match Receipt",
-    thesis: "Proof-gated deterministic settlement.",
+    title: "Match Receipt Engine",
+    thesis: "Deterministic settlement backed by Merkle proofs.",
     description:
-      "Live match events become Merkle-verifiable receipts. Valid evidence advances settlement; tampered evidence fails closed.",
+      "Live match events become Merkle-verifiable receipts. Valid evidence advances settlement; tampered evidence stops it.",
     stack: "State machines · Merkle proofs · Tamper demo",
     href: "https://match-receipt-engine.vercel.app",
     linkLabel: "Run the Demo",
   },
   more: {
     kicker: "Product + protocol experiments",
-    title: "More Work",
-    thesis: "Working surfaces across learning, identity, receipts, and coordination.",
+    title: "More Projects",
+    thesis: "Experiments in learning, identity, receipts, and coordination.",
     description:
-      "Oshiami, Cloak, Jiagon, Gimi, Pincher, flops, and ClearTrade explore different boundaries between useful automation and inspectable proof.",
+      "Oshiami, Cloak, Jiagon, Gimi, Pincher, flops, and ClearTrade span learning, fashion, local reviews, rentals, events, infrastructure credits, and trading agents.",
     stack: "Consumer apps · Agent systems · Protocol research",
-    href: "https://github.com/jh1nresh",
-    linkLabel: "View All Repositories",
+    href: "https://github.com/jh1nresh?tab=repositories",
+    linkLabel: "Browse Public Repositories",
   },
 };
 
