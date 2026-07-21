@@ -3,482 +3,222 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#080a09" />
+    <meta name="theme-color" content="#000000" />
     <meta
       name="description"
       content="Jerry Chen is a founder-engineer building verifiable agent products, onchain settlement systems, and consumer AI applications."
     />
     <title>Jerry Chen — Systems with proof</title>
-    <script>document.documentElement.classList.add("js");</script>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23080a09'/%3E%3Cpath d='M17 17h30v15c0 11-6 17-15 17S17 43 17 32V17Z' fill='none' stroke='%23c8ff28' stroke-width='5'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000000'/%3E%3Cpath d='M17 17h30v15c0 11-6 17-15 17S17 43 17 32V17Z' fill='none' stroke='%23ffffff' stroke-width='5'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net" />
+    <link rel="preconnect" href="https://stream.mux.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="page-loader" data-loader aria-hidden="true">
-      <div class="loader-signal">
-        <span data-loader-value>00</span><small>%</small>
-      </div>
-      <p>Systems with proof</p>
-      <div class="loader-track"><i data-loader-bar></i></div>
-    </div>
-    <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
-    <div class="scene-wash" aria-hidden="true">
-      <i class="wash-lime"></i>
-      <i class="wash-cyan"></i>
-      <i class="wash-ember"></i>
-    </div>
-    <div class="noise" aria-hidden="true"></div>
-    <div class="cursor-light" aria-hidden="true"></div>
-
     <header class="site-header" data-elevated="false">
-      <a class="brand" href="#top" aria-label="Jerry Chen home">
-        <span class="brand-dot"></span>
-        <span>JERRY / CHEN</span>
-      </a>
+      <a class="brand" href="#home" aria-label="Jerry Chen home">Jerry Chen</a>
       <nav aria-label="Primary navigation">
+        <a href="#home">Home</a>
         <a href="#work">Work</a>
-        <a href="#index">Index</a>
+        <a href="#about">About</a>
         <a href="#research">Research</a>
-        <a href="#contact">Contact</a>
+        <a href="#contact">Reach Out</a>
       </nav>
-      <a class="availability" href="mailto:jhinresh@gmail.com">
-        <span></span> Open to serious work
-      </a>
+      <a class="liquid-glass header-cta" href="mailto:jhinresh@gmail.com">Begin a Project</a>
     </header>
 
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title" data-scene="hero">
-        <div class="hero-atmosphere" aria-hidden="true">
-          <div class="carousel-scenes">
-            <div class="carousel-scene scene-save is-active" data-carousel-scene="0"></div>
-            <div class="carousel-scene scene-maiat" data-carousel-scene="1"></div>
-            <div class="carousel-scene scene-sllr" data-carousel-scene="2"></div>
-          </div>
-          <div class="orbit orbit-one"></div>
-          <div class="orbit orbit-two"></div>
-          <div class="signal signal-one"></div>
-          <div class="signal signal-two"></div>
-        </div>
-
-        <div class="hero-kicker reveal" data-intro>
-          <span>Founder engineer</span>
-          <span>Irvine, CA / Taiwan</span>
-          <span>2026 portfolio</span>
-        </div>
-
-        <div class="hero-copy reveal" data-intro>
-          <p class="eyebrow">SYSTEMS WITH PROOF</p>
-          <h1 id="hero-title">
-            <span>JERRY</span>
-            <span class="outline">CHEN</span>
+      <section class="hero" id="home" aria-labelledby="hero-title">
+        <video
+          class="section-media"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+          tabindex="-1"
+          preload="metadata"
+          aria-hidden="true"
+        ></video>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="overline animate-fade-rise">Founder engineer · Irvine / Taiwan</p>
+          <h1 id="hero-title" class="animate-fade-rise">
+            Systems that <em>survive</em><br />contact with the real world.
           </h1>
-          <div class="hero-aside">
-            <p class="hero-statement">
-              I build products where AI agents, consumer experiences, and onchain
-              settlement must survive contact with the real world.
-            </p>
-            <div class="hero-actions">
-              <a class="button button-primary" href="#work">Explore selected work ↘</a>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="hero-cards hero-carousel"
-          data-hero-carousel
-          role="region"
-          aria-roledescription="carousel"
-          aria-label="Featured projects"
-          aria-describedby="hero-carousel-instruction"
-        >
-          <div class="hero-carousel-meta sr-only" data-intro>
-            <p id="hero-carousel-instruction">Drag, use the arrow keys, or use the carousel controls to explore. Activate a card to open its preview.</p>
-            <span>08 projects</span>
-          </div>
-          <div class="hero-carousel-viewport" id="hero-carousel-track" data-carousel-viewport>
-            <div class="hero-carousel-track" data-carousel-track>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="SAV-E / Consumer AI" data-carousel-target="#project-save">
-                <img src="./assets/projects/save.png" alt="SAV-E private place memory product artwork" draggable="false" decoding="async" fetchpriority="high" />
-                <span>SAV-E / Consumer AI</span>
-              </button>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="Maiat / Agent trust" data-carousel-target="#project-maiat">
-                <img src="./assets/projects/maiat.png" alt="Maiat reputation clearing system artwork" draggable="false" decoding="async" />
-                <span>Maiat / Agent trust</span>
-              </button>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="SLL-R / Execution" data-carousel-target="#project-sllr">
-                <img src="./assets/projects/sllr.webp" alt="SLL-R order execution flow" draggable="false" decoding="async" />
-                <span>SLL-R / Execution</span>
-              </button>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="Dojo / Agent marketplace" data-carousel-target="#project-maiat">
-                <img src="./assets/projects/dojo.png" alt="Dojo agent marketplace interface" draggable="false" decoding="async" />
-                <span>Dojo / Marketplace</span>
-              </button>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="Oshiami / Learning" data-carousel-target="#project-oshiami">
-                <img src="./assets/projects/oshiami.png" alt="Oshiami Japanese learning application" draggable="false" decoding="async" />
-                <span>Oshiami / Learning</span>
-              </button>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="Cloak / Fashion" data-carousel-target="#project-cloak">
-                <img src="./assets/projects/cloak.png" alt="Cloak fashion application" draggable="false" decoding="async" />
-                <span>Cloak / Fashion</span>
-              </button>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="Jiagon / Receipts" data-carousel-target="#project-jiagon">
-                <img src="./assets/projects/jiagon.png" alt="Jiagon receipt reputation product" draggable="false" decoding="async" />
-                <span>Jiagon / Receipts</span>
-              </button>
-              <button class="carousel-card" type="button" data-carousel-card data-carousel-title="Pincher / Social" data-carousel-target="#project-pincher">
-                <img src="./assets/projects/pincher.png" alt="Pincher social event application" draggable="false" decoding="async" />
-                <span>Pincher / Social</span>
-              </button>
-            </div>
-          </div>
-          <div class="hero-carousel-controls" aria-label="Carousel controls" data-intro>
-            <button class="carousel-control" type="button" data-carousel-prev aria-label="Move carousel left" aria-controls="hero-carousel-track">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6" /></svg>
-            </button>
-            <button class="carousel-control" type="button" data-carousel-next aria-label="Move carousel right" aria-controls="hero-carousel-track">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6" /></svg>
-            </button>
-          </div>
-          <p class="sr-only" data-carousel-announcer aria-live="polite" aria-atomic="true"></p>
-        </div>
-
-        <div class="carousel-lightbox" data-carousel-lightbox role="dialog" aria-modal="true" aria-labelledby="carousel-lightbox-title" hidden>
-          <div class="carousel-lightbox-panel">
-            <button class="carousel-lightbox-close" type="button" data-carousel-lightbox-close aria-label="Close project preview">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17" /></svg>
-            </button>
-            <figure>
-              <div class="carousel-lightbox-art"><img data-carousel-lightbox-image src="./assets/projects/save.png" alt="Selected project preview" /></div>
-              <figcaption>
-                <span>Selected work</span>
-                <strong id="carousel-lightbox-title" data-carousel-lightbox-title>SAV-E / Consumer AI</strong>
-                <a href="#project-save" data-carousel-lightbox-link>View project ↘</a>
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-
-        <a class="scroll-cue" href="#proof" aria-label="Scroll to proof" data-intro>
-          <span>Scroll to inspect</span>
-          <i>↓</i>
-        </a>
-      </section>
-
-      <section class="proof-strip" id="proof" aria-label="Selected proof">
-        <div>
-          <strong>01</strong>
-          <span>Jito Grid</span>
-          <em>1st place / Sponge</em>
-        </div>
-        <div>
-          <strong>02</strong>
-          <span>BNB US College</span>
-          <em>2nd place / Dojo</em>
-        </div>
-        <div>
-          <strong>05</strong>
-          <span>Base Batches 003</span>
-          <em>Top 5 / Maiat</em>
-        </div>
-        <div>
-          <strong>04</strong>
-          <span>Execution surfaces</span>
-          <em>iOS · EVM · Solana · Web</em>
-        </div>
-      </section>
-
-      <section class="manifesto section-shell reveal" data-scene="profile">
-        <p class="section-label">PROFILE / 01</p>
-        <div>
-          <h2>Not a list of repos.<br /><span>A body of judgment.</span></h2>
-          <p>
-            My work keeps returning to the same hard boundary: a model can propose an
-            action, but a real system must constrain it, verify it, recover from failure,
-            and leave evidence someone else can inspect.
+          <p class="hero-lede animate-fade-rise-delay">
+            I build products where AI agents, consumer experiences, and onchain
+            settlement must act with constraints, recover from failure, and leave proof.
           </p>
+          <a class="liquid-glass hero-cta animate-fade-rise-delay-2" href="#work">Explore the Work</a>
         </div>
       </section>
 
-      <section class="featured section-shell" id="work" aria-labelledby="work-title" data-scene="work">
-        <div class="section-intro reveal">
-          <p class="section-label">SELECTED WORK / 02</p>
-          <h2 id="work-title">Systems that cross the boundary.</h2>
-          <p>Four flagship projects, each with a different real-world failure boundary.</p>
-        </div>
-
-        <article class="feature-card feature-light reveal" id="project-save" data-tilt>
-          <div class="feature-visual portrait-visual">
-            <img src="./assets/projects/save.png" alt="SAV-E app store artwork showing private place memory" loading="lazy" decoding="async" />
-          </div>
-          <div class="feature-copy">
-            <div class="feature-meta"><span>01 / CONSUMER AI</span><span>iOS · BUILD 81</span></div>
-            <h3>SAV-E</h3>
-            <p class="feature-thesis">Private place memory with evidence before certainty.</p>
-            <p>
-              Turns Instagram, Threads, Xiaohongshu, Maps, web, voice, and Takeout clues
-              into reviewable receipts and confirmed Map Stamps—without inventing places
-              when the evidence is weak.
-            </p>
-            <ul>
-              <li>SwiftUI, MapKit, Share Extension, App Intents</li>
-              <li>Evidence-tiered social import and private passport</li>
-              <li>Node.js, PostgreSQL, Places and multimodal analysis</li>
-            </ul>
-            <div class="feature-links">
-              <a href="https://github.com/jh1nresh/SAV-E" target="_blank" rel="noreferrer">Source ↗</a>
-              <a href="https://sav-e-app.vercel.app" target="_blank" rel="noreferrer">Web surface ↗</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="feature-card reveal" id="project-maiat" data-tilt>
-          <div class="feature-copy">
-            <div class="feature-meta"><span>02 / AGENT INFRA</span><span>LIVE APP</span></div>
-            <h3>MAIAT<br />+ DOJO</h3>
-            <p class="feature-thesis">Reputation clearing for agent work.</p>
-            <p>
-              A trust stack where work orders, evaluator decisions, settlement receipts,
-              and behavioral signals update who gets trusted with future work. Dojo is the
-              product surface; Maiat is the clearing and reputation layer beneath it.
-            </p>
-            <ul>
-              <li>Solidity, Foundry, TypeScript, Next.js</li>
-              <li>Receipt ledger, evaluators, trust API and EAS attestations</li>
-              <li>Base Batches Top 5 · BNB US College 2nd place</li>
-            </ul>
-            <div class="feature-links">
-              <a href="https://app.maiat.io" target="_blank" rel="noreferrer">Live app ↗</a>
-              <a href="https://github.com/jh1nresh/maiat-contracts" target="_blank" rel="noreferrer">Source ↗</a>
-            </div>
-          </div>
-          <div class="feature-visual">
-            <img src="./assets/projects/maiat.png" alt="Maiat protocol synthesis visual" loading="lazy" decoding="async" />
-            <img class="visual-inset" src="./assets/projects/dojo.png" alt="Dojo agent marketplace interface" loading="lazy" decoding="async" />
-          </div>
-        </article>
-
-        <article class="feature-card feature-rust reveal" id="project-sllr" data-tilt>
-          <div class="feature-visual">
-            <img src="./assets/projects/sllr.webp" alt="SLL-R merchant execution receipt flow" loading="lazy" decoding="async" />
-          </div>
-          <div class="feature-copy">
-            <div class="feature-meta"><span>03 / COMMERCE AGENT</span><span>WORKING DEMO</span></div>
-            <h3>SLL-R</h3>
-            <p class="feature-thesis">Merchant-backed order execution for AI agents.</p>
-            <p>
-              Binds an exact merchant quote to buyer consent, reserves real capacity,
-              creates one idempotent order, tracks live queue state, and issues a canonical
-              receipt only after fulfillment or customer claim.
-            </p>
-            <ul>
-              <li>Quote-bound consent and idempotent execution</li>
-              <li>Payment proof kept separate from fulfillment proof</li>
-              <li>Merchant terminal, MCP, polling and receipt lifecycle</li>
-            </ul>
-            <div class="feature-links">
-              <a href="https://github.com/jh1nresh/SLL-R" target="_blank" rel="noreferrer">Source ↗</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="feature-card feature-red reveal" id="project-match" data-tilt>
-          <div class="feature-copy">
-            <div class="feature-meta"><span>04 / SETTLEMENT</span><span>LIVE + TAMPER DEMO</span></div>
-            <h3>MATCH<br />RECEIPT</h3>
-            <p class="feature-thesis">Proof-gated deterministic settlement.</p>
-            <p>
-              Turns live match events into Merkle-verifiable receipts. Valid evidence
-              advances settlement; tampered evidence fails closed and routes the market to
-              the declared refund or dispute path.
-            </p>
-            <ul>
-              <li>Merkle proofs and explicit state machines</li>
-              <li>Deterministic payout, refund and dispute paths</li>
-              <li>No real money or mainnet funds in the demo</li>
-            </ul>
-            <div class="feature-links">
-              <a href="https://match-receipt-engine.vercel.app" target="_blank" rel="noreferrer">Live demo ↗</a>
-              <a href="https://match-receipt-engine.vercel.app/?tamper=1" target="_blank" rel="noreferrer">Tamper demo ↗</a>
-              <a href="https://github.com/jh1nresh/match-receipt-engine" target="_blank" rel="noreferrer">Source ↗</a>
-            </div>
-          </div>
-          <div class="receipt-visual" aria-label="Settlement state diagram">
-            <span class="receipt-node node-a">LIVE EVENT</span>
-            <span class="receipt-line line-a"></span>
-            <span class="receipt-node node-b">PROOF</span>
-            <span class="receipt-line line-b"></span>
-            <span class="receipt-node node-c">SETTLE</span>
-            <span class="receipt-hash">0x7d…91c / VERIFIED</span>
-          </div>
-        </article>
+      <section class="tagline" id="about" aria-labelledby="tagline-title">
+        <p class="overline reveal">A body of judgment</p>
+        <h2 id="tagline-title" class="reveal">
+          Ideas are easy.<br /><em>Systems have to hold.</em>
+        </h2>
+        <p class="tagline-copy reveal">
+          A model can propose an action. A real system must constrain it, verify it,
+          recover from failure, and leave evidence someone else can inspect.
+        </p>
       </section>
 
-      <section class="project-index section-shell" id="index" aria-labelledby="index-title" data-scene="index">
-        <div class="section-intro reveal">
-          <p class="section-label">PROJECT INDEX / 03</p>
-          <h2 id="index-title">More working surfaces.</h2>
-          <p>Filtered by what the project proves—not by whichever stack happens to be fashionable.</p>
-        </div>
+      <section class="feature-section" id="work" aria-labelledby="feature-title">
+        <div class="feature-split">
+          <article class="feature-panel reveal" id="project-feature-panel" role="tabpanel" aria-live="polite">
+            <div class="feature-copy">
+              <span class="feature-icon" aria-hidden="true"></span>
+              <p class="overline" data-feature-kicker>Consumer AI · iOS</p>
+              <h2 id="feature-title" data-feature-title>SAV-E</h2>
+              <p class="feature-thesis" data-feature-thesis>Private place memory with evidence before certainty.</p>
+              <p class="feature-description" data-feature-description>
+                Turns social, map, web, voice, and Takeout clues into reviewable receipts
+                and confirmed Map Stamps—without inventing places when evidence is weak.
+              </p>
+              <p class="feature-stack" data-feature-stack>SwiftUI · MapKit · App Intents · PostgreSQL</p>
+            </div>
 
-        <div class="filters reveal" role="group" aria-label="Filter projects">
-          <button class="filter is-active" type="button" data-filter="all">All</button>
-          <button class="filter" type="button" data-filter="consumer">Consumer</button>
-          <button class="filter" type="button" data-filter="agent">Agent systems</button>
-          <button class="filter" type="button" data-filter="protocol">Protocol</button>
-        </div>
-
-        <div class="project-grid">
-          <article class="project-card reveal" id="project-oshiami" data-category="consumer" data-tilt>
-            <div class="project-image"><img src="./assets/projects/oshiami.png" alt="Oshiami illustrated learning world" loading="lazy" decoding="async" /></div>
-            <div class="project-card-copy">
-              <span>LIVE / LEARNING</span><h3>Oshiami</h3>
-              <p>Three short learning studios backed by a prerequisite graph, mastery evidence, family accounts, and child-safe progress.</p>
-              <a href="https://growth-planet-learning.vercel.app/" target="_blank" rel="noreferrer">Open live site ↗</a>
+            <div class="feature-controls">
+              <div class="feature-tabs" id="index" role="tablist" aria-label="Selected systems">
+                <button class="feature-tab is-active" id="tab-save" type="button" role="tab" aria-selected="true" aria-controls="project-feature-panel" data-feature-tab="save">SAV-E</button>
+                <button class="feature-tab" id="tab-maiat" type="button" role="tab" aria-selected="false" aria-controls="project-feature-panel" data-feature-tab="maiat">Maiat + Dojo</button>
+                <button class="feature-tab" id="tab-sllr" type="button" role="tab" aria-selected="false" aria-controls="project-feature-panel" data-feature-tab="sllr">SLL-R</button>
+                <button class="feature-tab" id="tab-match" type="button" role="tab" aria-selected="false" aria-controls="project-feature-panel" data-feature-tab="match">Match Receipt</button>
+                <button class="feature-tab" id="tab-more" type="button" role="tab" aria-selected="false" aria-controls="project-feature-panel" data-feature-tab="more">More</button>
+              </div>
+              <div class="feature-progress" aria-hidden="true"><span data-feature-progress></span></div>
+              <a
+                class="liquid-glass feature-link"
+                href="https://sav-e-app.vercel.app"
+                target="_blank"
+                rel="noreferrer"
+                data-feature-link
+              >Explore This System</a>
             </div>
           </article>
 
-          <article class="project-card reveal" id="project-cloak" data-category="consumer" data-tilt>
-            <div class="project-image"><img src="./assets/projects/cloak.png" alt="Cloak AI dressing room interface" loading="lazy" decoding="async" /></div>
-            <div class="project-card-copy">
-              <span>PROTOTYPE / FASHION</span><h3>Cloak</h3>
-              <p>An AI dressing room that keeps the person—not the product card—at the center of like, skip, try-on, and buy decisions.</p>
-              <a href="https://github.com/jh1nresh/Cloak-ai" target="_blank" rel="noreferrer">Inspect source ↗</a>
+          <div class="feature-media reveal">
+            <video
+              class="section-media"
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+              autoplay
+              loop
+              muted
+              playsinline
+              tabindex="-1"
+              preload="metadata"
+              aria-hidden="true"
+            ></video>
+            <div class="feature-media-label">
+              <span>Selected systems</span>
+              <strong data-feature-count>01 / 05</strong>
             </div>
-          </article>
-
-          <article class="project-card reveal" id="project-jiagon" data-category="protocol agent" data-tilt>
-            <div class="project-image"><img src="./assets/projects/jiagon.png" alt="Jiagon verified local review interface" loading="lazy" decoding="async" /></div>
-            <div class="project-card-copy">
-              <span>LIVE / RECEIPTS</span><h3>Jiagon</h3>
-              <p>Receipt-backed local reviews that turn crypto-card payments into privacy-aware credentials and agent-readable taste signals.</p>
-              <a href="https://jiagon.vercel.app" target="_blank" rel="noreferrer">Open live app ↗</a>
-            </div>
-          </article>
-
-          <article class="project-card reveal" data-category="agent consumer" data-tilt>
-            <div class="project-image project-image-orb">
-              <div class="orb-ui"><i></i><b>GIMI</b><small>ASK · RESERVE · RETURN</small></div>
-            </div>
-            <div class="project-card-copy">
-              <span>PROTOTYPE / RENTAL</span><h3>Gimi</h3>
-              <p>A community inventory agent for discovering, reserving, funding, returning, and issuing receipts for real shared items.</p>
-              <a href="https://github.com/jh1nresh/Gimi" target="_blank" rel="noreferrer">Inspect source ↗</a>
-            </div>
-          </article>
-
-          <article class="project-card reveal" id="project-pincher" data-category="agent consumer" data-tilt>
-            <div class="project-image project-image-square"><img src="./assets/projects/pincher.png" alt="Pincher carpool matcher identity" loading="lazy" decoding="async" /></div>
-            <div class="project-card-copy">
-              <span>SHIPPED EVENT MVP</span><h3>Pincher</h3>
-              <p>A Telegram-first carpool matcher that created event ride rooms, matched routes, and coordinated attendees in dedicated topics.</p>
-              <a href="https://github.com/jh1nresh/Pincher" target="_blank" rel="noreferrer">Inspect source ↗</a>
-            </div>
-          </article>
-
-          <article class="project-card reveal" data-category="protocol" data-tilt>
-            <div class="project-image capacity-visual" aria-label="Capacity credit market illustration">
-              <div class="capacity-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-              <b>FLOPS</b><small>CAPACITY → CREDIT → REDEEM → RECEIPT</small>
-            </div>
-            <div class="project-card-copy">
-              <span>PROTOTYPE / COMPUTE</span><h3>flops</h3>
-              <p>A redeemable AI infrastructure capacity-credit market with a full provider-to-redemption lifecycle and buyer-confirmed release.</p>
-              <a href="https://github.com/jh1nresh/flops" target="_blank" rel="noreferrer">Inspect source ↗</a>
-            </div>
-          </article>
-
-          <article class="project-card reveal" data-category="agent protocol" data-tilt>
-            <div class="project-image trade-visual" aria-label="ClearTrade receipt trail illustration">
-              <div class="chart-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-              <span>signal ✓</span><span>risk ✓</span><span>execution ✓</span><span>evaluation ✓</span>
-            </div>
-            <div class="project-card-copy">
-              <span>PAPER-ONLY / AUDITABLE</span><h3>ClearTrade</h3>
-              <p>A drawdown-aware paper trading agent where every signal, risk decision, execution, and evaluation leaves a hash-verifiable receipt.</p>
-              <a href="https://github.com/jh1nresh/cleartrade-agent" target="_blank" rel="noreferrer">Inspect source ↗</a>
-            </div>
-          </article>
+          </div>
         </div>
       </section>
 
-      <section class="research section-shell" id="research" aria-labelledby="research-title" data-scene="research">
-        <div class="research-field" aria-hidden="true"></div>
-        <div class="research-copy reveal">
-          <p class="section-label">CURRENT RESEARCH / 04</p>
-          <h2 id="research-title">HEDGE / AMM</h2>
-          <p class="research-lede">Self-hedging collateral for productive onchain assets.</p>
-          <p>
-            Current research—not a shipped product. The focus is a constrained risk
-            account where a concentrated LP position can finance a bounded hedge against
-            its own changing exposure without putting an LLM in the liquidation path.
+      <section class="statement" id="research" aria-labelledby="statement-title">
+        <video
+          class="section-media"
+          data-hls-video
+          data-src="https://stream.mux.com/9njY8qDfS02Uvbll018C8CK39p5EksK7mn02DDC1zYvppI.m3u8"
+          autoplay
+          loop
+          muted
+          playsinline
+          tabindex="-1"
+          preload="metadata"
+          aria-hidden="true"
+        ></video>
+        <div class="statement-shade" aria-hidden="true"></div>
+        <div class="statement-content reveal">
+          <p class="overline">Verifiable infrastructure</p>
+          <h2 id="statement-title">Judgment inspired.<br /><em>Proof driven.</em></h2>
+          <p class="statement-copy">
+            Across SAV-E, Maiat, SLL-R, settlement engines, and current HEDGE / AMM
+            research, the principle is the same: constrain the action and make the result inspectable.
           </p>
-          <div class="research-loop" aria-label="Hedge research loop">
-            <span>LP collateral</span><i>→</i><span>risk valuation</span><i>→</i><span>hedge-only credit</span><i>→</i><span>approved derivative</span><i>→</i><span>unified health</span>
+          <div class="stats" aria-label="Selected proof">
+            <div><strong>1st</strong><span>Jito Grid<br />Sponge</span></div>
+            <div><strong>2nd</strong><span>BNB US College<br />Dojo</span></div>
+            <div><strong>Top 5</strong><span>Base Batches 003<br />Maiat</span></div>
+            <div><strong>4×</strong><span>iOS · EVM<br />Solana · Web</span></div>
           </div>
-        </div>
-        <div class="research-principles reveal">
-          <div><strong>01</strong><span>Deterministic safety</span><p>Contracts define what the agent can never do.</p></div>
-          <div><strong>02</strong><span>Net carry</span><p>Fees minus funding, borrowing, execution, rebalance, and reserves.</p></div>
-          <div><strong>03</strong><span>Coordinated unwind</span><p>Strategy health and lending health stay separate and explicit.</p></div>
+          <a class="liquid-glass statement-link" href="https://github.com/jh1nresh" target="_blank" rel="noreferrer">Inspect the Work</a>
         </div>
       </section>
 
-      <section class="method section-shell" aria-labelledby="method-title" data-scene="method">
-        <div class="section-intro reveal">
-          <p class="section-label">OPERATING METHOD / 05</p>
-          <h2 id="method-title">Build fast. Fail closed.</h2>
-        </div>
-        <div class="method-grid">
-          <article class="reveal"><span>01</span><h3>Define the paid job</h3><p>Start from a costly failure or action—not an impressive model capability.</p></article>
-          <article class="reveal"><span>02</span><h3>Constrain the action</h3><p>Permissions, state transitions, limits, and rollback exist before autonomy.</p></article>
-          <article class="reveal"><span>03</span><h3>Attack the happy path</h3><p>Tests, logs, fuzzing, tamper cases, and real UI proof challenge the implementation.</p></article>
-          <article class="reveal"><span>04</span><h3>Leave a receipt</h3><p>Every meaningful decision becomes inspectable evidence for the next one.</p></article>
-        </div>
-        <div class="stack-marquee" aria-label="Technical stack">
-          <div>
-            <span>SWIFTUI</span><span>SOLIDITY</span><span>FOUNDRY</span><span>SOLANA</span><span>TYPESCRIPT</span><span>NEXT.JS</span><span>POSTGRESQL</span><span>PYTHON</span><span>MAPKIT</span><span>AGENT EVALS</span>
-          </div>
-          <div aria-hidden="true">
-            <span>SWIFTUI</span><span>SOLIDITY</span><span>FOUNDRY</span><span>SOLANA</span><span>TYPESCRIPT</span><span>NEXT.JS</span><span>POSTGRESQL</span><span>PYTHON</span><span>MAPKIT</span><span>AGENT EVALS</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="contact section-shell" id="contact" aria-labelledby="contact-title" data-scene="contact">
-        <div class="contact-copy reveal">
-          <p class="section-label">CONTACT / 06</p>
-          <h2 id="contact-title">BUILD<br /><span>WHAT HOLDS.</span></h2>
+      <section class="join" id="contact" aria-labelledby="contact-title">
+        <video
+          class="section-media"
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260306_074215_04640ca7-042c-45d6-bb56-58b1e8a42489.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+          tabindex="-1"
+          preload="metadata"
+          aria-hidden="true"
+        ></video>
+        <div class="join-shade" aria-hidden="true"></div>
+        <div class="join-content reveal">
+          <p class="overline">Irvine, California · Originally from Taiwan</p>
+          <h2 id="contact-title">Build what holds</h2>
           <p>
             Open to protocol security, AMM and risk infrastructure, verifiable agent
             systems, and founder-engineer collaborations with a real execution boundary.
           </p>
-          <div class="contact-actions">
-            <a class="button button-primary" href="mailto:jhinresh@gmail.com">Start a conversation ↗</a>
-            <button class="button button-quiet" type="button" data-copy-email>Copy email</button>
-          </div>
-        </div>
-        <div class="contact-card reveal" data-tilt>
-          <span>JERRY CHEN</span>
-          <strong>Founder engineer<br />Systems + proof</strong>
-          <p>Irvine, California<br />Originally from Taiwan</p>
-          <div>
-            <a href="https://github.com/jh1nresh" target="_blank" rel="noreferrer">GitHub ↗</a>
-            <a href="https://x.com/JhiNResH" target="_blank" rel="noreferrer">X ↗</a>
-            <a href="https://dinq.me/jhinresh" target="_blank" rel="noreferrer">Links ↗</a>
+          <div class="join-actions">
+            <a class="liquid-glass join-primary" href="mailto:jhinresh@gmail.com">Start a Conversation</a>
+            <a class="join-secondary" href="https://github.com/jh1nresh" target="_blank" rel="noreferrer">View GitHub</a>
           </div>
         </div>
       </section>
     </main>
 
     <footer>
-      <span>© Jerry Chen</span>
-      <span>Designed around real local work, not template metrics.</span>
-      <a href="#top">Back to top ↑</a>
+      <div class="footer-grid">
+        <div>
+          <h2>Where ideas<br />meet the real world.</h2>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="#home">Home</a>
+          <a href="#work">Selected work</a>
+          <a href="#about">Operating belief</a>
+          <a href="#research">Research + proof</a>
+          <a href="#contact">Reach out</a>
+        </nav>
+        <div class="footer-follow">
+          <p>Follow the latest builds,<br />research, and release proof.</p>
+          <a class="liquid-glass footer-button" href="https://x.com/JhiNResH" target="_blank" rel="noreferrer">Follow on X</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <a class="footer-brand" href="#home">Jerry Chen</a>
+        <span>© 2026 Jerry Chen</span>
+        <div>
+          <a href="https://github.com/jh1nresh" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://dinq.me/jhinresh" target="_blank" rel="noreferrer">Links</a>
+        </div>
+      </div>
     </footer>
 
+    <script
+      src="https://cdn.jsdelivr.net/npm/hls.js@1.6.16/dist/hls.min.js"
+      integrity="sha384-5E8B0pTlZZJMabWpC0fyYf6OUpe15jJij34BqBAh4NXoHAlLNOjCPRrwtOXOQFAn"
+      crossorigin="anonymous"
+    ></script>
     <script src="./script.js"></script>
   </body>
 </html>
