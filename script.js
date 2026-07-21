@@ -8,6 +8,63 @@ const updateHeader = () => {
 window.addEventListener("scroll", updateHeader, { passive: true });
 updateHeader();
 
+const sceneTargets = [...document.querySelectorAll("main > .scene")];
+let sceneObserver;
+const sceneHandoff = () => window.innerHeight * 0.48;
+
+const syncSceneStates = () => {
+  const handoff = sceneHandoff();
+  let activeIndex = sceneTargets.findIndex((scene) => {
+    const rect = scene.getBoundingClientRect();
+    return rect.top <= handoff && rect.bottom > handoff;
+  });
+
+  if (activeIndex < 0) {
+    const nextIndex = sceneTargets.findIndex(
+      (scene) => scene.getBoundingClientRect().top > handoff,
+    );
+    activeIndex = nextIndex < 0 ? sceneTargets.length - 1 : Math.max(0, nextIndex - 1);
+  }
+
+  sceneTargets.forEach((scene, index) => {
+    scene.dataset.sceneState = index < activeIndex
+      ? "after"
+      : index > activeIndex
+        ? "before"
+        : "active";
+  });
+};
+
+const setupSceneTransitions = () => {
+  sceneObserver?.disconnect();
+  sceneObserver = undefined;
+
+  if (!("IntersectionObserver" in window) || reducedMotion.matches) {
+    document.documentElement.classList.remove("scene-transitions-ready");
+    sceneTargets.forEach((scene) => delete scene.dataset.sceneState);
+    return;
+  }
+
+  syncSceneStates();
+  document.documentElement.classList.add("scene-transitions-ready");
+
+  const handoff = Math.round(sceneHandoff());
+  const bottomInset = Math.max(0, window.innerHeight - handoff - 1);
+  sceneObserver = new IntersectionObserver(
+    syncSceneStates,
+    { rootMargin: `-${handoff}px 0px -${bottomInset}px`, threshold: 0 },
+  );
+
+  sceneTargets.forEach((scene) => sceneObserver.observe(scene));
+};
+
+setupSceneTransitions();
+reducedMotion.addEventListener?.("change", setupSceneTransitions);
+window.addEventListener("resize", setupSceneTransitions, { passive: true });
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted) setupSceneTransitions();
+});
+
 const revealTargets = document.querySelectorAll(".reveal");
 
 if ("IntersectionObserver" in window && !reducedMotion.matches) {

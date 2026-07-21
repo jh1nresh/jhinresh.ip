@@ -125,100 +125,99 @@ p, h1, h2, h3 { margin: 0; }
 }
 
 main > .scene {
-  --scene-entry-y: 3svh;
-  --scene-entry-z: -180px;
-  --scene-entry-pitch: .8deg;
-  --scene-settle-y: .8svh;
-  --scene-settle-z: -34px;
-  --scene-settle-pitch: .2deg;
-  --scene-media-scale: 1.1;
+  --scene-entry-y: 9svh;
+  --scene-entry-z: -460px;
+  --scene-entry-pitch: 5deg;
+  --scene-entry-scale: .72;
+  --scene-exit-y: 20svh;
+  --scene-exit-z: 280px;
+  --scene-exit-pitch: -12deg;
+  --scene-exit-scale: 1.16;
+  --scene-media-scale: 1.14;
+  --scene-spring: cubic-bezier(.2, .72, .2, 1);
+  --scene-pivot: cubic-bezier(.77, 0, .175, 1);
   position: relative;
   overflow: hidden;
   overflow: clip;
   isolation: isolate;
-  perspective: 1100px;
+  perspective: 900px;
   perspective-origin: var(--scene-perspective-x) 42svh;
-  view-timeline-axis: block;
-  view-timeline-name: --scene;
 }
 main > .scene:nth-child(odd) {
-  --scene-entry-x: max(-68vw, -620px);
-  --scene-entry-yaw: 12deg;
-  --scene-settle-x: max(-6vw, -76px);
-  --scene-settle-yaw: 1.8deg;
-  --scene-exit-mid-x: max(-18vw, -230px);
-  --scene-exit-mid-yaw: -4.5deg;
-  --scene-exit-x: max(-24vw, -300px);
-  --scene-exit-yaw: -6deg;
-  --scene-media-x: min(8vw, 110px);
-  --scene-media-settle-x: min(1vw, 14px);
-  --scene-media-exit-x: min(3vw, 42px);
-  --scene-portal-left: 8%;
-  --scene-portal-origin: 0% 50%;
+  --scene-entry-x: max(-82vw, -760px);
+  --scene-entry-yaw: 30deg;
+  --scene-exit-x: max(-34vw, -420px);
+  --scene-exit-yaw: -14deg;
+  --scene-detail-x: max(-7vw, -88px);
+  --scene-detail-yaw: 7deg;
+  --scene-media-x: min(14vw, 170px);
+  --scene-media-exit-x: max(-8vw, -100px);
+  --scene-stack-left: 0%;
+  --scene-stack-before: translate3d(-44%, 0, -240px) rotateY(36deg) scale3d(.68, .9, 1);
+  --scene-stack-active: translate3d(-86%, 0, 80px) rotateY(8deg) scale3d(.92, 1, 1);
+  --scene-before-clip: inset(4% 44% 4% 0 round 34px);
+  --scene-after-clip: inset(6% 0 6% 54% round 28px);
   --scene-stage-origin: 100% 42%;
-  --scene-perspective-x: 22%;
-  --scene-curtain-origin: 0% 50%;
+  --scene-perspective-x: 20%;
+  --scene-curtain-origin: 100% 50%;
 }
 main > .scene:nth-child(even) {
-  --scene-entry-x: min(68vw, 620px);
-  --scene-entry-yaw: -12deg;
-  --scene-settle-x: min(6vw, 76px);
-  --scene-settle-yaw: -1.8deg;
-  --scene-exit-mid-x: min(18vw, 230px);
-  --scene-exit-mid-yaw: 4.5deg;
-  --scene-exit-x: min(24vw, 300px);
-  --scene-exit-yaw: 6deg;
-  --scene-media-x: max(-8vw, -110px);
-  --scene-media-settle-x: max(-1vw, -14px);
-  --scene-media-exit-x: max(-3vw, -42px);
-  --scene-portal-left: 92%;
-  --scene-portal-origin: 100% 50%;
+  --scene-entry-x: min(82vw, 760px);
+  --scene-entry-yaw: -30deg;
+  --scene-exit-x: min(34vw, 420px);
+  --scene-exit-yaw: 14deg;
+  --scene-detail-x: min(7vw, 88px);
+  --scene-detail-yaw: -7deg;
+  --scene-media-x: max(-14vw, -170px);
+  --scene-media-exit-x: min(8vw, 100px);
+  --scene-stack-left: 100%;
+  --scene-stack-before: translate3d(-56%, 0, -240px) rotateY(-36deg) scale3d(.68, .9, 1);
+  --scene-stack-active: translate3d(-14%, 0, 80px) rotateY(-8deg) scale3d(.92, 1, 1);
+  --scene-before-clip: inset(4% 0 4% 44% round 34px);
+  --scene-after-clip: inset(6% 54% 6% 0 round 28px);
   --scene-stage-origin: 0% 42%;
-  --scene-perspective-x: 78%;
-  --scene-curtain-origin: 100% 50%;
+  --scene-perspective-x: 80%;
+  --scene-curtain-origin: 0% 50%;
 }
 main > .scene::before {
   position: absolute;
   z-index: 5;
-  top: 0;
-  left: var(--scene-portal-left);
-  width: min(720px, 78svh, 72vw);
-  height: 100svh;
-  max-height: 100%;
+  top: 6svh;
+  bottom: 6svh;
+  left: var(--scene-stack-left);
+  width: min(48vw, 560px);
   border: 1px solid rgba(255,255,255,.34);
-  border-radius: 50%;
+  border-radius: clamp(22px, 4vw, 48px);
   background:
-    radial-gradient(ellipse at 50% 50%, transparent 0 22%, rgba(255,255,255,.22) 22.3%, transparent 22.8%),
-    radial-gradient(ellipse at 50% 50%, transparent 0 36%, rgba(255,255,255,.1) 36.3%, transparent 36.9%),
-    radial-gradient(ellipse at 50% 50%, transparent 0 18%, rgba(0,0,0,.28) 42%, rgba(0,0,0,.92) 76%, #000 100%),
-    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.2), transparent 44%);
+    repeating-linear-gradient(90deg, rgba(255,255,255,.2) 0 1px, transparent 1px 13%),
+    radial-gradient(circle at 50% 14%, rgba(255,255,255,.24), transparent 38%),
+    linear-gradient(145deg, rgba(58,58,58,.96), rgba(5,5,5,.98) 64%);
+  box-shadow:
+    0 0 0 12px rgba(255,255,255,.025),
+    0 0 0 24px rgba(255,255,255,.015),
+    0 44px 140px rgba(0,0,0,.82);
   content: "";
   opacity: 0;
   pointer-events: none;
-  transform: translate3d(-50%, 0, 0) scale3d(.12, .58, 1);
-  transform-origin: var(--scene-portal-origin);
+  transform: var(--scene-stack-before);
+  transform-style: preserve-3d;
 }
 main > .scene::after {
   position: absolute;
   z-index: 4;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 100svh;
-  max-height: 100%;
+  inset: 0;
   content: "";
   opacity: 0;
   pointer-events: none;
-  transform: scale3d(.08, 1, 1);
+  transform: scale3d(.02, 1, 1);
   transform-origin: var(--scene-curtain-origin);
 }
 main > .scene:nth-child(odd)::after {
-  background: linear-gradient(90deg, #000 0%, #000 64%, rgba(0,0,0,.88) 82%, transparent 100%);
+  background: linear-gradient(90deg, #000 0%, #000 62%, rgba(0,0,0,.9) 78%, rgba(0,0,0,.32) 94%, transparent 100%);
 }
 main > .scene:nth-child(even)::after {
-  background: linear-gradient(270deg, #000 0%, #000 64%, rgba(0,0,0,.88) 82%, transparent 100%);
+  background: linear-gradient(270deg, #000 0%, #000 62%, rgba(0,0,0,.9) 78%, rgba(0,0,0,.32) 94%, transparent 100%);
 }
-main > .scene:first-child::before { display: none; }
 .scene-stage {
   position: relative;
   z-index: 2;
@@ -239,89 +238,114 @@ main > .scene:first-child::before { display: none; }
   justify-content: center;
 }
 
-@supports (animation-timeline: view()) {
-  .scene-stage {
-    animation: scene-room-enter linear both, scene-room-exit linear forwards;
-    animation-range: entry 0% entry 82%, exit 0% exit 76%;
-    animation-timeline: --scene, --scene;
-  }
-
-  main > .scene:not(:first-child)::before {
-    animation: scene-portal-open linear both;
-    animation-range: entry 0% entry 82%;
-    animation-timeline: --scene;
-  }
-
-  main > .scene::after {
-    animation: scene-curtain-close linear both;
-    animation-range: exit 0% exit 76%;
-    animation-timeline: --scene;
-  }
-
-  main > .scene > .section-media {
-    animation: scene-media-settle linear both, scene-media-exit linear forwards;
-    animation-range: entry 0% entry 82%, exit 0% exit 76%;
-    animation-timeline: --scene, --scene;
-  }
+.scene-transitions-ready main > .scene .scene-stage {
+  transition:
+    transform 1100ms var(--scene-spring),
+    opacity 420ms var(--ease-out),
+    clip-path 960ms var(--scene-spring);
+}
+.scene-transitions-ready main > .scene .scene-stage > * {
+  transition:
+    transform 760ms var(--scene-spring),
+    opacity 420ms var(--ease-out);
+}
+.scene-transitions-ready main > .scene::before {
+  transition:
+    transform 1100ms var(--scene-spring),
+    opacity 720ms var(--ease-out);
+}
+.scene-transitions-ready main > .scene::after {
+  transition:
+    transform 1020ms var(--scene-spring),
+    opacity 760ms var(--ease-out);
+}
+.scene-transitions-ready main > .scene > .section-media {
+  transition: transform 1100ms var(--scene-spring), opacity .4s ease;
 }
 
-@keyframes scene-room-enter {
-  0% {
-    opacity: .02;
-    transform: translate3d(var(--scene-entry-x), var(--scene-entry-y), var(--scene-entry-z)) rotateY(var(--scene-entry-yaw)) rotateX(var(--scene-entry-pitch));
-  }
-  24% {
-    opacity: .14;
-    transform: translate3d(var(--scene-entry-x), var(--scene-entry-y), var(--scene-entry-z)) rotateY(var(--scene-entry-yaw)) rotateX(var(--scene-entry-pitch));
-  }
-  66% {
-    opacity: .9;
-    transform: translate3d(var(--scene-settle-x), var(--scene-settle-y), var(--scene-settle-z)) rotateY(var(--scene-settle-yaw)) rotateX(var(--scene-settle-pitch));
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) rotateY(0) rotateX(0);
-  }
+.scene-transitions-ready main > .scene[data-scene-state="before"] .scene-stage {
+  opacity: .14;
+  clip-path: var(--scene-before-clip);
+  transform:
+    translate3d(var(--scene-entry-x), var(--scene-entry-y), var(--scene-entry-z))
+    rotateY(var(--scene-entry-yaw))
+    rotateX(var(--scene-entry-pitch))
+    scale(var(--scene-entry-scale));
+}
+.scene-transitions-ready main > .scene[data-scene-state="before"] .scene-stage > * {
+  opacity: .12;
+  transform:
+    translate3d(var(--scene-detail-x), 44px, -90px)
+    rotateY(var(--scene-detail-yaw))
+    scale(.92);
+}
+.scene-transitions-ready main > .scene[data-scene-state="before"]::before {
+  opacity: .82;
+  transform: var(--scene-stack-before);
+}
+.scene-transitions-ready main > .scene[data-scene-state="before"]::after {
+  opacity: .86;
+  transform: scale3d(1, 1, 1);
+}
+.scene-transitions-ready main > .scene[data-scene-state="before"] > .section-media {
+  transform: translate3d(var(--scene-media-x), 0, 0) scale(var(--scene-media-scale));
 }
 
-@keyframes scene-room-exit {
-  0%, 24% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) rotateY(0) rotateX(0);
-  }
-  72% {
-    opacity: .46;
-    transform: translate3d(var(--scene-exit-mid-x), -1svh, -54px) rotateY(var(--scene-exit-mid-yaw));
-  }
-  100% {
-    opacity: .06;
-    transform: translate3d(var(--scene-exit-x), -2svh, -80px) rotateY(var(--scene-exit-yaw));
-  }
+.scene-transitions-ready main > .scene[data-scene-state="active"] .scene-stage {
+  opacity: 1;
+  clip-path: inset(0 round 0);
+  transform: translate3d(0, 0, 0) rotateY(0) rotateX(0) scale(1);
+  transition-delay: 70ms, 0ms, 40ms;
+}
+.scene-transitions-ready main > .scene[data-scene-state="active"] .scene-stage > * {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotateY(0) scale(1);
+}
+.scene-transitions-ready main > .scene[data-scene-state="active"] .scene-stage > :nth-child(1) { transition-delay: 60ms; }
+.scene-transitions-ready main > .scene[data-scene-state="active"] .scene-stage > :nth-child(2) { transition-delay: 110ms; }
+.scene-transitions-ready main > .scene[data-scene-state="active"] .scene-stage > :nth-child(3) { transition-delay: 160ms; }
+.scene-transitions-ready main > .scene[data-scene-state="active"] .scene-stage > :nth-child(4) { transition-delay: 210ms; }
+.scene-transitions-ready main > .scene[data-scene-state="active"]::before {
+  opacity: 0;
+  transform: var(--scene-stack-active);
+  transition-delay: 0ms, 120ms;
+}
+.scene-transitions-ready main > .scene[data-scene-state="active"]::after {
+  opacity: 0;
+  transform: scale3d(.02, 1, 1);
+  transition-delay: 0ms, 70ms;
+}
+.scene-transitions-ready main > .scene[data-scene-state="active"] > .section-media {
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
-@keyframes scene-portal-open {
-  0% { opacity: .98; transform: translate3d(-50%, 0, 0) scale3d(.1, .42, 1); }
-  24% { opacity: .92; transform: translate3d(-50%, 0, 0) scale3d(.14, .52, 1); }
-  68% { opacity: .66; transform: translate3d(-50%, 0, 0) scale3d(.98, 1, 1); }
-  100% { opacity: 0; transform: translate3d(-50%, 0, 0) scale3d(1.22, 1.08, 1); }
+.scene-transitions-ready main > .scene[data-scene-state="after"] .scene-stage {
+  opacity: .26;
+  clip-path: var(--scene-after-clip);
+  transform:
+    translate3d(var(--scene-exit-x), var(--scene-exit-y), var(--scene-exit-z))
+    rotateY(var(--scene-exit-yaw))
+    rotateX(var(--scene-exit-pitch))
+    scale(var(--scene-exit-scale));
+  transition-timing-function: var(--scene-pivot), var(--ease-out), var(--scene-pivot);
+  transition-duration: 720ms, 560ms, 680ms;
 }
-
-@keyframes scene-curtain-close {
-  0% { opacity: 0; transform: scale3d(.04, 1, 1); }
-  28% { opacity: .05; transform: scale3d(.08, 1, 1); }
-  72% { opacity: .72; transform: scale3d(.78, 1, 1); }
-  100% { opacity: .98; transform: scale3d(1, 1, 1); }
+.scene-transitions-ready main > .scene[data-scene-state="after"] .scene-stage > * {
+  opacity: .7;
+  transform: translate3d(0, 54px, 80px) rotateY(0) scale(1.04);
+  transition-delay: 0ms;
 }
-
-@keyframes scene-media-settle {
-  0%, 24% { transform: translate3d(var(--scene-media-x), 1%, 0) scale(var(--scene-media-scale)); }
-  66% { transform: translate3d(var(--scene-media-settle-x), .25%, 0) scale(1.025); }
-  100% { transform: translate3d(0, 0, 0) scale(1); }
+.scene-transitions-ready main > .scene[data-scene-state="after"]::before {
+  opacity: 0;
+  transform: var(--scene-stack-active);
 }
-
-@keyframes scene-media-exit {
-  0%, 24% { transform: translate3d(0, 0, 0) scale(1); }
-  100% { transform: translate3d(var(--scene-media-exit-x), 0, 0) scale(1.06); }
+.scene-transitions-ready main > .scene[data-scene-state="after"]::after {
+  opacity: .82;
+  transform: scale3d(1, 1, 1);
+  transition-timing-function: var(--scene-pivot), var(--ease-out);
+}
+.scene-transitions-ready main > .scene[data-scene-state="after"] > .section-media {
+  transform: translate3d(var(--scene-media-exit-x), 0, 0) scale(1.08);
 }
 .hero {
   position: relative;
@@ -911,44 +935,47 @@ footer {
 
 @media (max-width: 600px) {
   main > .scene {
-    --scene-entry-y: 2svh;
-    --scene-entry-z: -120px;
-    --scene-entry-pitch: .5deg;
-    --scene-settle-y: .5svh;
-    --scene-settle-z: -22px;
-    --scene-settle-pitch: .1deg;
-    --scene-media-scale: 1.06;
-    perspective: 900px;
+    --scene-entry-y: 7svh;
+    --scene-entry-z: -300px;
+    --scene-entry-pitch: 3deg;
+    --scene-entry-scale: .78;
+    --scene-exit-y: 14svh;
+    --scene-exit-z: 180px;
+    --scene-exit-pitch: -8deg;
+    --scene-exit-scale: 1.1;
+    --scene-media-scale: 1.1;
+    perspective: 720px;
   }
   main > .scene:nth-child(odd) {
-    --scene-entry-x: -64vw;
-    --scene-entry-yaw: 8deg;
-    --scene-settle-x: -7vw;
-    --scene-settle-yaw: 1.2deg;
-    --scene-exit-mid-x: -14vw;
-    --scene-exit-mid-yaw: -3deg;
-    --scene-exit-x: -18vw;
-    --scene-exit-yaw: -4deg;
-    --scene-media-x: 6vw;
-    --scene-media-settle-x: 1vw;
-    --scene-media-exit-x: 2vw;
-    --scene-portal-left: 0%;
-    --scene-perspective-x: 26%;
+    --scene-entry-x: -88vw;
+    --scene-entry-yaw: 22deg;
+    --scene-exit-x: -42vw;
+    --scene-exit-yaw: -10deg;
+    --scene-detail-x: -10vw;
+    --scene-detail-yaw: 5deg;
+    --scene-media-x: 12vw;
+    --scene-media-exit-x: -6vw;
+    --scene-before-clip: inset(3% 36% 3% 0 round 24px);
+    --scene-after-clip: inset(4% 0 4% 42% round 22px);
+    --scene-perspective-x: 22%;
   }
   main > .scene:nth-child(even) {
-    --scene-entry-x: 64vw;
-    --scene-entry-yaw: -8deg;
-    --scene-settle-x: 7vw;
-    --scene-settle-yaw: -1.2deg;
-    --scene-exit-mid-x: 14vw;
-    --scene-exit-mid-yaw: 3deg;
-    --scene-exit-x: 18vw;
-    --scene-exit-yaw: 4deg;
-    --scene-media-x: -6vw;
-    --scene-media-settle-x: -1vw;
-    --scene-media-exit-x: -2vw;
-    --scene-portal-left: 100%;
-    --scene-perspective-x: 74%;
+    --scene-entry-x: 88vw;
+    --scene-entry-yaw: -22deg;
+    --scene-exit-x: 42vw;
+    --scene-exit-yaw: 10deg;
+    --scene-detail-x: 10vw;
+    --scene-detail-yaw: -5deg;
+    --scene-media-x: -12vw;
+    --scene-media-exit-x: 6vw;
+    --scene-before-clip: inset(3% 0 3% 36% round 24px);
+    --scene-after-clip: inset(4% 42% 4% 0 round 22px);
+    --scene-perspective-x: 78%;
+  }
+  main > .scene::before { top: 4svh; bottom: 4svh; width: 64vw; }
+  .scene-transitions-ready main > .scene[data-scene-state] .scene-stage {
+    clip-path: none;
+    transition-property: transform, opacity;
   }
   .site-header { width: calc(100% - 24px); padding-top: 18px; }
   .site-header[data-elevated="true"] { top: 8px; }
@@ -1000,6 +1027,12 @@ footer {
   .blog-card,
   .blog-card-media img,
   .blog-read span { animation: none; opacity: 1; transform: none; transition: none; }
+  .scene-stage { clip-path: none; }
+  .scene-transitions-ready main > .scene .scene-stage > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
   main > .scene > .section-media { animation: none; transform: none; transition: none; }
   main > .scene::before,
   main > .scene::after { display: none; }
