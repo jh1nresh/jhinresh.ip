@@ -57,41 +57,49 @@ Repositories that are forks, learning exercises, dormant duplicates, infrastruct
 
 ## Information architecture
 
-1. Full-screen identity hero
-2. Verifiable proof strip
-3. Featured project stories
-4. Filterable project index
-5. Current research thesis
-6. Working principles and technical stack
-7. Contact
+1. Full-screen video identity hero
+2. Centered operating-belief tagline
+3. Split selected-work feature with five project tabs
+4. HLS-backed research statement and proof stats
+5. Full-screen video contact CTA
+6. Three-column footer
 
 ## Visual direction
 
-Original design inspired by the reference video's vocabulary, not a clone:
+The site follows the supplied Velorah prompt's visual system while keeping Jerry's
+verified identity, work, and links:
 
-- near-black cinematic surface;
-- acid-lime signal color with restrained ember accent;
-- oversized condensed typography;
-- faint grid/noise and mouse spotlight;
-- project imagery used as evidence, not decoration;
-- dense editorial labels and generous section scale;
-- card tilt, reveal, filter, and reduced-motion fallbacks.
+- pure-black cinematic surface with full-bleed video scenes;
+- Instrument Serif display typography and Inter body typography;
+- white, gray, and near-black palette;
+- selective liquid-glass navigation and calls to action;
+- generous vertical rhythm, centered statements, and a two-column feature split;
+- restrained fade-rise motion and a complete reduced-motion fallback.
 
 ## Acceptance criteria
 
 - Desktop and mobile layouts are usable and visually coherent.
 - Navigation anchors work and header state responds to scroll.
-- Project filters work with keyboard-accessible buttons.
+- Project tabs update the featured content, progress, and destination and support keyboard navigation.
+- MP4 backgrounds and the HLS statement stream degrade to readable black sections when media is unavailable.
 - Every public link is sourced from a verified local README or git remote.
-- Maturity labels distinguish live, shipped, prototype, and research work.
 - No private phone number, secrets, analytics, or unverifiable metrics appear.
 - `node --check script.js` passes.
 - Local browser QA produces no console errors.
-- Primary interactions and all image paths are verified.
+- Primary interactions and all media paths are verified.
 
 ## Security scan receipt
 
-`N/A` for scanner execution: this is a static HTML/CSS/JS portfolio with no authentication, payments, backend, user data storage, third-party scripts, or form submission. Manual safety requirements: no secrets/private phone number, links use `rel="noreferrer"` where appropriate, and external pages are never embedded.
+`N/A` for scanner execution: this is a static HTML/CSS/JS portfolio with no
+authentication, payments, backend, user data storage, or form submission. It loads
+display fonts from Google Fonts, three decorative MP4 files from the supplied
+CloudFront URLs, one Mux HLS stream, and a pinned hls.js browser build from jsDelivr.
+Media failure leaves the copy and calls to action readable. Manual safety requirements:
+no secrets/private phone number, links use `rel="noreferrer"` where appropriate, and
+no form data or first-party analytics are collected. Browser requests to the font,
+media, and script providers expose normal network metadata such as IP address and
+user-agent. Confirm media reuse rights or replace/self-host the supplied assets before
+treating a public deployment as durable.
 
 ## Demand / distribution / paywall
 
