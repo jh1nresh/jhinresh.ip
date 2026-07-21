@@ -22,7 +22,7 @@
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260721-3" />
+    <link rel="stylesheet" href="./styles.css?v=20260721-7" />
   </head>
   <body>
     <header class="site-header" data-elevated="false">
@@ -32,14 +32,14 @@
         <a href="#about">About</a>
         <a href="#work">Work</a>
         <a href="#research">Proofs</a>
-        <span class="nav-placeholder" aria-disabled="true">Blog</span>
+        <a href="#blog">Blog</a>
         <a href="#contact">Contact</a>
       </nav>
       <a class="liquid-glass header-cta" href="mailto:jhinresh@gmail.com">Contact Jerry</a>
     </header>
 
     <main id="top">
-      <section class="hero" id="home" aria-labelledby="hero-title">
+      <section class="hero scene" id="home" aria-labelledby="hero-title">
         <video
           class="section-media"
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4"
@@ -52,7 +52,7 @@
           aria-hidden="true"
         ></video>
         <div class="hero-shade" aria-hidden="true"></div>
-        <div class="hero-content">
+        <div class="hero-content scene-stage">
           <p class="overline animate-fade-rise">Founder &amp; engineer · Based in Irvine, from Taiwan</p>
           <h1 id="hero-title" class="animate-fade-rise">
             Systems that <em>survive</em><br />contact with the real world.
@@ -65,19 +65,21 @@
         </div>
       </section>
 
-      <section class="tagline" id="about" aria-labelledby="tagline-title">
-        <p class="overline reveal">How I build</p>
-        <h2 id="tagline-title" class="reveal">
-          Ideas are easy.<br /><em>Systems have to hold.</em>
-        </h2>
-        <p class="tagline-copy reveal">
-          A model can propose an action. A real system must constrain it, verify it,
-          recover from failure, and leave evidence someone else can inspect.
-        </p>
+      <section class="tagline scene" id="about" aria-labelledby="tagline-title">
+        <div class="tagline-content scene-stage">
+          <p class="overline reveal">How I build</p>
+          <h2 id="tagline-title" class="reveal">
+            Ideas are easy.<br /><em>Systems have to hold.</em>
+          </h2>
+          <p class="tagline-copy reveal">
+            A model can propose an action. A real system must constrain it, verify it,
+            recover from failure, and leave evidence someone else can inspect.
+          </p>
+        </div>
       </section>
 
-      <section class="feature-section" id="work" aria-labelledby="feature-title">
-        <div class="feature-split">
+      <section class="feature-section scene" id="work" aria-labelledby="feature-title">
+        <div class="feature-split scene-stage">
           <article class="feature-panel reveal" id="project-feature-panel" role="tabpanel" aria-live="polite">
             <div class="feature-copy">
               <span class="feature-icon" aria-hidden="true"></span>
@@ -130,7 +132,7 @@
         </div>
       </section>
 
-      <section class="statement" id="research" aria-labelledby="statement-title">
+      <section class="statement scene" id="research" aria-labelledby="statement-title">
         <video
           class="section-media"
           data-hls-video
@@ -144,24 +146,70 @@
           aria-hidden="true"
         ></video>
         <div class="statement-shade" aria-hidden="true"></div>
-        <div class="statement-content reveal">
-          <p class="overline">Verifiable infrastructure</p>
-          <h2 id="statement-title">Guided by judgment.<br /><em>Backed by proof.</em></h2>
-          <p class="statement-copy">
-            Across SAV-E, Maiat, SLL-R, Match Receipt, and current hedging and AMM
-            risk research, the same rule applies: constrain the action and make the result inspectable.
-          </p>
-          <div class="stats" aria-label="Selected proof">
-            <div><strong>1st</strong><span>Jito Grid<br />Sponge</span></div>
-            <div><strong>2nd</strong><span>BNB US College<br />Dojo</span></div>
-            <div><strong>Top 5</strong><span>Base Batches 003<br />Maiat</span></div>
-            <div><strong>4</strong><span>Execution surfaces<br />iOS · EVM · Solana · Web</span></div>
+        <div class="scene-stage">
+          <div class="statement-content reveal">
+            <p class="overline">Verifiable infrastructure</p>
+            <h2 id="statement-title">Guided by judgment.<br /><em>Backed by proof.</em></h2>
+            <p class="statement-copy">
+              Across SAV-E, Maiat, SLL-R, Match Receipt, and current hedging and AMM
+              risk research, the same rule applies: constrain the action and make the result inspectable.
+            </p>
+            <div class="stats" aria-label="Selected proof">
+              <div><strong>1st</strong><span>Jito Grid<br />Sponge</span></div>
+              <div><strong>2nd</strong><span>BNB US College<br />Dojo</span></div>
+              <div><strong>Top 5</strong><span>Base Batches 003<br />Maiat</span></div>
+              <div><strong>4</strong><span>Execution surfaces<br />iOS · EVM · Solana · Web</span></div>
+            </div>
+            <a class="liquid-glass statement-link" href="https://github.com/jh1nresh?tab=repositories" target="_blank" rel="noreferrer">Browse GitHub Projects</a>
           </div>
-          <a class="liquid-glass statement-link" href="https://github.com/jh1nresh?tab=repositories" target="_blank" rel="noreferrer">Browse GitHub Projects</a>
         </div>
       </section>
 
-      <section class="join" id="contact" aria-labelledby="contact-title">
+      <section class="blog-section scene" id="blog" aria-labelledby="blog-title">
+        <div class="blog-shell scene-stage">
+          <div class="blog-heading">
+            <p class="overline reveal">Field notes</p>
+            <h2 id="blog-title" class="reveal">Small experiments.<br /><em>Real artifacts.</em></h2>
+            <p class="blog-heading-copy reveal">
+              Short notes from the workbench—what I made, what moved, and what became useful enough to share.
+            </p>
+          </div>
+
+          <a
+            class="blog-card reveal"
+            href="https://xhslink.com/o/1kuBPpt5C1I"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Read Turning a long-distance girlfriend into a desktop pet on Xiaohongshu"
+          >
+            <div class="blog-card-copy">
+              <div class="blog-card-meta">
+                <span class="blog-card-number">01</span>
+                <span>Xiaohongshu · Build note</span>
+              </div>
+              <p class="blog-original-title" lang="zh-Hans">把异地女友变成桌宠。</p>
+              <h3>Turning a long-distance girlfriend into a desktop pet.</h3>
+              <p class="blog-card-summary">
+                A two-hour Codex build using one graduation photo, shaped into nine animation states and sixteen viewing directions.
+              </p>
+              <span class="blog-read">Read the post <span aria-hidden="true">↗</span></span>
+            </div>
+            <figure class="blog-card-media">
+              <img
+                src="./assets/blog/desktop-pet-cover.svg"
+                alt="Graduation-style desktop pet character holding a plush rabbit"
+                width="420"
+                height="454"
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>9 animation states · 16 viewing directions</figcaption>
+            </figure>
+          </a>
+        </div>
+      </section>
+
+      <section class="join scene" id="contact" aria-labelledby="contact-title">
         <video
           class="section-media"
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260306_074215_04640ca7-042c-45d6-bb56-58b1e8a42489.mp4"
@@ -174,16 +222,18 @@
           aria-hidden="true"
         ></video>
         <div class="join-shade" aria-hidden="true"></div>
-        <div class="join-content reveal">
-          <p class="overline">Irvine, California · Originally from Taiwan</p>
-          <h2 id="contact-title">Build what holds</h2>
-          <p>
-            Open to protocol security, AMM risk infrastructure, verifiable agent systems,
-            and hands-on engineering collaborations with clear scope and ownership.
-          </p>
-          <div class="join-actions">
-            <a class="liquid-glass join-primary" href="mailto:jhinresh@gmail.com">Email Jerry</a>
-            <a class="join-secondary" href="https://github.com/jh1nresh" target="_blank" rel="noreferrer">View GitHub</a>
+        <div class="scene-stage">
+          <div class="join-content reveal">
+            <p class="overline">Irvine, California · Originally from Taiwan</p>
+            <h2 id="contact-title">Build what holds</h2>
+            <p>
+              Open to protocol security, AMM risk infrastructure, verifiable agent systems,
+              and hands-on engineering collaborations with clear scope and ownership.
+            </p>
+            <div class="join-actions">
+              <a class="liquid-glass join-primary" href="mailto:jhinresh@gmail.com">Email Jerry</a>
+              <a class="join-secondary" href="https://github.com/jh1nresh" target="_blank" rel="noreferrer">View GitHub</a>
+            </div>
           </div>
         </div>
       </section>
@@ -199,6 +249,7 @@
           <a href="#about">Operating belief</a>
           <a href="#work">Selected work</a>
           <a href="#research">Proofs</a>
+          <a href="#blog">Blog</a>
           <a href="#contact">Contact</a>
         </nav>
         <div class="footer-follow">

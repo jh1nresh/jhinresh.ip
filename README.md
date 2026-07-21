@@ -1,7 +1,7 @@
 # jhinresh.ip
 
 A cinematic, static portfolio built from Jerry Chen's verified product work and a
-six-part, video-led editorial layout.
+video-led editorial layout.
 
 The page is intentionally not a repository dump. Projects are selected when their local source provides a coherent product statement plus inspectable implementation, public source, live proof, or a technical primitive worth evaluating.
 

@@ -31,8 +31,9 @@ jobs:
 
       - name: Prepare site artifact
         run: |
-          mkdir -p _site
+          mkdir -p _site/assets/blog
           cp index.html styles.css script.js _site/
+          cp assets/blog/desktop-pet-cover.svg _site/assets/blog/
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
