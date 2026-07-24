@@ -39,7 +39,7 @@ Repositories that are forks, learning exercises, dormant duplicates, infrastruct
 - SAV-E — private place memory for iOS
 - Maiat + Dojo — reputation clearing and agent work infrastructure
 - SLL-R — merchant-backed order execution for AI agents
-- Match Receipt Engine — proof-gated deterministic settlement
+- R8 — branch-level cross-strait food evidence and discovery
 
 ### Product and protocol experiments
 
@@ -60,7 +60,7 @@ Repositories that are forks, learning exercises, dormant duplicates, infrastruct
 1. Full-screen video identity hero
 2. Centered operating-belief tagline
 3. Split selected-work feature with five project tabs
-4. HLS-backed research statement and proof stats
+4. HLS-backed awards and recognition
 5. Full-screen video contact CTA
 6. Three-column footer
 
