@@ -12,7 +12,7 @@ The page is intentionally not a repository dump. Projects are selected when thei
 - SAV-E — private place memory for iOS
 - Maiat + Dojo — reputation clearing for agent work
 - SLL-R — merchant-backed order execution for AI agents
-- Match Receipt Engine — proof-gated deterministic settlement
+- R8 — branch-level cross-strait food evidence and discovery
 
 ### Product and protocol experiments
 

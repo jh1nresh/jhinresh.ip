@@ -1000,7 +1000,7 @@ footer {
   .statement, .join { min-height: 90svh; padding: 104px 20px; }
   .statement h2 { font-size: clamp(50px, 14vw, 64px); letter-spacing: -1.2px; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 32px 18px; }
-  .stats strong { font-size: 42px; }
+  .stats strong { font-size: clamp(30px, 10vw, 42px); }
   .blog-section { padding-block: 100px; }
   .blog-heading { gap: 22px; margin-bottom: 36px; }
   .blog-heading h2 { font-size: clamp(46px, 13vw, 58px); letter-spacing: -1px; }

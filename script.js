@@ -92,7 +92,7 @@ const featureData = {
     description:
       "Turns social posts, maps, web pages, voice notes, and Google Takeout into reviewable evidence and confirmed Map Stamps—without guessing.",
     stack: "SwiftUI · MapKit · App Intents · PostgreSQL",
-    href: "https://sav-e-app.vercel.app",
+    href: "https://testflight.apple.com/join/aSVm9hRJ",
     linkLabel: "Open SAV-E",
   },
   maiat: {
@@ -115,15 +115,15 @@ const featureData = {
     href: "https://github.com/jh1nresh/SLL-R",
     linkLabel: "View SLL-R Source",
   },
-  match: {
-    kicker: "Settlement · Merkle proof",
-    title: "Match Receipt Engine",
-    thesis: "Deterministic settlement backed by Merkle proofs.",
+  r8: {
+    kicker: "Food intelligence · Evidence",
+    title: "R8",
+    thesis: "Cross-strait food discovery backed by traceable evidence.",
     description:
-      "Live match events become Merkle-verifiable receipts. Valid evidence advances settlement; tampered evidence stops it.",
-    stack: "State machines · Merkle proofs · Tamper demo",
-    href: "https://match-receipt-engine.vercel.app",
-    linkLabel: "Run the Demo",
+      "Turns restaurant sources and taste signals into branch-level rankings for Taipei, New Taipei, and Shanghai—with explicit scoring and abstention boundaries.",
+    stack: "Astro · TypeScript · Evidence graph · Eval harness",
+    href: "https://github.com/jh1nresh/r8",
+    linkLabel: "View R8 Source",
   },
   more: {
     kicker: "Product + protocol experiments",
