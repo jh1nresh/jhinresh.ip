@@ -1,34 +1,19 @@
 # jhinresh.ip
 
-A cinematic, static portfolio built from Jerry Chen's verified product work and a
-video-led editorial layout.
+A static, proof-led portfolio for JhiNResH. The design combines an editorial full-viewport identity hero with three focused case studies, a writing destination, and a short recognition record.
 
-The page is intentionally not a repository dump. Projects are selected when their local source provides a coherent product statement plus inspectable implementation, public source, live proof, or a technical primitive worth evaluating.
+The page is intentionally not a repository dump. Work is selected when it communicates a consequential decision and points to something public or inspectable.
 
 ## Included work
 
-### Flagship systems
+- SAV-E — private, evidence-backed place memory for iOS
+- Maiat + Dojo — inspectable trust and execution infrastructure for agents
+- SLL-R — repeatable reasoning for smart-contract review
+- Writing — Substack long-form destination plus selected build notes
 
-- SAV-E — private place memory for iOS
-- Maiat + Dojo — reputation clearing for agent work
-- SLL-R — merchant-backed order execution for AI agents
-- R8 — branch-level cross-strait food evidence and discovery
+CV and LinkedIn are intentionally not included. Contact is limited to email, GitHub, X, and Substack.
 
-### Product and protocol experiments
-
-- Oshiami
-- Cloak
-- Jiagon
-- Gimi
-- Pincher
-- flops
-- ClearTrade Agent
-
-### Research
-
-- Hedge / AMM risk infrastructure, clearly labeled as research rather than a shipped product
-
-See [`docs/portfolio-scope.md`](./docs/portfolio-scope.md) for the selection rule, information architecture, acceptance criteria, and safety receipt.
+See [`docs/portfolio-scope.md`](./docs/portfolio-scope.md) for the selection rule, information architecture, and acceptance criteria.
 
 ## Run locally
 
@@ -49,12 +34,6 @@ Then inspect desktop and mobile widths in a browser and check the browser consol
 
 ## Deployment
 
-This is plain HTML, CSS, and JavaScript. It can be deployed to Vercel, GitHub Pages,
-Netlify, or any static host without a build step. Cinematic backgrounds load from the
-supplied CloudFront and Mux URLs, with hls.js loaded from a pinned jsDelivr URL; the
-content remains readable if those media resources are unavailable.
+This is plain HTML, CSS, and JavaScript with no build step. GitHub Actions publishes the site to GitHub Pages from `main`.
 
-The supplied CloudFront and Mux media are third-party dependencies. Confirm reuse
-rights or replace/self-host them before treating a public deployment as durable.
-
-No analytics, backend, form submission, authentication, or private phone number is included.
+All visible media is stored in this repository. No analytics, backend, form submission, authentication, CV, LinkedIn profile, or private phone number is included.

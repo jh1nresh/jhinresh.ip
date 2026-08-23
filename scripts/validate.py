@@ -24,7 +24,7 @@ class PortfolioParser(HTMLParser):
         if element_id := values.get("id"):
             self.ids.append(element_id)
         if tag == "img":
-            if not values.get("alt"):
+            if "alt" not in values:
                 self.images_without_alt += 1
             if src := values.get("src"):
                 self._record_asset(src)
@@ -67,7 +67,7 @@ def main() -> int:
     if unsafe_external:
         errors.append("external links missing rel=noreferrer: " + ", ".join(unsafe_external))
 
-    required_sections = {"top", "work", "index", "research", "contact"}
+    required_sections = {"top", "about", "work", "writing", "recognition", "contact"}
     missing_sections = required_sections.difference(parser.ids)
     if missing_sections:
         errors.append("missing sections: " + ", ".join(sorted(missing_sections)))
