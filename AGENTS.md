@@ -9,7 +9,9 @@ to Vercel, GitHub Pages, Netlify, or any static host.
 
 ## Before Editing
 
-- Read `README.md`, `index.html`, `styles.css`, and `script.js`.
+- Read the target file and the relevant consumer. Read `README.md` for project
+  context, `styles.css` for layout/styling, and `script.js` for behavior only when
+  they can affect the requested edit; do not require all four for a text fix.
 - Preserve the current one-page narrative: founder-engineer, verifiable agents,
   crypto rails, receipts, reputation, and proof-driven shipping.
 - Do not expose private phone numbers or sensitive personal data unless the user
@@ -17,7 +19,7 @@ to Vercel, GitHub Pages, Netlify, or any static host.
 
 ## Verification
 
-For content/CSS/JS changes:
+For changes affecting visible layout or browser interaction:
 
 ```bash
 python3 -m http.server 4173
@@ -25,7 +27,8 @@ python3 -m http.server 4173
 
 Then inspect desktop and mobile widths in a browser.
 
-For syntax-only checks:
+For a copy-only edit, verify the exact wording, links and diff; inspect rendering
+if wrapping or layout may change. For JavaScript syntax checks:
 
 ```bash
 node --check script.js
