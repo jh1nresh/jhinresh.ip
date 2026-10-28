@@ -25,8 +25,7 @@ The portrait now introduces Jerry on the opening page. Copy uses first person
 without new biography or role claims. Two selected recognitions appear on the
 cover; Maiat/Dojo links its corresponding results to an always-open12-entry
 record grouped2026/2025/2024. The chapter is labelled Awards & blog; each has its
-own page. Blog currently links to the existing X/Substack profiles, pending the
-owner’s chosen post URLs. The research hash scrolls to and focuses the recognition
+own page. Blog remains blank until the owner supplies chosen post URLs. The research hash scrolls to and focuses the recognition
 heading.
 
 Book pages use the same frame in every chapter: 780px high on desktop and

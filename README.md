@@ -14,8 +14,7 @@ The opening page pairs Jerry’s owned portrait and a short first-person introdu
 with two inherited recognition highlights. Maiat/Dojo includes project-specific
 recognition; the final spread gives awards and writing one page each. The left
 page openly lists all12 inherited awards, grants and cohort entries by year; the
-right page links to Jerry’s X and Substack writing. Individual post links await
-the owner’s selection. Recognition links focus the full record heading.
+right page reserves a blank Blog area. Article links await the owner’s selection. Recognition links focus the full record heading.
 
 ## Run locally
 
