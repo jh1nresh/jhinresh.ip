@@ -15,7 +15,7 @@
    const children=[...root.children];
    for(let i=0;i<children.length;i++){
     const child=children[i];
-    if(child.classList.contains('recognition-record')||child.classList.contains('project-recognition')){
+    if(child.classList.contains('recognition-record')||child.classList.contains('project-recognition')||child.classList.contains('recognition-preview')){
      const items=[...child.children];
      for(let j=0;j<items.length;j++){
       const item=items[j];
