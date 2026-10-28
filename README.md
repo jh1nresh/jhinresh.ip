@@ -55,7 +55,9 @@ Desktop shows two facing pages; mobile shows one physical page at a time, with
 matching page URLs and next/previous controls. Text that exceeds the available
 page height uses readable sections with Continue reading controls, without
 scrolling or reducing the whole book to a miniature. Resize and font/image loads
-recompute section boundaries. Without the reader enhancement, native content
+recompute section boundaries. Extremely short screens use compact spacing; any
+unbreakable unit still taller than the remaining area retains native scrolling
+so its content stays accessible. Without the reader enhancement, native content
 remains fully readable.
 A retained sheet has the old page on its front and the incoming page on its back;
 the sheet bends across18 connected material strips, with the outer edge leading

@@ -37,36 +37,42 @@
   previous.type=next.type='button';previous.textContent='←';next.textContent='→';
   previous.setAttribute('aria-label','Previous section');next.setAttribute('aria-label','Continue reading');readout.setAttribute('role','status');
   pager.append(previous,readout,next);page.insertBefore(pager,page.querySelector('.folio-foot'));
-  const record={page,content,units,pager,previous,next,readout,parts:[],part:0,index,side};records.push(record);
+  const record={page,content,units,baseUnits:units,pager,previous,next,readout,parts:[],oversized:new Set(),part:0,index,side};records.push(record);
   previous.addEventListener('click',()=>select(record,record.part-1,true));next.addEventListener('click',()=>select(record,record.part+1,true));
  }
  function select(record,part,focus=false){
   record.part=Math.max(0,Math.min(record.parts.length-1,part));
   const visible=new Set(record.parts[record.part]||record.units);
   record.units.forEach(unit=>unit.forEach(node=>{node.hidden=!visible.has(unit);}));
+  if([...visible].some(unit=>record.oversized.has(unit)))record.content.dataset.overflow='';else delete record.content.dataset.overflow;
   record.previous.disabled=record.part===0;record.next.disabled=record.part===record.parts.length-1;
   record.readout.textContent=`Reading ${record.part+1} / ${record.parts.length}`;
   record.content.scrollTop=0;if(focus)record.content.focus({preventScroll:true});
  }
  function fit(){
   for(const record of records){
-   const {page,content,units,pager}=record,spread=spreads[record.index],hidden=spread.hidden;
-   spread.hidden=false;page.dataset.measuring='';pager.hidden=true;page.style.setProperty('--content-height',`${content.clientHeight}px`);
+   record.units=[...record.baseUnits];record.oversized=new Set();
+   const {page,content,units,pager}=record,scrollTop=content.scrollTop,spread=spreads[record.index],hidden=spread.hidden;
+   spread.hidden=false;page.dataset.measuring='';pager.hidden=true;delete content.dataset.overflow;page.style.setProperty('--content-height',`${content.clientHeight}px`);
    units.forEach(unit=>unit.forEach(node=>{node.hidden=false;}));
    record.parts=[units];
    if(content.scrollHeight>content.clientHeight+1){
     pager.hidden=false;page.style.setProperty('--content-height',`${content.clientHeight}px`);units.forEach(unit=>unit.forEach(node=>{node.hidden=true;}));
     const parts=[];let part=[];
-    for(const unit of units){
-     unit.forEach(node=>{node.hidden=false;});
+    for(let i=0;i<units.length;i++){
+     const unit=units[i];unit.forEach(node=>{node.hidden=false;});
      if(part.length&&content.scrollHeight>content.clientHeight+1){
       part.forEach(group=>group.forEach(node=>{node.hidden=true;}));parts.push(part);part=[];
+     }
+     if(content.scrollHeight>content.clientHeight+1){
+      if(unit.length>1){unit.forEach(node=>{node.hidden=true;});units.splice(i,1,...unit.map(node=>[node]));i--;continue;}
+      record.oversized.add(unit);
      }
      part.push(unit);
     }
     if(part.length)parts.push(part);record.parts=parts;pager.hidden=parts.length<=1;
    }
-   select(record,record.part);delete page.dataset.measuring;spread.hidden=hidden;
+   select(record,record.part);content.scrollTop=scrollTop;delete page.dataset.measuring;spread.hidden=hidden;
   }
  }
  function reveal(record,hash){

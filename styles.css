@@ -130,3 +130,26 @@ html[data-book-fit] .page[data-measuring]{width:50%}
 @media(max-width:760px){html[data-book-fit] .page[data-measuring]{width:100%}}
 
 html[data-book-fit] .interface-preview .feature-media img{max-height:calc(var(--content-height,100cqh) - 92px)}html[data-book-fit] .feature-media:not(:has(> :not([hidden]))){display:none}
+
+/* Keep short landscape screens compact; never make an unbreakable unit inaccessible. */
+html[data-book-fit] .page-content[data-overflow]{overflow-y:auto;scrollbar-width:thin;overscroll-behavior:contain}
+html[data-book-fit] .page-content[data-overflow]::-webkit-scrollbar{display:block;width:6px}
+@media(max-height:480px){
+ html[data-book-fit] body{grid-template-rows:36px minmax(0,1fr)}
+ html[data-book-fit] footer{display:none}
+ html[data-book-fit] .masthead{height:36px}.masthead .brand small{display:none}
+ html[data-book-fit] .reader{grid-template-rows:34px minmax(0,1fr) 44px 26px;gap:2px}
+ html[data-book-fit] .chapter-tabs{height:34px}
+ html[data-book-fit] .chapter-tabs a,html[data-book-fit] .chapter-tabs a[aria-current=page]{min-height:30px;padding-block:5px}
+ html[data-book-fit] .reader-controls{height:42px;margin:0 auto}
+ html[data-book-fit] .motion-controls{height:26px}
+ html[data-book-fit] .motion-toggle{min-height:26px;padding:2px 10px}
+ html[data-book-fit] .page{padding-block:8px}
+ html[data-book-fit] .folio-head{padding-bottom:5px}
+ html[data-book-fit] .folio-foot{padding-top:5px}
+ html[data-book-fit] .chapter-copy,html[data-book-fit] .project-spread .chapter-copy{padding-top:8px}
+ html[data-book-fit] .intro-heading h1{font-size:42px}
+ html[data-book-fit] h2{font-size:26px}
+ html[data-book-fit] .page-pager{margin-top:4px;min-height:36px}
+}
+@media(max-height:480px) and (max-width:480px){html[data-book-fit] .chapter-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));height:34px}html[data-book-fit] .chapter-tabs a,html[data-book-fit] .chapter-tabs a[aria-current=page]{padding:2px;font-size:8px;white-space:normal;text-align:center;justify-content:center;line-height:1.15}html[data-book-fit] .chapter-tabs a span{display:none}}

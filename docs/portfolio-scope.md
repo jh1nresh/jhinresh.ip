@@ -33,7 +33,9 @@ one physical page at a time. The navigation counts all twelve folios and mobile
 right-hand pages have explicit page-NN hashes. Overflowing text is divided into
 readable sections with Previous section / Continue reading controls. The page,
 book frame and navigation require no vertical scrolling; all inherited content
-remains reachable. Resize, fonts, images and expanded interface previews trigger
+remains reachable. Extremely short screens use compact spacing; oversized groups
+split further, and unbreakable content retains a native scrolling escape hatch
+within its page rather than being clipped. Resize, fonts, images and expanded interface previews trigger
 measurement at each page’s actual width. Main-script failure retains native flow.
 
 The two-sided paper leaf bends across18 connected strips, including single-page
