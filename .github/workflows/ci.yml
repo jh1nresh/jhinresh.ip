@@ -33,4 +33,18 @@ jobs:
         run: python3 scripts/validate.py
 
       - name: Check JavaScript syntax
-        run: node --check script.js
+        run: |
+          node --check script.js
+          node --check cabinet.js
+          node --check workflows.js
+
+      - name: Check figure build
+        run: |
+          node scripts/build-cabinet.mjs
+          node scripts/build-savvy.mjs
+          git diff --exit-code -- index.html assets/figures/
+
+      - name: Check navigation and cabinet lifecycle
+        run: |
+          node scripts/test-runtime.mjs
+          node scripts/test-workflows.mjs

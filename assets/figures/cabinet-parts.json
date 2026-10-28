@@ -1,0 +1,644 @@
+{
+  "projection": {
+    "origin": [
+      225,
+      165
+    ],
+    "scale": 0.9682458365518543,
+    "azimuth": 45,
+    "elevation": 35.264389682754654
+  },
+  "travel": 28,
+  "parts": [
+    {
+      "name": "platform foot",
+      "x": -3,
+      "y": 1,
+      "z": 0,
+      "w": 13,
+      "d": 12,
+      "h": 4
+    },
+    {
+      "name": "platform foot",
+      "x": 112,
+      "y": 1,
+      "z": 0,
+      "w": 13,
+      "d": 12,
+      "h": 4
+    },
+    {
+      "name": "platform foot",
+      "x": -3,
+      "y": 116,
+      "z": 0,
+      "w": 13,
+      "d": 12,
+      "h": 4
+    },
+    {
+      "name": "platform foot",
+      "x": 112,
+      "y": 116,
+      "z": 0,
+      "w": 13,
+      "d": 12,
+      "h": 4
+    },
+    {
+      "name": "platform",
+      "x": -7,
+      "y": -4,
+      "z": 4,
+      "w": 134,
+      "d": 137,
+      "h": 5
+    },
+    {
+      "name": "cabinet foot",
+      "x": 5,
+      "y": 8,
+      "z": 9,
+      "w": 10,
+      "d": 10,
+      "h": 5
+    },
+    {
+      "name": "cabinet foot",
+      "x": 105,
+      "y": 8,
+      "z": 9,
+      "w": 10,
+      "d": 10,
+      "h": 5
+    },
+    {
+      "name": "cabinet foot",
+      "x": 5,
+      "y": 70,
+      "z": 9,
+      "w": 10,
+      "d": 10,
+      "h": 5
+    },
+    {
+      "name": "cabinet foot",
+      "x": 105,
+      "y": 70,
+      "z": 9,
+      "w": 10,
+      "d": 10,
+      "h": 5
+    },
+    {
+      "name": "cabinet bottom",
+      "x": 0,
+      "y": 4,
+      "z": 14,
+      "w": 120,
+      "d": 82,
+      "h": 6
+    },
+    {
+      "name": "back panel",
+      "x": 4,
+      "y": 4,
+      "z": 20,
+      "w": 112,
+      "d": 4,
+      "h": 129
+    },
+    {
+      "name": "left side",
+      "x": 0,
+      "y": 4,
+      "z": 20,
+      "w": 5,
+      "d": 82,
+      "h": 129
+    },
+    {
+      "name": "support shelf",
+      "x": 5,
+      "y": 8,
+      "z": 20,
+      "w": 110,
+      "d": 71,
+      "h": 3
+    },
+    {
+      "name": "drawer guide",
+      "x": 6,
+      "y": 10,
+      "z": 23,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "drawer guide",
+      "x": 110,
+      "y": 10,
+      "z": 23,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "support shelf",
+      "x": 5,
+      "y": 8,
+      "z": 53,
+      "w": 110,
+      "d": 71,
+      "h": 3
+    },
+    {
+      "name": "drawer guide",
+      "x": 6,
+      "y": 10,
+      "z": 56,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "drawer guide",
+      "x": 110,
+      "y": 10,
+      "z": 56,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "support shelf",
+      "x": 5,
+      "y": 8,
+      "z": 86,
+      "w": 110,
+      "d": 71,
+      "h": 3
+    },
+    {
+      "name": "drawer guide",
+      "x": 6,
+      "y": 10,
+      "z": 89,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "drawer guide",
+      "x": 110,
+      "y": 10,
+      "z": 89,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "support shelf",
+      "x": 5,
+      "y": 8,
+      "z": 119,
+      "w": 110,
+      "d": 71,
+      "h": 3
+    },
+    {
+      "name": "drawer guide",
+      "x": 6,
+      "y": 10,
+      "z": 122,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "drawer guide",
+      "x": 110,
+      "y": 10,
+      "z": 122,
+      "w": 4,
+      "d": 69,
+      "h": 2
+    },
+    {
+      "name": "drawer floor maiat",
+      "x": 10,
+      "y": 10,
+      "z": 23,
+      "w": 100,
+      "d": 70,
+      "h": 2
+    },
+    {
+      "name": "drawer back maiat",
+      "x": 10,
+      "y": 10,
+      "z": 25,
+      "w": 100,
+      "d": 3,
+      "h": 16
+    },
+    {
+      "name": "drawer wall maiat",
+      "x": 10,
+      "y": 13,
+      "z": 25,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "drawer wall maiat",
+      "x": 107,
+      "y": 13,
+      "z": 25,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "project folio maiat",
+      "x": 20,
+      "y": 27,
+      "z": 25,
+      "w": 78,
+      "d": 44,
+      "h": 1.5
+    },
+    {
+      "name": "drawer front maiat",
+      "x": 7,
+      "y": 80,
+      "z": 22,
+      "w": 106,
+      "d": 5,
+      "h": 23
+    },
+    {
+      "name": "handle mount maiat",
+      "x": 44,
+      "y": 85,
+      "z": 24,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "handle mount maiat",
+      "x": 75,
+      "y": 85,
+      "z": 24,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "drawer handle maiat",
+      "x": 44,
+      "y": 89,
+      "z": 24,
+      "w": 34,
+      "d": 3,
+      "h": 3
+    },
+    {
+      "name": "drawer floor eznest",
+      "x": 10,
+      "y": 10,
+      "z": 56,
+      "w": 100,
+      "d": 70,
+      "h": 2
+    },
+    {
+      "name": "drawer back eznest",
+      "x": 10,
+      "y": 10,
+      "z": 58,
+      "w": 100,
+      "d": 3,
+      "h": 16
+    },
+    {
+      "name": "drawer wall eznest",
+      "x": 10,
+      "y": 13,
+      "z": 58,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "drawer wall eznest",
+      "x": 107,
+      "y": 13,
+      "z": 58,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "project folio eznest",
+      "x": 20,
+      "y": 27,
+      "z": 58,
+      "w": 78,
+      "d": 44,
+      "h": 1.5
+    },
+    {
+      "name": "drawer front eznest",
+      "x": 7,
+      "y": 80,
+      "z": 55,
+      "w": 106,
+      "d": 5,
+      "h": 23
+    },
+    {
+      "name": "handle mount eznest",
+      "x": 44,
+      "y": 85,
+      "z": 57,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "handle mount eznest",
+      "x": 75,
+      "y": 85,
+      "z": 57,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "drawer handle eznest",
+      "x": 44,
+      "y": 89,
+      "z": 57,
+      "w": 34,
+      "d": 3,
+      "h": 3
+    },
+    {
+      "name": "drawer floor output",
+      "x": 10,
+      "y": 10,
+      "z": 89,
+      "w": 100,
+      "d": 70,
+      "h": 2
+    },
+    {
+      "name": "drawer back output",
+      "x": 10,
+      "y": 10,
+      "z": 91,
+      "w": 100,
+      "d": 3,
+      "h": 16
+    },
+    {
+      "name": "drawer wall output",
+      "x": 10,
+      "y": 13,
+      "z": 91,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "drawer wall output",
+      "x": 107,
+      "y": 13,
+      "z": 91,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "project folio output",
+      "x": 20,
+      "y": 27,
+      "z": 91,
+      "w": 78,
+      "d": 44,
+      "h": 1.5
+    },
+    {
+      "name": "drawer front output",
+      "x": 7,
+      "y": 80,
+      "z": 88,
+      "w": 106,
+      "d": 5,
+      "h": 23
+    },
+    {
+      "name": "handle mount output",
+      "x": 44,
+      "y": 85,
+      "z": 90,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "handle mount output",
+      "x": 75,
+      "y": 85,
+      "z": 90,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "drawer handle output",
+      "x": 44,
+      "y": 89,
+      "z": 90,
+      "w": 34,
+      "d": 3,
+      "h": 3
+    },
+    {
+      "name": "drawer floor savvy",
+      "x": 10,
+      "y": 10,
+      "z": 122,
+      "w": 100,
+      "d": 70,
+      "h": 2
+    },
+    {
+      "name": "drawer back savvy",
+      "x": 10,
+      "y": 10,
+      "z": 124,
+      "w": 100,
+      "d": 3,
+      "h": 16
+    },
+    {
+      "name": "drawer wall savvy",
+      "x": 10,
+      "y": 13,
+      "z": 124,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "drawer wall savvy",
+      "x": 107,
+      "y": 13,
+      "z": 124,
+      "w": 3,
+      "d": 67,
+      "h": 16
+    },
+    {
+      "name": "project folio savvy",
+      "x": 20,
+      "y": 27,
+      "z": 124,
+      "w": 78,
+      "d": 44,
+      "h": 1.5
+    },
+    {
+      "name": "drawer front savvy",
+      "x": 7,
+      "y": 80,
+      "z": 121,
+      "w": 106,
+      "d": 5,
+      "h": 23
+    },
+    {
+      "name": "handle mount savvy",
+      "x": 44,
+      "y": 85,
+      "z": 123,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "handle mount savvy",
+      "x": 75,
+      "y": 85,
+      "z": 123,
+      "w": 3,
+      "d": 4,
+      "h": 3
+    },
+    {
+      "name": "drawer handle savvy",
+      "x": 44,
+      "y": 89,
+      "z": 123,
+      "w": 34,
+      "d": 3,
+      "h": 3
+    },
+    {
+      "name": "right side",
+      "x": 115,
+      "y": 4,
+      "z": 20,
+      "w": 5,
+      "d": 82,
+      "h": 129
+    },
+    {
+      "name": "top cap",
+      "x": -1,
+      "y": 3,
+      "z": 149,
+      "w": 122,
+      "d": 84,
+      "h": 5
+    },
+    {
+      "name": "top fastener",
+      "x": 5,
+      "y": 9,
+      "z": 154,
+      "w": 1,
+      "d": 1,
+      "h": 0.3
+    },
+    {
+      "name": "top fastener",
+      "x": 112,
+      "y": 9,
+      "z": 154,
+      "w": 1,
+      "d": 1,
+      "h": 0.3
+    },
+    {
+      "name": "top fastener",
+      "x": 5,
+      "y": 78,
+      "z": 154,
+      "w": 1,
+      "d": 1,
+      "h": 0.3
+    },
+    {
+      "name": "top fastener",
+      "x": 112,
+      "y": 78,
+      "z": 154,
+      "w": 1,
+      "d": 1,
+      "h": 0.3
+    },
+    {
+      "name": "notebook back",
+      "x": 29,
+      "y": 24,
+      "z": 154,
+      "w": 57,
+      "d": 41,
+      "h": 1
+    },
+    {
+      "name": "notebook pages",
+      "x": 30,
+      "y": 25,
+      "z": 155,
+      "w": 55,
+      "d": 39,
+      "h": 3
+    },
+    {
+      "name": "notebook cover",
+      "x": 29,
+      "y": 24,
+      "z": 158,
+      "w": 57,
+      "d": 41,
+      "h": 1
+    },
+    {
+      "name": "notebook spine",
+      "x": 29,
+      "y": 24,
+      "z": 154,
+      "w": 3,
+      "d": 41,
+      "h": 5
+    }
+  ]
+}

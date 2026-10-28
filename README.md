@@ -1,60 +1,58 @@
-# jhinresh.ip
+# JhiNResH / Jerry Chen
 
-A cinematic, static portfolio built from Jerry Chen's verified product work and a
-video-led editorial layout.
+A personal website presented as a six-chapter illustrated field book. The user’s
+Every Joule reference guides the reading experience, with Colorfigures/Anatomy
+objects, colored bookmarks, warm paper and a cloth binding. All personal/project
+content is static HTML; no accounts, forms, analytics or payment actions exist.
 
-The page is intentionally not a repository dump. Projects are selected when their local source provides a coherent product statement plus inspectable implementation, public source, live proof, or a technical primitive worth evaluating.
-
-## Included work
-
-### Flagship systems
-
-- SAV-E — private place memory for iOS
-- Maiat + Dojo — reputation clearing for agent work
-- SLL-R — merchant-backed order execution for AI agents
-- R8 — branch-level cross-strait food evidence and discovery
-
-### Product and protocol experiments
-
-- Oshiami
-- Cloak
-- Jiagon
-- Gimi
-- Pincher
-- flops
-- ClearTrade Agent
-
-### Research
-
-- Hedge / AMM risk infrastructure, clearly labeled as research rather than a shipped product
-
-See [`docs/portfolio-scope.md`](./docs/portfolio-scope.md) for the selection rule, information architecture, acceptance criteria, and safety receipt.
+Chapters: Hello → Savvy → OUTPUT → EZNest → Agents → Footnotes/contact.
+Savvy’s TestFlight status, OUTPUT’s devnet/no-production limits and EZNest’s
+workflow-preview/synthetic-shape limits remain visible with their illustrations.
+The withdrawn desktop-pet article and SLL-R are excluded.
 
 ## Run locally
 
 ```bash
-python3 -m http.server 4173
+python3 -m http.server 4174 --bind 127.0.0.1
 ```
 
-Open `http://localhost:4173`.
+Open `http://127.0.0.1:4174/`.
 
-## Verification
+## Build and verify
 
 ```bash
+node scripts/build-cabinet.mjs
+node scripts/build-savvy.mjs
 node --check script.js
+node --check cabinet.js
+node --check workflows.js
+node scripts/test-runtime.mjs
+node scripts/test-workflows.mjs
 python3 scripts/validate.py
 ```
 
-Then inspect desktop and mobile widths in a browser and check the browser console.
+Both builders update standalone SVG, a part inventory and inline SVG in the page.
+The cabinet has 70 solids; the synthetic Savvy station has 48. They combine Anatomy
+rounded slabs with Colorfigures projection/drawing helpers, without mounting a
+library over the host page. Both MIT notices are embedded and in `LICENSES.txt`.
+Archivo is local with its SIL Open Font License; serif headings use system fonts.
 
-## Deployment
+## Reading and animation
 
-This is plain HTML, CSS, and JavaScript. It can be deployed to Vercel, GitHub Pages,
-Netlify, or any static host without a build step. Cinematic backgrounds load from the
-supplied CloudFront and Mux URLs, with hls.js loaded from a pinned jsDelivr URL; the
-content remains readable if those media resources are unavailable.
+Without JavaScript, all six chapters and native anchors remain readable. With
+JavaScript, chapter links, previous/next and history reveal the appropriate spread.
+The cabinet’s four drawers select a project and update its reading link. Savvy’s
+link card moves to review, then a synthetic Map Stamp appears. Both diagrams are
+user-operated, stop at rest/offscreen/hidden, and jump for reduced motion.
 
-The supplied CloudFront and Mux media are third-party dependencies. Confirm reuse
-rights or replace/self-host them before treating a public deployment as durable.
+OUTPUT and EZNest use static project diagrams extracted from the user-provided
+artwork. No GIF, video player or animated media asset is included. Savvy’s
+separate SVG workflow remains user-operated; its real public interface is
+available in an expandable preview.
 
-No analytics, backend, form submission, authentication, or private phone number is included.
+Runtime checks use deterministic DOM/frame adapters; inspect desktop/mobile,
+all chapters, keyboard navigation, static project images and no-JavaScript fallback in a
+real browser too. Local proof does not establish physical-device/Safari acceptance.
+
+GitHub Pages packages the actual HTML/CSS/JS, font, portrait, media and licenses.
+Current delivery is local preview plus PR; merge/deployment are separate actions.

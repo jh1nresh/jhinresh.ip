@@ -1,108 +1,84 @@
-# Jerry Chen Portfolio — PM Gate
+# Personal field book scope
 
-## Goal
+## Goal and delivery
 
-Turn the existing static portfolio into a cinematic, dark, one-page portfolio that represents the strongest locally verified work without presenting every repository as equally mature.
+Fix the audited personal-site issues and build an illustrated storybook about
+Jerry Chen’s current work. User-selected references: EZNest’s technical figures,
+then https://iamtechartist.com/every-joule/ via the supplied X post for the book
+experience. The user allows palette/architecture changes and supplied OUTPUT and
+nesting artwork, then clarified that the website should show actual images
+instead of GIFs. Savvy receives a matching SVG diagram.
 
-## Audience
+Endpoint: verified local preview and updated PR #11, ready for human review.
+No merge or deployment is authorized. Rejected earlier designs in the other
+checkout remain excluded.
 
-- Smart-contract security and protocol engineering hiring teams
-- Crypto/AI infrastructure founders and ecosystem partners
-- Early product collaborators who need evidence of founder-engineer range
+## Content and reading
 
-## Customer-paid job
+Six HTML chapters: Hello/Jerry → Savvy → OUTPUT → EZNest → agent systems →
+biography, recognition, writing and contact. Warm pages, a cloth binding, sage
+surroundings and colored chapter bookmarks replace the white product-page layout.
+No fictional personal history, career claim, metric, business result or post is
+added. The owned portrait and 12 inherited recognition facts remain unchanged.
 
-In under two minutes, help a technical reviewer answer:
+With JavaScript the reader shows one spread, with previous/next, direct hashes and
+browser history. Explicit navigation focuses the chapter heading; history restores
+the spread/readout without forcing focus. The contact alias reveals the final
+chapter and scrolls to the contact block. Without scripts all chapters and native
+anchors remain readable. A short CSS chapter transition is disabled for reduced
+motion. No auto tour or ambient motion is used.
 
-1. What kind of systems does Jerry build?
-2. Which projects are real, live, or inspectable?
-3. What is his distinctive technical judgment?
-4. Where can I inspect source, demos, or contact him?
+## Figures and truthful limits
 
-## Selection rule
+The project index is a Figure-tier 70-solid cabinet with four drawers. Each drawer,
+front and handle translates along +y by 0–28. Four feet contact the bottom at z14;
+shelves end at y79 before closed fronts start at y80. Drawer floors are supported
+at z23/56/89/122. The near side and cap mask trays as they enter the case. Build
+assertions verify the part budget, support, shelf clearance and travel over the
+platform. Drawer selection updates its read-chapter link and readout.
 
-A project enters the public portfolio only when its local repo provides at least two of:
+Savvy is a separate Figure-tier 48-solid synthetic place-memory station. A three-
+sheet card assembly travels 90 units along a supported bed to a mounted review
+screen. The screen’s foot/stem/bracket/case meet flush. A map pin appears only
+after the illustrated review. Synthetic places, no real shop data or live search.
+Native steps/play/pause/reset share the same progress model; one bounded 6.4-second
+story, safe reversals, offscreen/hidden pause, reduced-motion jumps. Printed map
+roads and text are surface artwork. No WebGL or physics-simulation claim.
 
-- a coherent product statement;
-- current implementation evidence;
-- a public source repository;
-- a live demo or captured UI;
-- a testable technical primitive;
-- an award, integration, or receipt that can be inspected.
+Anatomy supplies rounded slabs; Colorfigures supplies projection, box/cylinder
+geometry, ink and flat shading. Both figures embed MIT notices. Geometry has build
+assertions and visual detail inspection; no full mesh/raycast audit is claimed.
 
-Repositories that are forks, learning exercises, dormant duplicates, infrastructure siblings with no separate public story, or private operating memory stay out of the main portfolio.
+## Provided media and product boundaries
 
-## Public project set
+- OUTPUT and EZNest use static PNG diagrams extracted from the first frames of
+  the supplied artwork. No GIF/MP4, media controls, or original-GIF links remain.
+- OUTPUT stays explicitly a devnet/test-network pilot with no production printing
+  or production escrow; synthetic illustration is not a promise of jobs.
+- EZNest stays a workflow preview. Synthetic shapes are not measurements; final
+  settings and RIP compatibility remain unconfirmed. No integration with OUTPUT
+  or real printer/connector action is implied.
+- Savvy keeps TestFlight status. The diagram is distinct from the app interface;
+  the real public website capture is separately expandable and dated 28 Oct 2026.
+- Maiat’s inherited application image, portrait and public destinations remain.
+- The withdrawn desktop-pet article and SLL-R remain excluded.
 
-### Flagship systems
+All assets, Archivo/OFL and scripts are local. The static project images require
+no media runtime. Savvy and cabinet motion remain explicit and respect reduced
+motion. Canonical/Open Graph/Twitter
+metadata use the real site URL and owned portrait. Small text uses dark inks for
+contrast; decorative postage is hidden from accessibility APIs.
 
-- SAV-E — private place memory for iOS
-- Maiat + Dojo — reputation clearing and agent work infrastructure
-- SLL-R — merchant-backed order execution for AI agents
-- R8 — branch-level cross-strait food evidence and discovery
+## Acceptance
 
-### Product and protocol experiments
-
-- Oshiami — prerequisite-based learning studios
-- Gimi — community inventory rental agent
-- Jiagon — receipt-backed local reviews
-- Cloak — AI dressing room and fashion agent
-- Pincher — Telegram-first event carpool matcher
-- flops — redeemable AI infrastructure capacity credits
-- ClearTrade Agent — receipt-first paper trading agent
-
-### Research direction
-
-- Hedge / AMM risk infrastructure — explicitly labeled as current research, not a shipped product.
-
-## Information architecture
-
-1. Full-screen video identity hero
-2. Centered operating-belief tagline
-3. Split selected-work feature with five project tabs
-4. HLS-backed awards and recognition
-5. Full-screen video contact CTA
-6. Three-column footer
-
-## Visual direction
-
-The site follows the supplied Velorah prompt's visual system while keeping Jerry's
-verified identity, work, and links:
-
-- pure-black cinematic surface with full-bleed video scenes;
-- Instrument Serif display typography and Inter body typography;
-- white, gray, and near-black palette;
-- selective liquid-glass navigation and calls to action;
-- generous vertical rhythm, centered statements, and a two-column feature split;
-- restrained fade-rise motion and a complete reduced-motion fallback.
-
-## Acceptance criteria
-
-- Desktop and mobile layouts are usable and visually coherent.
-- Navigation anchors work and header state responds to scroll.
-- Project tabs update the featured content, progress, and destination and support keyboard navigation.
-- MP4 backgrounds and the HLS statement stream degrade to readable black sections when media is unavailable.
-- Every public link is sourced from a verified local README or git remote.
-- No private phone number, secrets, analytics, or unverifiable metrics appear.
-- `node --check script.js` passes.
-- Local browser QA produces no console errors.
-- Primary interactions and all media paths are verified.
-
-## Security scan receipt
-
-`N/A` for scanner execution: this is a static HTML/CSS/JS portfolio with no
-authentication, payments, backend, user data storage, or form submission. It loads
-display fonts from Google Fonts, three decorative MP4 files from the supplied
-CloudFront URLs, one Mux HLS stream, and a pinned hls.js browser build from jsDelivr.
-Media failure leaves the copy and calls to action readable. Manual safety requirements:
-no secrets/private phone number, links use `rel="noreferrer"` where appropriate, and
-no form data or first-party analytics are collected. Browser requests to the font,
-media, and script providers expose normal network metadata such as IP address and
-user-agent. Confirm media reuse rights or replace/self-host the supplied assets before
-treating a public deployment as durable.
-
-## Demand / distribution / paywall
-
-- Demand proof: the user explicitly requested a portfolio covering worthwhile local work.
-- Distribution format: one shareable personal URL plus GitHub source; future screenshots can be used in X/job applications.
-- Pricing/paywall: `N/A`; this is a public credibility surface, not a paid product.
+- All six chapters, static project images, source captions, status
+  boundaries and 12 inherited recognition entries exist and are correctly packaged.
+- Chapter bookmarks, previous/next, contact alias and history select the right
+  content; modified links retain native behavior. No-script reading works.
+- Cabinet and Savvy controls/readouts match their actual rendered states. Playback,
+  interruption, repeated input, hidden/offscreen and reduced-motion checks pass.
+- Inspect 320/390/~768/1024/1440 widths, all chapter states, focus, image loading and
+  figure details; no overflow, broken anchors/assets or unexpected console errors.
+- Build assertions, syntax, reader/workflow tests, validator and diff check pass.
+  Verify exact Pages packaging, final source in independent review and current-head CI.
+- Report untested physical-device/Safari limits; CI is not design approval or deploy proof.

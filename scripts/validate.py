@@ -18,11 +18,15 @@ class PortfolioParser(HTMLParser):
         self.local_assets: list[str] = []
         self.external_links: list[tuple[str, str | None]] = []
         self.images_without_alt = 0
+        self.fragment_targets: list[str] = []
+        self.control_targets: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         values = dict(attrs)
         if element_id := values.get("id"):
             self.ids.append(element_id)
+        if controls := values.get("aria-controls"):
+            self.control_targets.extend(controls.split())
         if tag == "img":
             if not values.get("alt"):
                 self.images_without_alt += 1
@@ -33,6 +37,8 @@ class PortfolioParser(HTMLParser):
         if tag == "script" and (src := values.get("src")):
             self._record_asset(src)
         if tag == "a" and (href := values.get("href")):
+            if href.startswith("#"):
+                self.fragment_targets.append(href[1:])
             if href.startswith(("http://", "https://")):
                 self.external_links.append((href, values.get("rel")))
             elif not href.startswith(("#", "mailto:", "data:")):
@@ -59,6 +65,10 @@ def main() -> int:
         resolved = (ROOT / asset).resolve()
         if not resolved.is_relative_to(ROOT.resolve()) or not resolved.exists():
             errors.append(f"missing local asset: {asset}")
+
+    missing_targets = sorted(set(parser.fragment_targets + parser.control_targets).difference(parser.ids))
+    if missing_targets:
+        errors.append("missing navigation/control targets: " + ", ".join(missing_targets))
 
     if parser.images_without_alt:
         errors.append(f"images without alt text: {parser.images_without_alt}")
