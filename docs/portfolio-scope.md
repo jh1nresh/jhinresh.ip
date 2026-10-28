@@ -21,6 +21,11 @@ surroundings and colored chapter bookmarks replace the white product-page layout
 No fictional personal history, career claim, metric, business result or post is
 added. The owned portrait and 12 inherited recognition facts remain unchanged.
 
+Book pages use the same frame in every chapter: 780px high on desktop and
+740px per stacked page on mobile. Long content scrolls within its page while
+printed folios stay visible. The navigation shows page pairs 01–02 through
+11–12 out of 12; the six bookmarks remain chapter indices.
+
 With JavaScript the reader shows one spread, with previous/next, direct hashes and
 browser history. Explicit navigation focuses the chapter heading; history restores
 the spread/readout without forcing focus. The contact alias reveals the final

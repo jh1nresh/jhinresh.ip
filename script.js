@@ -12,7 +12,7 @@
   let current = 0;
   let activeProject = 'savvy';
   function spreadForHash(hash) {
-    if (hash === '#work') return 1;
+    if (hash === '#work') return 0;
     const direct = spreads.findIndex(spread => `#${spread.id}` === hash);
     if (direct >= 0) return direct;
     const target = hash ? document.getElementById(hash.slice(1)) : null;
@@ -37,10 +37,11 @@
     });
     previous.disabled = current === 0;
     next.disabled = current === spreads.length - 1;
-    readout.textContent = `${String(current + 1).padStart(2, '0')} / ${String(spreads.length).padStart(2, '0')} — ${labels[current]}`;
+    readout.textContent = `${String(current * 2 + 1).padStart(2, '0')}–${String(current * 2 + 2).padStart(2, '0')} / ${String(spreads.length * 2).padStart(2, '0')} — ${labels[current]}`;
     if (current >= 1 && current <= 4) selectProject(projects[current - 1]);
     document.dispatchEvent(new CustomEvent('chapterchange', {detail: spreads[current].id}));
     if (navigate) {
+      spreads[current].querySelectorAll('.page-content').forEach(page => { page.scrollTop = 0; });
       const destination = targetHash || `#${spreads[current].id}`;
       if (location.hash !== destination) history.pushState(null, '', destination);
       const target = destination === `#${spreads[current].id}` ? reader : document.getElementById(destination.slice(1));
