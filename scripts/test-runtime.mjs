@@ -31,7 +31,7 @@ class Element {
 function fixture({reduced=false,hash='',main=true,animate=false}={}){
  const animations=[];animationSink=animations;
  const ids=['home','project-savvy','project-output','project-eznest','project-maiat','about'];
- const labels=['Hello','Savvy','OUTPUT','EZNest','Agents','Footnotes'];
+ const labels=['Hello','Savvy','OUTPUT','EZNest','Agents','About'];
  const binding=new Element();if(!animate)binding.animate=null;
  const reader=new Element(),controls=new Element(),previous=new Element(),next=new Element(),chapterReadout=new Element(),figure=new Element(),cabinetControls=new Element(),drawerReadout=new Element(),readLink=new Element({href:'#project-savvy'});
  controls.hidden=true;cabinetControls.hidden=true;
@@ -40,14 +40,14 @@ function fixture({reduced=false,hash='',main=true,animate=false}={}){
  const buttons=['savvy','output','eznest','maiat'].map(key=>Object.assign(new Element(),{dataset:{cabinet:key}}));
  const drawers=buttons.map(button=>Object.assign(new Element(),{dataset:{drawer:button.dataset.cabinet}}));
  figure.querySelectorAll=()=>drawers;cabinetControls.querySelectorAll=()=>buttons;
- const contact=new Element();contact.closest=()=>spreads[5];
+ const contact=new Element();contact.closest=()=>spreads[5];const awardsHeading=new Element();
  const motion=Object.assign(new Element(),{matches:reduced});
  const window=new Element(),document=Object.assign(new Element(),{hidden:false,documentElement:{dataset:{}}});
  const selectors={'.book-binding':binding,'.reader':reader,'.reader-controls':controls,'#previous-chapter':previous,'#next-chapter':next,'#chapter-readout':chapterReadout,'#project-cabinet':figure,'.cabinet-controls':cabinetControls,'#cabinet-readout':drawerReadout,'#cabinet-read-chapter':readLink};
  document.createElement=()=>new Element();
  document.querySelector=selector=>selectors[selector];
  document.querySelectorAll=selector=>selector==='[data-spread]'?spreads:selector==='.chapter-tabs a'?links:buttons;
- document.getElementById=id=>id==='contact'||id==='research'?contact:spreads.find(spread=>spread.id===id);
+ document.getElementById=id=>id==='awards-title'?awardsHeading:id==='contact'||id==='research'?contact:spreads.find(spread=>spread.id===id);
  const frames=new Map(),observers=[];let id=0,now=0;
  function Observer(callback){observers.push(callback);this.observe=()=>{};}
  window.IntersectionObserver=Observer;
@@ -60,7 +60,7 @@ function fixture({reduced=false,hash='',main=true,animate=false}={}){
  function linkClick(link,extra={}){let prevented=false;document.emit('click',{target:link,button:0,preventDefault(){prevented=true;},...extra});return prevented;}
  const position=key=>Number(drawers.find(drawer=>drawer.dataset.drawer===key).getAttribute('transform').match(/ ([\d.]+)\)/)[1])*2;
  const active=()=>spreads.findIndex(spread=>!spread.hidden);
- return {binding,reader,get animations(){return animations.filter(item=>item.target.className==='turn-leaf');},allAnimations:animations,document,window,location,stack,spreads,links,buttons,controls,previous,next,chapterReadout,cabinetControls,drawerReadout,readLink,drawers,motion,frames,advance,position,active,linkClick,contact,observe:visible=>observers[0]([{isIntersecting:visible}])};
+ return {awardsHeading,binding,reader,get animations(){return animations.filter(item=>item.target.className==='turn-leaf');},allAnimations:animations,document,window,location,stack,spreads,links,buttons,controls,previous,next,chapterReadout,cabinetControls,drawerReadout,readLink,drawers,motion,frames,advance,position,active,linkClick,contact,observe:visible=>observers[0]([{isIntersecting:visible}])};
 }
 const checks=[];
 const markup=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
@@ -83,7 +83,7 @@ f=fixture();
 for(let i=0;i<f.links.length;i++){
  f.spreads[i].pages.forEach(page=>{page.scrollTop=180;});
  f.linkClick(f.links[i]);
- assert.equal(f.chapterReadout.textContent,`${String(i*2+1).padStart(2,'0')}–${String(i*2+2).padStart(2,'0')} / 12 — ${['Hello','Savvy','OUTPUT','EZNest','Agents','Footnotes'][i]}`);
+ assert.equal(f.chapterReadout.textContent,`${String(i*2+1).padStart(2,'0')}–${String(i*2+2).padStart(2,'0')} / 12 — ${['Hello','Savvy','OUTPUT','EZNest','Agents','About'][i]}`);
  assert.ok(f.spreads[i].pages.every(page=>page.scrollTop===0));
 }
 f.location.hash='#project-output';f.window.emit('popstate');assert.equal(f.chapterReadout.textContent,'05–06 / 12 — OUTPUT');
@@ -95,4 +95,5 @@ f.previous.click();assert.ok(f.allAnimations.filter(item=>item.target.className=
 f=fixture({animate:true});f.next.click();f.document.hidden=true;f.document.emit('visibilitychange');await Promise.resolve();assert.equal(f.binding.children.length,0);assert.equal(f.active(),1);checks.push('hiding the document completes the paper turn without leaving a stale leaf');
 f=fixture({animate:true});f.next.click();f.location.hash='#home';f.window.emit('popstate');f.location.hash='#project-savvy';f.window.emit('popstate');f.animations[0].finish();await Promise.resolve();assert.equal(f.active(),1);assert.equal(f.location.hash,'#project-savvy');assert.equal(f.chapterReadout.textContent,'03–04 / 12 — Savvy');assert.equal(f.animations.length,1);checks.push('Back then Forward during a turn cancels the stale queued destination');
 f=fixture({animate:true});f.next.click();f.next.click();f.document.hidden=true;f.document.emit('visibilitychange');await Promise.resolve();assert.equal(f.active(),2);assert.equal(f.animations.length,1);assert.equal(f.binding.children.length,0);assert.equal(f.reader.getAttribute('aria-busy'),null);checks.push('hidden-page cleanup settles queued navigation without starting a background turn');
+f=fixture();const awardsLink=Object.assign(new Element({href:'#research'}),{dataset:{chapter:'about'}});f.linkClick(awardsLink);assert.equal(f.active(),5);assert.equal(f.awardsHeading.focused,true);assert.equal(f.chapterReadout.textContent,'11–12 / 12 — About');checks.push('recognition links open the full record and focus its heading');
 console.log(JSON.stringify({passed:checks.length,checks},null,2));

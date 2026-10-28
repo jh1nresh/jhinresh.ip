@@ -8,7 +8,7 @@
   const next = document.querySelector('#next-chapter');
   const readout = document.querySelector('#chapter-readout');
   if (!reader || !spreads.length || !controls || !previous || !next || !readout) return;
-  const labels = ['Hello', 'Savvy', 'OUTPUT', 'EZNest', 'Agents', 'Footnotes'];
+  const labels = ['Hello', 'Savvy', 'OUTPUT', 'EZNest', 'Agents', 'About'];
   const projects = ['savvy', 'output', 'eznest', 'maiat'];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const narrow = matchMedia('(max-width: 760px)');
@@ -112,8 +112,8 @@
     const finish = () => {
       document.dispatchEvent(new CustomEvent('chapterchange',{detail:spreads[current].id}));
       if(!navigate)return;
-      if(destination!==`#${spreads[current].id}` && !['#work','#home'].includes(destination))document.getElementById(destination.slice(1))?.scrollIntoView({block:'nearest',behavior:'instant'});
-      const heading=spreads[current].querySelector('h1,h2');heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});
+      if(destination!==`#${spreads[current].id}` && !['#work','#home'].includes(destination))document.getElementById(destination.slice(1))?.scrollIntoView({block:destination==='#research'?'start':'nearest',behavior:'instant'});
+      const heading=(destination==='#research'&&document.getElementById('awards-title'))||spreads[current].querySelector('h1,h2');heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});
     };
     // Snapshot before hiding the old spread; then reveal the destination under the turning leaf.
     // turnSheet creates its snapshot synchronously, before returning control to this task.
