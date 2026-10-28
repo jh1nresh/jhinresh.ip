@@ -42,7 +42,9 @@ Source provenance and MIT notices live in `scripts/figure-sources/README.md`,
 
 All six chapters share a fixed book frame and twelve consecutive folios.
 A retained sheet has the old page on its front and the incoming page on its back;
-only that sheet rotates. The cover, page boxes and navigation keep their size.
+the sheet bends across18 connected material strips, with the outer edge leading
+the spine and a soft, flat landing. Its front/back crops keep the original page
+layout and scroll gutters. The cover, page boxes and navigation keep their size.
 Rapid input queues the latest destination; completion removes the overlay before
 starting another turn. Chapter navigation does not scroll the desktop viewport.
 Mobile alignment happens before a turn; contact can scroll to its explicit target.

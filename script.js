@@ -52,7 +52,7 @@
     return wrapper;
   }
   function turnSheet(from, to, forward, finish) {
-    if (!binding || !binding.animate || motion.matches || document.hidden) { finish(); return; }
+    if (!binding || !binding.animate || !window.bookCurl || motion.matches || document.hidden) { finish(); return; }
     const layer = document.createElement('div');
     layer.className = `turn-layer${forward ? '' : ' turn-reverse'}${narrow.matches ? ' turn-vertical' : ''}`;
     layer.inert = true;
@@ -60,12 +60,37 @@
     const under = face(from,forward ? 'left' : 'right','turn-under');
     const leaf = document.createElement('div');
     leaf.className = 'turn-leaf';
-    leaf.append(face(from,forward ? 'right' : 'left','turn-front'),face(to,forward ? 'left' : 'right','turn-back'));
     layer.append(under,leaf);binding.append(layer);
+    const vertical=narrow.matches,axis=vertical?'X':'Y';
+    const bounds=from.querySelector('.page-right').getBoundingClientRect();
+    const width=bounds.width,height=bounds.height,length=vertical?height:width;
+    const count=window.bookCurl.segments,step=length/count,duration=980;
+    const steps=window.bookCurl.keyframes;
+    const poses=Array.from({length:steps+1},(_,i)=>window.bookCurl.sample(i/steps,length,!forward,vertical));
+    const animations=[];
+    // Clip full-size page copies into material strips; neighbouring ends share one curve.
+    leaf.replaceChildren();
+    for(let i=0;i<count;i++){
+      const strip=document.createElement('div');strip.className='curl-strip';
+      strip.style.width=`${vertical?width:step+.35}px`;strip.style.height=`${vertical?step+.35:height}px`;
+      for(const back of [false,true]){
+        const panel=document.createElement('div');panel.className=`curl-face ${back?'curl-back':'curl-front'}`;
+        const page=face(back?to:from,back?(forward?'left':'right'):(forward?'right':'left'),'curl-content');
+        page.style.width=`${width}px`;page.style.height=`${height}px`;
+        const crop=back?(forward?count-1-i:i):(forward?i:count-1-i);
+        page.style[vertical?'top':'left']=`${-crop*step}px`;
+        const shade=document.createElement('div');shade.className='curl-shade';
+        panel.append(page,shade);strip.append(panel);
+        animations.push(shade.animate(poses.map((pose,index)=>({offset:index/steps,opacity:pose[i].shade})),{duration,easing:'linear',fill:'both'}));
+      }
+      leaf.append(strip);
+      animations.push(strip.animate(poses.map((pose,index)=>({offset:index/steps,transform:`translate3d(${pose[i].x}px,${pose[i].y}px,${pose[i].z}px) rotate${axis}(${pose[i].angle}deg)`})),{duration,easing:'linear',fill:'both'}));
+    }
     layer.querySelectorAll('.turn-face').forEach(page=>{page.querySelector('.page-content').scrollTop=page.savedScroll;});
-    const axis = narrow.matches ? 'X' : 'Y';
-    const degrees = (forward ? -180 : 180) * (narrow.matches ? -1 : 1);
-    const animation = leaf.animate([{transform:`rotate${axis}(0deg)`},{transform:`rotate${axis}(${degrees}deg)`}],{duration:760,easing:'cubic-bezier(.45,0,.2,1)',fill:'forwards'});
+    const clock=leaf.animate([{transform:'translateZ(0px)'},{transform:'translateZ(0px)'}],{duration,easing:'linear',fill:'forwards'});
+    animations.push(clock);
+    if(typeof document.timeline?.currentTime==='number'){const started=performance.now();animations.forEach(animation=>{animation.startTime=started;});}
+    const animation={finished:clock.finished,finish(){animations.forEach(item=>item.finish());}};
     let done = false;
     const cleanup = () => { if(done)return;done=true;layer.remove();turn=null;reader.removeAttribute('aria-busy');finish();const pending=queued;queued=null;if(pending)showChapter(...pending); };
     turn = {animation,cleanup};reader.setAttribute('aria-busy','true');
@@ -92,7 +117,7 @@
     };
     // Snapshot before hiding the old spread; then reveal the destination under the turning leaf.
     // turnSheet creates its snapshot synchronously, before returning control to this task.
-    const animate = old && old!==spreads[index] && binding?.animate && !motion.matches && !document.hidden;
+    const animate = old && old!==spreads[index] && binding?.animate && window.bookCurl && !motion.matches && !document.hidden;
     const startTurn=animate?()=>turnSheet(old,spreads[index],forward,finish):null;
     current=index;
     if(startTurn)startTurn();

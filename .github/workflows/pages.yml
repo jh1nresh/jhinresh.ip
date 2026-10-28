@@ -28,16 +28,18 @@ jobs:
         run: |
           python3 scripts/validate.py
           node --check script.js
+          node --check page-curl.js
           node --check cabinet.js
           node --check workflows.js
           node --check assets/figures/project-scenes.js
           node scripts/test-runtime.mjs
+          node scripts/test-page-curl.mjs
           node scripts/test-workflows.mjs
 
       - name: Prepare site artifact
         run: |
           mkdir -p _site
-          cp index.html styles.css script.js cabinet.js workflows.js LICENSES.txt _site/
+          cp index.html styles.css script.js page-curl.js cabinet.js workflows.js LICENSES.txt _site/
           mkdir -p _site/assets/projects _site/assets/portrait _site/assets/fonts _site/assets/figures
           cp assets/projects/savvy-web-20261028.png assets/projects/maiat.png _site/assets/projects/
           cp assets/portrait/jerry-chen.jpg _site/assets/portrait/

@@ -31,7 +31,9 @@ With JavaScript the reader shows one spread, with previous/next, direct hashes a
 browser history. Explicit navigation focuses the chapter heading; history restores
 the spread/readout without forcing focus. The contact alias reveals the final
 chapter and scrolls to the contact block. Without scripts all chapters and native
-anchors remain readable. A retained two-sided paper leaf turns above the next spread; the cover and
+anchors remain readable. A retained two-sided paper leaf bends across18 connected strips above the next
+spread. Arc-length geometry keeps adjacent edges joined, lifts the outer edge
+first, shades the bend and lands flat; the cover and
 page boxes are never transformed. Rapid input queues the latest destination.
 Reduced motion skips the leaf animation. Desktop chapter navigation keeps the
 viewport position; any mobile alignment happens before the turn. The motion
