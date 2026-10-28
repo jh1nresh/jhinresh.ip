@@ -22,7 +22,8 @@ export function depthOf([x, y, z], projection) {
     return (x * cosA + y * sinA) * cosE + z * sinE;
 }
 const tenth = (value) => {
-    const text = (Math.round(value * 10) / 10).toFixed(1).replace(/\.0$/, "");
+    // Resolve sub-nanopixel drift at half-tenths consistently across libm implementations.
+    const text = (Math.round(value * 10 + 1e-8) / 10).toFixed(1).replace(/\.0$/, "");
     return text === "-0" ? "0" : text;
 };
 export function pathOf(points, closed = false) {

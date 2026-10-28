@@ -4,6 +4,10 @@ import {fileURLToPath} from 'node:url';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
 import * as anatomy from './vendor/anatomy-kit.mjs';
+// ARM/x64 trig can land on opposite sides of the same decimal half-tenth.
+for (const value of [199.55,198.65,-199.55]) {
+  for (const drift of [-1e-12,1e-12]) assert.equal(anatomy.pathOf([[0,value+drift]]),anatomy.pathOf([[0,value]]));
+}
 const root=fileURLToPath(new URL('../',import.meta.url));
 const projection={origin:[225,165],scale:Math.sqrt(1.5/1.6),azimuth:45,elevation:Math.atan(1/Math.sqrt(2))*180/Math.PI};
 function rounded(x,y,z,w,d,h,r,c){const q=anatomy.slabOf({x,y,w,d,r},z,h,projection,5,.5);return `<path d="${q.fill}" fill="${c.l}"/>`+q.shades.map((p,i)=>`<path d="${p}" fill="${i<2?c.m:c.d}"/>`).join('')+`<path d="${q.top}" fill="${c.l}"/><path d="${q.outline}${q.crease}" fill="none" stroke="#263d34" stroke-width=".8" stroke-linejoin="round"/><path d="${q.bevel}" fill="none" stroke="${c.l}" stroke-width=".5"/>`;}
