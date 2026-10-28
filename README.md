@@ -23,6 +23,7 @@ Open `http://127.0.0.1:4174/`.
 ```bash
 node scripts/build-cabinet.mjs
 node scripts/build-savvy.mjs
+node scripts/build-project-scenes.mjs
 node --check script.js
 node --check cabinet.js
 node --check workflows.js
@@ -31,28 +32,35 @@ node scripts/test-workflows.mjs
 python3 scripts/validate.py
 ```
 
-Both builders update standalone SVG, a part inventory and inline SVG in the page.
-The cabinet has 70 solids; the synthetic Savvy station has 48. They combine Anatomy
-rounded slabs with Colorfigures projection/drawing helpers, without mounting a
-library over the host page. Both MIT notices are embedded and in `LICENSES.txt`.
-Archivo is local with its SIL Open Font License; serif headings use system fonts.
+The builders update standalone SVGs, inventories and inline fallbacks. The cabinet
+has70 solids; Savvy has48; the new Maiat approval/receipt mechanism has47.
+OUTPUT/EZNest reuse the pure scene models from the canonical EZNest landing.
+Source provenance and MIT notices live in `scripts/figure-sources/README.md`,
+`LICENSES.txt` and the generated bundle. Archivo/OFL stays local.
 
 ## Reading and animation
 
-Without JavaScript, all six chapters and native anchors remain readable. With
-JavaScript, chapter links, previous/next and history reveal the appropriate spread.
-The cabinet’s four drawers select a project and update its reading link. Savvy’s
-link card moves to review, then a synthetic Map Stamp appears. Both diagrams are
-user-operated, stop at rest/offscreen/hidden, and jump for reduced motion.
+All six chapters share a fixed book frame and twelve consecutive folios.
+A retained sheet has the old page on its front and the incoming page on its back;
+only that sheet rotates. The cover, page boxes and navigation keep their size.
+Rapid input queues the latest destination; completion removes the overlay before
+starting another turn. Chapter navigation does not scroll the desktop viewport.
+Mobile alignment happens before a turn; contact can scroll to its explicit target.
+History preserves the page's reading position. Without scripts all chapters and
+native anchors remain readable.
 
-OUTPUT and EZNest use static project diagrams extracted from the user-provided
-artwork. No GIF, video player or animated media asset is included. Savvy’s
-separate SVG workflow remains user-operated; its real public interface is
-available in an expandable preview.
+The four Look Inside diagrams autoplay on chapter entry and loop while visible.
+One host RAF clock renders only the active project at up to30fps. It pauses during
+paper turns, when offscreen/hidden, and on the global Pause illustrations button.
+Reduced-motion preferences default to meaningful stills and instant page changes;
+readers can explicitly opt into diagram motion. No GIF/video player is involved.
+The real Savvy/Maiat interfaces remain separately expandable. All diagrams are
+illustrative: no real search, approval, printing, signature or payment occurs.
 
-Runtime checks use deterministic DOM/frame adapters; inspect desktop/mobile,
-all chapters, keyboard navigation, static project images and no-JavaScript fallback in a
-real browser too. Local proof does not establish physical-device/Safari acceptance.
+Runtime checks exercise actual reader and motion handlers with deterministic
+DOM/frame/media-query/animation adapters. Browser verification must additionally
+inspect the turning faces, frame geometry, scrolling and autonomous SVG states.
+These checks do not establish physical-device/Safari acceptance.
 
 GitHub Pages packages the actual HTML/CSS/JS, font, portrait, media and licenses.
 Current delivery is local preview plus PR; merge/deployment are separate actions.

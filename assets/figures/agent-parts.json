@@ -1,0 +1,454 @@
+{
+  "solidCount": 47,
+  "stroke": 24.8,
+  "cardTravel": 154,
+  "parts": [
+    {
+      "name": "platform foot",
+      "x": 8,
+      "y": 8,
+      "z": -6,
+      "w": 12,
+      "d": 12,
+      "h": 6
+    },
+    {
+      "name": "platform foot",
+      "x": 196,
+      "y": 8,
+      "z": -6,
+      "w": 12,
+      "d": 12,
+      "h": 6
+    },
+    {
+      "name": "platform foot",
+      "x": 8,
+      "y": 98,
+      "z": -6,
+      "w": 12,
+      "d": 12,
+      "h": 6
+    },
+    {
+      "name": "platform foot",
+      "x": 196,
+      "y": 98,
+      "z": -6,
+      "w": 12,
+      "d": 12,
+      "h": 6
+    },
+    {
+      "name": "platform",
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "w": 216,
+      "d": 118,
+      "h": 6
+    },
+    {
+      "name": "quote bed",
+      "x": 12,
+      "y": 48,
+      "z": 6,
+      "w": 156,
+      "d": 38,
+      "h": 4
+    },
+    {
+      "name": "receipt tray floor",
+      "x": 168,
+      "y": 48,
+      "z": 6,
+      "w": 44,
+      "d": 38,
+      "h": 4
+    },
+    {
+      "name": "continuous card guide",
+      "x": 12,
+      "y": 44,
+      "z": 6,
+      "w": 200,
+      "d": 4,
+      "h": 8
+    },
+    {
+      "name": "continuous card guide",
+      "x": 12,
+      "y": 86,
+      "z": 6,
+      "w": 200,
+      "d": 4,
+      "h": 8
+    },
+    {
+      "name": "track end stop",
+      "x": 12,
+      "y": 48,
+      "z": 10,
+      "w": 4,
+      "d": 38,
+      "h": 5
+    },
+    {
+      "name": "track end stop",
+      "x": 208,
+      "y": 48,
+      "z": 10,
+      "w": 4,
+      "d": 38,
+      "h": 5
+    },
+    {
+      "name": "column mounting foot",
+      "x": 94,
+      "y": 26,
+      "z": 6,
+      "w": 16,
+      "d": 20,
+      "h": 4
+    },
+    {
+      "name": "column mounting foot",
+      "x": 146,
+      "y": 26,
+      "z": 6,
+      "w": 16,
+      "d": 20,
+      "h": 4
+    },
+    {
+      "name": "column",
+      "x": 98,
+      "y": 30,
+      "z": 10,
+      "w": 8,
+      "d": 12,
+      "h": 72
+    },
+    {
+      "name": "column",
+      "x": 150,
+      "y": 30,
+      "z": 10,
+      "w": 8,
+      "d": 12,
+      "h": 72
+    },
+    {
+      "name": "cross beam",
+      "x": 98,
+      "y": 30,
+      "z": 82,
+      "w": 60,
+      "d": 12,
+      "h": 8
+    },
+    {
+      "name": "stamp cantilever",
+      "x": 122,
+      "y": 42,
+      "z": 82,
+      "w": 12,
+      "d": 30,
+      "h": 6
+    },
+    {
+      "name": "telescoping ram",
+      "x": 124,
+      "y": 62,
+      "z": 51,
+      "w": 8,
+      "d": 8,
+      "h": 31,
+      "shape": "cylinder"
+    },
+    {
+      "name": "moving stamp head",
+      "x": 110,
+      "y": 50,
+      "z": 42,
+      "w": 36,
+      "d": 32,
+      "h": 9
+    },
+    {
+      "name": "pad backing",
+      "x": 110,
+      "y": 50,
+      "z": 39,
+      "w": 36,
+      "d": 32,
+      "h": 3
+    },
+    {
+      "name": "rubber stamp face",
+      "x": 110,
+      "y": 50,
+      "z": 36,
+      "w": 36,
+      "d": 32,
+      "h": 3
+    },
+    {
+      "name": "head retaining screw",
+      "x": 113.9,
+      "y": 53.9,
+      "z": 51,
+      "w": 2.2,
+      "d": 2.2,
+      "h": 1,
+      "shape": "cylinder"
+    },
+    {
+      "name": "head retaining screw",
+      "x": 139.9,
+      "y": 53.9,
+      "z": 51,
+      "w": 2.2,
+      "d": 2.2,
+      "h": 1,
+      "shape": "cylinder"
+    },
+    {
+      "name": "head retaining screw",
+      "x": 113.9,
+      "y": 75.9,
+      "z": 51,
+      "w": 2.2,
+      "d": 2.2,
+      "h": 1,
+      "shape": "cylinder"
+    },
+    {
+      "name": "head retaining screw",
+      "x": 139.9,
+      "y": 75.9,
+      "z": 51,
+      "w": 2.2,
+      "d": 2.2,
+      "h": 1,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 96.1,
+      "y": 28.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 96.1,
+      "y": 42.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 106.1,
+      "y": 28.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 106.1,
+      "y": 42.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 148.1,
+      "y": 28.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 148.1,
+      "y": 42.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 158.1,
+      "y": 28.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "mounting screw",
+      "x": 158.1,
+      "y": 42.1,
+      "z": 10,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 19.1,
+      "y": 45.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 19.1,
+      "y": 87.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 64.1,
+      "y": 45.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 64.1,
+      "y": 87.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 114.1,
+      "y": 45.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 114.1,
+      "y": 87.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 199.1,
+      "y": 45.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "guide retaining screw",
+      "x": 199.1,
+      "y": 87.1,
+      "z": 14,
+      "w": 1.8,
+      "d": 1.8,
+      "h": 0.5999999999999996,
+      "shape": "cylinder"
+    },
+    {
+      "name": "quote card sheet",
+      "x": 24,
+      "y": 54,
+      "z": 10,
+      "w": 28,
+      "d": 24,
+      "h": 0.4
+    },
+    {
+      "name": "quote card sheet",
+      "x": 24,
+      "y": 54,
+      "z": 10.4,
+      "w": 28,
+      "d": 24,
+      "h": 0.4
+    },
+    {
+      "name": "quote card sheet",
+      "x": 24,
+      "y": 54,
+      "z": 10.8,
+      "w": 28,
+      "d": 24,
+      "h": 0.4
+    },
+    {
+      "name": "column indicator",
+      "x": 158,
+      "y": 34,
+      "z": 55,
+      "w": 1,
+      "d": 4,
+      "h": 4,
+      "shape": "cylinder-x"
+    },
+    {
+      "name": "column indicator",
+      "x": 158,
+      "y": 34,
+      "z": 64,
+      "w": 1,
+      "d": 4,
+      "h": 4,
+      "shape": "cylinder-x"
+    },
+    {
+      "name": "column indicator",
+      "x": 158,
+      "y": 34,
+      "z": 73,
+      "w": 1,
+      "d": 4,
+      "h": 4,
+      "shape": "cylinder-x"
+    }
+  ]
+}

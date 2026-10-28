@@ -30,6 +30,7 @@ jobs:
           node --check script.js
           node --check cabinet.js
           node --check workflows.js
+          node --check assets/figures/project-scenes.js
           node scripts/test-runtime.mjs
           node scripts/test-workflows.mjs
 
@@ -37,10 +38,11 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html styles.css script.js cabinet.js workflows.js LICENSES.txt _site/
-          mkdir -p _site/assets/projects _site/assets/portrait _site/assets/fonts
-          cp assets/projects/savvy-web-20261028.png assets/projects/maiat.png assets/projects/output-illustration.png assets/projects/eznest-illustration.png _site/assets/projects/
+          mkdir -p _site/assets/projects _site/assets/portrait _site/assets/fonts _site/assets/figures
+          cp assets/projects/savvy-web-20261028.png assets/projects/maiat.png _site/assets/projects/
           cp assets/portrait/jerry-chen.jpg _site/assets/portrait/
           cp assets/fonts/Archivo.ttf assets/fonts/OFL.txt _site/assets/fonts/
+          cp assets/figures/project-scenes.js _site/assets/figures/
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

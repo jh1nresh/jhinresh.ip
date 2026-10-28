@@ -3,8 +3,17 @@ import vm from 'node:vm';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 const sources=['../script.js','../cabinet.js'].map(path=>fs.readFileSync(new URL(path,import.meta.url),'utf8'));
+let animationSink=[];
 class Element {
- constructor(attrs={}){this.attrs=attrs;this.events={};this.dataset={};this.hidden=false;this.textContent='';this.classes=new Set();this.classList={add:value=>this.classes.add(value)};}
+ constructor(attrs={}){this.attrs=attrs;this.events={};this.dataset={};this.hidden=false;this.textContent='';this.classes=new Set();this.classList={add:value=>this.classes.add(value)};this.children=[];this.className='';this.style={setProperty(){}};}
+ get attributes(){return Object.entries(this.attrs).map(([name,value])=>({name,value}));}
+ append(...nodes){for(const node of nodes){this.children.push(node);node.parent=this;}}
+ remove(){if(this.parent)this.parent.children=this.parent.children.filter(child=>child!==this);}
+ getBoundingClientRect(){return{top:100,bottom:1000};}
+ querySelector(selector){return this.querySelectorAll(selector)[0]||null;}
+ querySelectorAll(selector){const all=this.children.flatMap(child=>[child,...child.querySelectorAll('*')]);return selector==='*'?all:all.filter(child=>child.className.split(' ').includes(selector.slice(1)));}
+ cloneNode(){const copy=new Element({...this.attrs});copy.id=this.id;copy.className=this.className;copy.scrollTop=this.scrollTop;copy.append(...this.children.map(child=>child.cloneNode(true)));return copy;}
+ animate(keys,options){let resolve,reject;const finished=new Promise((a,b)=>{resolve=a;reject=b;});const animation={keys,options,finished,finish:resolve,cancel:reject};animationSink.push(animation);return animation;}
  addEventListener(name,fn){(this.events[name]||=[]).push(fn);}
  emit(name,event={}){this.events[name]?.forEach(fn=>fn(event));}
  dispatchEvent(event){this.emit(event.type,event);}
@@ -17,12 +26,14 @@ class Element {
  click(){if(!this.disabled)this.emit('click');}
  closest(selector){return selector==='a[data-chapter]'&&this.attrs.href&&this.dataset.chapter?this:null;}
 }
-function fixture({reduced=false,hash='',main=true}={}){
+function fixture({reduced=false,hash='',main=true,animate=false}={}){
+ const animations=[];animationSink=animations;
  const ids=['home','project-savvy','project-output','project-eznest','project-maiat','about'];
  const labels=['Hello','Savvy','OUTPUT','EZNest','Agents','Footnotes'];
+ const binding=new Element();if(!animate)binding.animate=null;
  const reader=new Element(),controls=new Element(),previous=new Element(),next=new Element(),chapterReadout=new Element(),figure=new Element(),cabinetControls=new Element(),drawerReadout=new Element(),readLink=new Element({href:'#project-savvy'});
  controls.hidden=true;cabinetControls.hidden=true;
- const spreads=ids.map(id=>{const e=Object.assign(new Element(),{id});e.heading=new Element();e.pages=[new Element(),new Element()];e.querySelector=()=>e.heading;e.querySelectorAll=()=>e.pages;return e;});
+ const spreads=ids.map(id=>{const e=Object.assign(new Element(),{id});e.heading=new Element();e.pages=[new Element(),new Element()];e.pages.forEach(page=>{page.className='page-content';});e.className='spread project-spread';const sides=e.pages.map(page=>{const side=new Element();side.append(page);return side;});e.querySelector=selector=>selector==='.page-left'?sides[0]:selector==='.page-right'?sides[1]:e.heading;e.querySelectorAll=()=>e.pages;return e;});
  const links=ids.map((id,i)=>Object.assign(new Element({href:`#${id}`}),{dataset:{chapter:id},textContent:labels[i]}));
  const buttons=['savvy','output','eznest','maiat'].map(key=>Object.assign(new Element(),{dataset:{cabinet:key}}));
  const drawers=buttons.map(button=>Object.assign(new Element(),{dataset:{drawer:button.dataset.cabinet}}));
@@ -30,7 +41,8 @@ function fixture({reduced=false,hash='',main=true}={}){
  const contact=new Element();contact.closest=()=>spreads[5];
  const motion=Object.assign(new Element(),{matches:reduced});
  const window=new Element(),document=Object.assign(new Element(),{hidden:false,documentElement:{dataset:{}}});
- const selectors={'.reader':reader,'.reader-controls':controls,'#previous-chapter':previous,'#next-chapter':next,'#chapter-readout':chapterReadout,'#project-cabinet':figure,'.cabinet-controls':cabinetControls,'#cabinet-readout':drawerReadout,'#cabinet-read-chapter':readLink};
+ const selectors={'.book-binding':binding,'.reader':reader,'.reader-controls':controls,'#previous-chapter':previous,'#next-chapter':next,'#chapter-readout':chapterReadout,'#project-cabinet':figure,'.cabinet-controls':cabinetControls,'#cabinet-readout':drawerReadout,'#cabinet-read-chapter':readLink};
+ document.createElement=()=>new Element();
  document.querySelector=selector=>selectors[selector];
  document.querySelectorAll=selector=>selector==='[data-spread]'?spreads:selector==='.chapter-tabs a'?links:buttons;
  document.getElementById=id=>id==='contact'||id==='research'?contact:spreads.find(spread=>spread.id===id);
@@ -38,14 +50,14 @@ function fixture({reduced=false,hash='',main=true}={}){
  function Observer(callback){observers.push(callback);this.observe=()=>{};}
  window.IntersectionObserver=Observer;
  const location={hash},stack=[];
- const context={window,document,location,history:{pushState(_s,_t,path){stack.push(path);location.hash=path;}},matchMedia:()=>motion,IntersectionObserver:Observer,CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}},requestAnimationFrame:callback=>{frames.set(++id,callback);return id;},cancelAnimationFrame:key=>frames.delete(key)};
+ const context={window,document,innerHeight:900,getComputedStyle:()=>({background:'#fff',getPropertyValue:()=> '#abc'}),location,history:{pushState(_s,_t,path){stack.push(path);location.hash=path;}},matchMedia:query=>query.includes('max-width')?{matches:false}:motion,IntersectionObserver:Observer,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},requestAnimationFrame:callback=>{frames.set(++id,callback);return id;},cancelAnimationFrame:key=>frames.delete(key)};
  if(main)vm.runInNewContext(sources[0],context);
  vm.runInNewContext(sources[1],context);
  function advance(count=200){for(let i=0;i<count&&frames.size;i++){now+=16;const callbacks=[...frames.values()];frames.clear();callbacks.forEach(fn=>fn(now));assert.ok(frames.size<=1,'single drawer loop');}}
  function linkClick(link,extra={}){let prevented=false;document.emit('click',{target:link,button:0,preventDefault(){prevented=true;},...extra});return prevented;}
  const position=key=>Number(drawers.find(drawer=>drawer.dataset.drawer===key).getAttribute('transform').match(/ ([\d.]+)\)/)[1])*2;
  const active=()=>spreads.findIndex(spread=>!spread.hidden);
- return {document,window,location,stack,spreads,links,buttons,controls,previous,next,chapterReadout,cabinetControls,drawerReadout,readLink,drawers,motion,frames,advance,position,active,linkClick,contact,observe:visible=>observers[0]([{isIntersecting:visible}])};
+ return {binding,reader,animations,document,window,location,stack,spreads,links,buttons,controls,previous,next,chapterReadout,cabinetControls,drawerReadout,readLink,drawers,motion,frames,advance,position,active,linkClick,contact,observe:visible=>observers[0]([{isIntersecting:visible}])};
 }
 const checks=[];
 const markup=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
@@ -75,4 +87,9 @@ f.location.hash='#project-output';f.window.emit('popstate');assert.equal(f.chapt
 checks.push('all page pairs match the twelve printed folios; explicit navigation resets page scrolling and history restores the range');
 f=fixture({hash:'#work'});assert.equal(f.active(),0);assert.equal(f.chapterReadout.textContent,'01–02 / 12 — Hello');checks.push('skip-to-book hash opens the first page pair');
 f=fixture({main:false});assert.equal(f.cabinetControls.hidden,true);assert.ok(f.spreads.every(spread=>!spread.hidden));checks.push('main script failure leaves native chapters readable and dependent controls hidden');
+f=fixture({animate:true});f.next.click();assert.equal(f.animations.length,1);assert.equal(f.animations[0].keys[1].transform,'rotateY(-180deg)');assert.equal(f.animations[0].options.duration,760);assert.equal(f.reader.scrolled,undefined);f.next.click();assert.equal(f.animations.length,1);assert.equal(f.binding.children.length,1);f.animations[0].finish();await Promise.resolve();assert.equal(f.animations.length,2);assert.equal(f.active(),2);f.animations[1].finish();await Promise.resolve();assert.equal(f.binding.children.length,0);assert.equal(f.reader.getAttribute('aria-busy'),null);checks.push('retained leaf completes before queued navigation; no whole-reader scroll or abandoned overlay');
+f.previous.click();assert.equal(f.animations[2].keys[1].transform,'rotateY(180deg)');f.motion.matches=true;f.motion.emit('change');await Promise.resolve();assert.equal(f.binding.children.length,0);checks.push('reverse turn and mid-turn reduced-motion cleanup settle on the destination');
+f=fixture({animate:true});f.next.click();f.document.hidden=true;f.document.emit('visibilitychange');await Promise.resolve();assert.equal(f.binding.children.length,0);assert.equal(f.active(),1);checks.push('hiding the document completes the paper turn without leaving a stale leaf');
+f=fixture({animate:true});f.next.click();f.location.hash='#home';f.window.emit('popstate');f.location.hash='#project-savvy';f.window.emit('popstate');f.animations[0].finish();await Promise.resolve();assert.equal(f.active(),1);assert.equal(f.location.hash,'#project-savvy');assert.equal(f.chapterReadout.textContent,'03–04 / 12 — Savvy');assert.equal(f.animations.length,1);checks.push('Back then Forward during a turn cancels the stale queued destination');
+f=fixture({animate:true});f.next.click();f.next.click();f.document.hidden=true;f.document.emit('visibilitychange');await Promise.resolve();assert.equal(f.active(),2);assert.equal(f.animations.length,1);assert.equal(f.binding.children.length,0);assert.equal(f.reader.getAttribute('aria-busy'),null);checks.push('hidden-page cleanup settles queued navigation without starting a background turn');
 console.log(JSON.stringify({passed:checks.length,checks},null,2));

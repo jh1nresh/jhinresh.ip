@@ -7,7 +7,8 @@ Jerry Chen’s current work. User-selected references: EZNest’s technical figu
 then https://iamtechartist.com/every-joule/ via the supplied X post for the book
 experience. The user allows palette/architecture changes and supplied OUTPUT and
 nesting artwork, then clarified that the website should show actual images
-instead of GIFs. Savvy receives a matching SVG diagram.
+instead of GIFs. The latest request requires automatic motion in all four
+Look Inside panels and a complete paper turn without scroll or size jumps.
 
 Endpoint: verified local preview and updated PR #11, ready for human review.
 No merge or deployment is authorized. Rejected earlier designs in the other
@@ -30,8 +31,11 @@ With JavaScript the reader shows one spread, with previous/next, direct hashes a
 browser history. Explicit navigation focuses the chapter heading; history restores
 the spread/readout without forcing focus. The contact alias reveals the final
 chapter and scrolls to the contact block. Without scripts all chapters and native
-anchors remain readable. A short CSS chapter transition is disabled for reduced
-motion. No auto tour or ambient motion is used.
+anchors remain readable. A retained two-sided paper leaf turns above the next spread; the cover and
+page boxes are never transformed. Rapid input queues the latest destination.
+Reduced motion skips the leaf animation. Desktop chapter navigation keeps the
+viewport position; any mobile alignment happens before the turn. The motion
+control has a reserved slot so its visibility never changes reader height.
 
 ## Figures and truthful limits
 
@@ -46,8 +50,9 @@ Savvy is a separate Figure-tier 48-solid synthetic place-memory station. A three
 sheet card assembly travels 90 units along a supported bed to a mounted review
 screen. The screen’s foot/stem/bracket/case meet flush. A map pin appears only
 after the illustrated review. Synthetic places, no real shop data or live search.
-Native steps/play/pause/reset share the same progress model; one bounded 6.4-second
-story, safe reversals, offscreen/hidden pause, reduced-motion jumps. Printed map
+A 6.4-second master timeline drives the automatic illustrated story, with a
+held finish and a faded reset. Hidden/offscreen pages pause; reduced motion shows
+a complete still. No per-pane play gesture is required. Printed map
 roads and text are surface artwork. No WebGL or physics-simulation claim.
 
 Anatomy supplies rounded slabs; Colorfigures supplies projection, box/cylinder
@@ -56,8 +61,11 @@ assertions and visual detail inspection; no full mesh/raycast audit is claimed.
 
 ## Provided media and product boundaries
 
-- OUTPUT and EZNest use static PNG diagrams extracted from the first frames of
-  the supplied artwork. No GIF/MP4, media controls, or original-GIF links remain.
+- OUTPUT and EZNest use native SVG scene models adapted from the canonical
+  EZNest landing, with no GIF/MP4 or manual playback requirement.
+- Maiat adds an original47-solid quote-card, approval-stamp and receipt mechanism.
+  Its platform, beam, ram/card contact and receipt travel have build assertions.
+  It illustrates consent; no real approval, signature or payment is performed.
 - OUTPUT stays explicitly a devnet/test-network pilot with no production printing
   or production escrow; synthetic illustration is not a promise of jobs.
 - EZNest stays a workflow preview. Synthetic shapes are not measurements; final
@@ -68,21 +76,23 @@ assertions and visual detail inspection; no full mesh/raycast audit is claimed.
 - Maiat’s inherited application image, portrait and public destinations remain.
 - The withdrawn desktop-pet article and SLL-R remain excluded.
 
-All assets, Archivo/OFL and scripts are local. The static project images require
-no media runtime. Savvy and cabinet motion remain explicit and respect reduced
-motion. Canonical/Open Graph/Twitter
+All assets, Archivo/OFL and scripts are local. One RAF clock animates only the
+active visible project, at up to30fps, and stops for turns, hidden/offscreen state
+or explicit pause. Each scene has a deterministic timeline; OUTPUT, EZNest and
+Maiat include a captioned rewind with identical loop endpoints. Reduced motion
+defaults to stills. The global motion button allows pause or explicit opt-in. Canonical/Open Graph/Twitter
 metadata use the real site URL and owned portrait. Small text uses dark inks for
 contrast; decorative postage is hidden from accessibility APIs.
 
 ## Acceptance
 
-- All six chapters, static project images, source captions, status
+- All six chapters, automatic SVG project scenes, source captions, status
   boundaries and 12 inherited recognition entries exist and are correctly packaged.
 - Chapter bookmarks, previous/next, contact alias and history select the right
   content; modified links retain native behavior. No-script reading works.
-- Cabinet and Savvy controls/readouts match their actual rendered states. Playback,
+- Cabinet and automatic scene readouts match their actual rendered states. Playback,
   interruption, repeated input, hidden/offscreen and reduced-motion checks pass.
-- Inspect 320/390/~768/1024/1440 widths, all chapter states, focus, image loading and
+- Inspect 320/390/~768/1024/1440 widths, all chapter states, focus, autonomous scene motion and
   figure details; no overflow, broken anchors/assets or unexpected console errors.
 - Build assertions, syntax, reader/workflow tests, validator and diff check pass.
   Verify exact Pages packaging, final source in independent review and current-head CI.
