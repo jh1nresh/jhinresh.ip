@@ -5,15 +5,17 @@ Every Joule reference guides the reading experience, with Colorfigures/Anatomy
 objects, colored bookmarks, warm paper and a cloth binding. All personal/project
 content is static HTML; no accounts, forms, analytics or payment actions exist.
 
-Chapters: Hello → Savvy → OUTPUT → EZNest → Agents → About & awards/contact.
+Chapters: Hello → Savvy → OUTPUT → EZNest → Agents → Awards & blog/contact.
 Savvy’s TestFlight status, OUTPUT’s devnet/no-production limits and EZNest’s
 workflow-preview/synthetic-shape limits remain visible with their illustrations.
 The withdrawn desktop-pet article and SLL-R are excluded.
 
 The opening page pairs Jerry’s owned portrait and a short first-person introduction
 with two inherited recognition highlights. Maiat/Dojo includes project-specific
-recognition; the final chapter openly lists all12 inherited awards, grants and
-cohort entries by year. Recognition links focus the full record heading.
+recognition; the final spread gives awards and writing one page each. The left
+page openly lists all12 inherited awards, grants and cohort entries by year; the
+right page links to Jerry’s X and Substack writing. Individual post links await
+the owner’s selection. Recognition links focus the full record heading.
 
 ## Run locally
 

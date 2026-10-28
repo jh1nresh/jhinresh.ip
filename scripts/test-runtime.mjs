@@ -31,7 +31,7 @@ class Element {
 function fixture({reduced=false,hash='',main=true,animate=false}={}){
  const animations=[];animationSink=animations;
  const ids=['home','project-savvy','project-output','project-eznest','project-maiat','about'];
- const labels=['Hello','Savvy','OUTPUT','EZNest','Agents','About'];
+ const labels=['Hello','Savvy','OUTPUT','EZNest','Agents','Awards & blog'];
  const binding=new Element();if(!animate)binding.animate=null;
  const reader=new Element(),controls=new Element(),previous=new Element(),next=new Element(),chapterReadout=new Element(),figure=new Element(),cabinetControls=new Element(),drawerReadout=new Element(),readLink=new Element({href:'#project-savvy'});
  controls.hidden=true;cabinetControls.hidden=true;
@@ -83,7 +83,7 @@ f=fixture();
 for(let i=0;i<f.links.length;i++){
  f.spreads[i].pages.forEach(page=>{page.scrollTop=180;});
  f.linkClick(f.links[i]);
- assert.equal(f.chapterReadout.textContent,`${String(i*2+1).padStart(2,'0')}–${String(i*2+2).padStart(2,'0')} / 12 — ${['Hello','Savvy','OUTPUT','EZNest','Agents','About'][i]}`);
+ assert.equal(f.chapterReadout.textContent,`${String(i*2+1).padStart(2,'0')}–${String(i*2+2).padStart(2,'0')} / 12 — ${['Hello','Savvy','OUTPUT','EZNest','Agents','Awards & blog'][i]}`);
  assert.ok(f.spreads[i].pages.every(page=>page.scrollTop===0));
 }
 f.location.hash='#project-output';f.window.emit('popstate');assert.equal(f.chapterReadout.textContent,'05–06 / 12 — OUTPUT');
@@ -95,5 +95,5 @@ f.previous.click();assert.ok(f.allAnimations.filter(item=>item.target.className=
 f=fixture({animate:true});f.next.click();f.document.hidden=true;f.document.emit('visibilitychange');await Promise.resolve();assert.equal(f.binding.children.length,0);assert.equal(f.active(),1);checks.push('hiding the document completes the paper turn without leaving a stale leaf');
 f=fixture({animate:true});f.next.click();f.location.hash='#home';f.window.emit('popstate');f.location.hash='#project-savvy';f.window.emit('popstate');f.animations[0].finish();await Promise.resolve();assert.equal(f.active(),1);assert.equal(f.location.hash,'#project-savvy');assert.equal(f.chapterReadout.textContent,'03–04 / 12 — Savvy');assert.equal(f.animations.length,1);checks.push('Back then Forward during a turn cancels the stale queued destination');
 f=fixture({animate:true});f.next.click();f.next.click();f.document.hidden=true;f.document.emit('visibilitychange');await Promise.resolve();assert.equal(f.active(),2);assert.equal(f.animations.length,1);assert.equal(f.binding.children.length,0);assert.equal(f.reader.getAttribute('aria-busy'),null);checks.push('hidden-page cleanup settles queued navigation without starting a background turn');
-f=fixture();const awardsLink=Object.assign(new Element({href:'#research'}),{dataset:{chapter:'about'}});f.linkClick(awardsLink);assert.equal(f.active(),5);assert.equal(f.awardsHeading.focused,true);assert.equal(f.chapterReadout.textContent,'11–12 / 12 — About');checks.push('recognition links open the full record and focus its heading');
+f=fixture();const awardsLink=Object.assign(new Element({href:'#research'}),{dataset:{chapter:'about'}});f.linkClick(awardsLink);assert.equal(f.active(),5);assert.equal(f.awardsHeading.focused,true);assert.equal(f.chapterReadout.textContent,'11–12 / 12 — Awards & blog');checks.push('recognition links open the full record and focus its heading');
 console.log(JSON.stringify({passed:checks.length,checks},null,2));

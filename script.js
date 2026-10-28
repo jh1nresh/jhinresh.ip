@@ -8,7 +8,7 @@
   const next = document.querySelector('#next-chapter');
   const readout = document.querySelector('#chapter-readout');
   if (!reader || !spreads.length || !controls || !previous || !next || !readout) return;
-  const labels = ['Hello', 'Savvy', 'OUTPUT', 'EZNest', 'Agents', 'About'];
+  const labels = ['Hello', 'Savvy', 'OUTPUT', 'EZNest', 'Agents', 'Awards & blog'];
   const projects = ['savvy', 'output', 'eznest', 'maiat'];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const narrow = matchMedia('(max-width: 760px)');
