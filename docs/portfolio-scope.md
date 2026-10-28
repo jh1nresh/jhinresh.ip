@@ -25,25 +25,24 @@ The portrait now introduces Jerry on the opening page. Copy uses first person
 without new biography or role claims. Two selected recognitions appear on the
 cover; Maiat/Dojo links its corresponding results to an always-open12-entry
 record grouped2026/2025/2024. The chapter is labelled Awards & blog; each has its
-own page. Blog remains blank until the owner supplies chosen post URLs. The research hash scrolls to and focuses the recognition
+own page. Blog remains blank until the owner supplies chosen post URLs. The research hash reveals and focuses the recognition
 heading.
 
-Book pages use the same frame in every chapter: 780px high on desktop and
-740px per stacked page on mobile. Long content scrolls within its page while
-printed folios stay visible. The navigation shows page pairs 01–02 through
-11–12 out of 12; the six bookmarks remain chapter indices.
+Book pages fill the available viewport. Desktop shows facing pages; mobile shows
+one physical page at a time. The navigation counts all twelve folios and mobile
+right-hand pages have explicit page-NN hashes. Overflowing text is divided into
+readable sections with Previous section / Continue reading controls. The page,
+book frame and navigation require no vertical scrolling; all inherited content
+remains reachable. Extremely short screens use compact spacing; oversized groups
+split further, and unbreakable content retains a native scrolling escape hatch
+within its page rather than being clipped. Resize, fonts, images and expanded interface previews trigger
+measurement at each page’s actual width. Main-script failure retains native flow.
 
-With JavaScript the reader shows one spread, with previous/next, direct hashes and
-browser history. Explicit navigation focuses the chapter heading; history restores
-the spread/readout without forcing focus. The contact alias reveals the final
-chapter and scrolls to the contact block. Without scripts all chapters and native
-anchors remain readable. A retained two-sided paper leaf bends across18 connected strips above the next
-spread. Arc-length geometry keeps adjacent edges joined, lifts the outer edge
-first, shades the bend and lands flat; the cover and
-page boxes are never transformed. Rapid input queues the latest destination.
-Reduced motion skips the leaf animation. Desktop chapter navigation keeps the
-viewport position; any mobile alignment happens before the turn. The motion
-control has a reserved slot so its visibility never changes reader height.
+The two-sided paper leaf bends across18 connected strips, including single-page
+mobile turns. The cover and page boxes stay still. Rapid input queues the latest
+destination. Reduced motion skips the turn, and contact/recognition hashes reveal
+the owning content section without scrolling. The motion control keeps a reserved
+slot so visibility never changes reader height.
 
 ## Figures and truthful limits
 

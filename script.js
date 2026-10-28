@@ -12,7 +12,7 @@
   const projects = ['savvy', 'output', 'eznest', 'maiat'];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const narrow = matchMedia('(max-width: 760px)');
-  let current = -1, activeProject = 'savvy', turn = null, queued = null, serial = 0;
+  let current = -1, currentSide = 0, activeProject = 'savvy', turn = null, queued = null, serial = 0;
   function spreadForHash(hash) {
     if (hash === '#work') return 0;
     const direct = spreads.findIndex(spread => `#${spread.id}` === hash);
@@ -51,18 +51,19 @@
     wrapper.append(copy);wrapper.savedScroll=scrollTop;
     return wrapper;
   }
-  function turnSheet(from, to, forward, finish) {
+  function turnSheet(from, to, forward, finish, fromSide = 0, toSide = 0) {
     if (!binding || !binding.animate || !window.bookCurl || motion.matches || document.hidden) { finish(); return; }
     const layer = document.createElement('div');
-    layer.className = `turn-layer${forward ? '' : ' turn-reverse'}${narrow.matches ? ' turn-vertical' : ''}`;
+    const single=narrow.matches;
+    layer.className = `turn-layer${forward ? '' : ' turn-reverse'}${single ? ' turn-single' : ''}`;
     layer.inert = true;
     layer.setAttribute('aria-hidden','true');
     const under = face(from,forward ? 'left' : 'right','turn-under');
     const leaf = document.createElement('div');
     leaf.className = 'turn-leaf';
-    layer.append(under,leaf);binding.append(layer);
-    const vertical=narrow.matches,axis=vertical?'X':'Y';
-    const bounds=from.querySelector('.page-right').getBoundingClientRect();
+    if(!single)layer.append(under);layer.append(leaf);binding.append(layer);
+    const vertical=false,axis='Y';
+    const bounds=from.querySelector(single?(fromSide?'.page-right':'.page-left'):'.page-right').getBoundingClientRect();
     const width=bounds.width,height=bounds.height,length=vertical?height:width;
     const count=window.bookCurl.segments,step=length/count,duration=980;
     const steps=window.bookCurl.keyframes;
@@ -75,7 +76,8 @@
       strip.style.width=`${vertical?width:step+.35}px`;strip.style.height=`${vertical?step+.35:height}px`;
       for(const back of [false,true]){
         const panel=document.createElement('div');panel.className=`curl-face ${back?'curl-back':'curl-front'}`;
-        const page=face(back?to:from,back?(forward?'left':'right'):(forward?'right':'left'),'curl-content');
+        const side=single?(back?toSide:fromSide)?'right':'left':back?(forward?'left':'right'):(forward?'right':'left');
+        const page=face(back?to:from,side,'curl-content');
         page.style.width=`${width}px`;page.style.height=`${height}px`;
         const crop=back?(forward?count-1-i:i):(forward?i:count-1-i);
         page.style[vertical?'top':'left']=`${-crop*step}px`;
@@ -96,35 +98,37 @@
     turn = {animation,cleanup};reader.setAttribute('aria-busy','true');
     animation.finished.then(cleanup,cleanup);
   }
-  function showChapter(index, navigate = false, targetHash = null) {
+  function showChapter(index, navigate = false, targetHash = null, side = 0) {
     index = Math.max(0, Math.min(spreads.length - 1,index));
-    if (turn) { queued=[index,navigate,targetHash];return; }
-    if(index===current && !navigate)return;
-    const old = current >= 0 ? spreads[current] : null, forward=index>current;
-    const destination = targetHash || `#${spreads[index].id}`;
+    if (turn) { queued=[index,navigate,targetHash,side];return; }
+    if(narrow.matches&&targetHash)side=document.getElementById(targetHash.slice(1))?.closest('.page-right')?1:0;
+    if(!narrow.matches)side=0;
+    if(index===current && side===currentSide && !navigate && !targetHash)return;
+    const old = current >= 0 ? spreads[current] : null, oldSide=currentSide, forward=index*2+side>current*2+currentSide;
+    const destination = targetHash || (narrow.matches&&side ? `#page-${String(index*2+2).padStart(2,'0')}` : `#${spreads[index].id}`);
     if(navigate) {
       spreads[index].querySelectorAll('.page-content').forEach(page=>{page.scrollTop=0;});
-      // Align only when entering the book from outside it, never after a turn finishes.
-      const rect=reader.getBoundingClientRect();
-      if(rect.top>=innerHeight || rect.bottom<=0 || (narrow.matches && rect.top<0))reader.scrollIntoView({block:'start',behavior:'instant'});
       if(location.hash!==destination)history.pushState(null,'',destination);
     }
     const finish = () => {
       document.dispatchEvent(new CustomEvent('chapterchange',{detail:spreads[current].id}));
       if(!navigate)return;
-      if(destination!==`#${spreads[current].id}` && !['#work','#home'].includes(destination))document.getElementById(destination.slice(1))?.scrollIntoView({block:destination==='#research'?'start':'nearest',behavior:'instant'});
-      const heading=(destination==='#research'&&document.getElementById('awards-title'))||spreads[current].querySelector('h1,h2');heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});
+
+      const pane=spreads[current].querySelector(currentSide?'.page-right':'.page-left');
+      const heading=(destination==='#research'&&document.getElementById('awards-title'))||(narrow.matches?(pane?.querySelector('h1:not([hidden]),h2:not([hidden])')||pane?.querySelector('.page-content')):null)||spreads[current].querySelector('h1,h2');heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});
     };
     // Snapshot before hiding the old spread; then reveal the destination under the turning leaf.
     // turnSheet creates its snapshot synchronously, before returning control to this task.
-    const animate = old && old!==spreads[index] && binding?.animate && window.bookCurl && !motion.matches && !document.hidden;
-    const startTurn=animate?()=>turnSheet(old,spreads[index],forward,finish):null;
-    current=index;
+    document.dispatchEvent(new CustomEvent('beforechapterchange',{detail:{index,side,single:narrow.matches,targetHash:destination}}));
+    const animate = old && (old!==spreads[index]||side!==oldSide) && binding?.animate && window.bookCurl && !motion.matches && !document.hidden;
+    const startTurn=animate?()=>turnSheet(old,spreads[index],forward,finish,oldSide,side):null;
+    current=index;currentSide=side;
     if(startTurn)startTurn();
-    spreads.forEach((spread,i)=>{spread.hidden=i!==current;});
+    spreads.forEach((spread,i)=>{spread.hidden=i!==current;spread.dataset.side=currentSide?'right':'left';});
     document.querySelectorAll('.chapter-tabs a').forEach(link=>{if(link.dataset.chapter===spreads[current].id)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');});
-    previous.disabled=current===0;next.disabled=current===spreads.length-1;
-    readout.textContent=`${String(current*2+1).padStart(2,'0')}–${String(current*2+2).padStart(2,'0')} / ${String(spreads.length*2).padStart(2,'0')} — ${labels[current]}`;
+    previous.disabled=current===0&&(!narrow.matches||currentSide===0);next.disabled=current===spreads.length-1&&(!narrow.matches||currentSide===1);
+    previous.setAttribute('aria-label',narrow.matches?'Previous page':'Previous chapter');next.setAttribute('aria-label',narrow.matches?'Next page':'Next chapter');
+    readout.textContent=`${String(current*2+1+(narrow.matches?currentSide:0)).padStart(2,'0')}${narrow.matches?'':'–'+String(current*2+2).padStart(2,'0')} / ${String(spreads.length*2).padStart(2,'0')} — ${labels[current]}`;
     if(current>=1&&current<=4)selectProject(projects[current-1]);
     document.dispatchEvent(new CustomEvent('chapterleave'));
     if(!startTurn)finish();
@@ -136,12 +140,14 @@
     event.preventDefault();showChapter(index,true,link.getAttribute('href'));
   });
   document.querySelectorAll('[data-cabinet]').forEach(button=>button.addEventListener('click',()=>selectProject(button.dataset.cabinet)));
-  previous.addEventListener('click',()=>showChapter(current-1,true));next.addEventListener('click',()=>showChapter(current+1,true));
-  const restore=()=>showChapter(Math.max(0,spreadForHash(location.hash)));
+  function step(direction){if(narrow.matches){const page=Math.max(0,Math.min(spreads.length*2-1,current*2+currentSide+direction));showChapter(Math.floor(page/2),true,null,page%2);}else showChapter(current+direction,true);}
+  previous.addEventListener('click',()=>step(-1));next.addEventListener('click',()=>step(1));
+  const restore=()=>showChapter(Math.max(0,spreadForHash(location.hash)),false,location.hash);
   window.addEventListener('popstate',restore);window.addEventListener('hashchange',restore);
   motion.addEventListener('change',()=>{if(motion.matches)turn?.animation.finish();});
   window.addEventListener('resize',()=>{if(turn)turn.animation.finish();});
+  narrow.addEventListener?.('change',()=>{if(turn){queued=[current,false,location.hash,0];turn.animation.finish();}else{const index=current;current=-1;showChapter(index,false,location.hash);}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)turn?.animation.finish();});
   document.documentElement.dataset.projectNavigation='ready';selectProject(activeProject);
-  reader.classList.add('reader-enhanced');restore();controls.hidden=false;
+  reader.classList.add('reader-enhanced');restore();controls.hidden=false;document.dispatchEvent(new CustomEvent('readerready'));
 })();

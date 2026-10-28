@@ -59,3 +59,98 @@ footer{width:min(1200px,calc(100% - 88px));margin:auto;padding:30px 5px 35px;dis
 .blog-page{width:100%;max-width:none;flex:1;display:flex;flex-direction:column}.blog-page #contact{margin-top:auto}.blog-page .social-links{gap:24px;flex-wrap:wrap;margin-top:12px}
 
 .awards-scroll{scrollbar-width:none}.awards-scroll::-webkit-scrollbar{display:none}
+
+/* A viewport-sized reading desk. Content uses next/previous sections, never scroll. */
+html[data-book-fit]{height:100%;scrollbar-gutter:auto;scroll-padding:0}
+html[data-book-fit] body{height:100dvh;min-height:0;display:grid;grid-template-rows:64px minmax(0,1fr) 36px;overflow:hidden}
+html[data-book-fit] main{min-height:0}
+html[data-book-fit] .masthead{min-height:0;height:64px;width:min(1200px,calc(100% - 48px))}
+html[data-book-fit] .reader{width:min(1200px,calc(100% - 48px));height:100%;min-height:0;margin:0 auto;display:grid;grid-template-rows:44px minmax(0,1fr) 52px 34px;gap:4px;--spread-height:100%;position:relative}
+html[data-book-fit] .chapter-tabs{height:44px;padding-left:12px;scrollbar-width:none}
+html[data-book-fit] .chapter-tabs::-webkit-scrollbar{display:none}
+html[data-book-fit] .chapter-tabs a{min-height:38px;padding:9px 16px;font-size:11px}
+html[data-book-fit] .chapter-tabs a[aria-current=page]{padding-top:13px}
+html[data-book-fit] .book-binding{min-height:0;grid-template-rows:minmax(0,1fr);border-width:6px;border-bottom-width:10px;box-shadow:0 3px 0 #d4bb83,0 6px 0 #f2e0b7,0 9px 0 #2f4859,0 16px 30px #30483722}
+html[data-book-fit] .spread{height:100%;min-height:0}
+html[data-book-fit] .page{height:100%;min-height:0;padding:16px 28px 14px;container-type:size}
+html[data-book-fit] .page-content{overflow:hidden;scrollbar-gutter:auto}
+html[data-book-fit] .folio-head{padding-bottom:10px}
+html[data-book-fit] .folio-foot{padding-top:10px}
+html[data-book-fit] .chapter-copy,html[data-book-fit] .project-spread .chapter-copy{padding-block:14px 8px;max-width:none}
+html[data-book-fit] .chapter-label{margin-bottom:12px;font-size:9px}
+html[data-book-fit] h1{font-size:clamp(48px,9vh,76px)}
+html[data-book-fit] h2{font-size:clamp(28px,5vh,42px)}
+html[data-book-fit] .lead{font-size:14px;line-height:1.55;margin-top:16px}
+html[data-book-fit] .chapter-copy>p:not(.chapter-label):not(.hand-note):not(.lead){font-size:12px;line-height:1.65;margin-top:12px}
+html[data-book-fit] .hand-note{margin-top:12px}
+html[data-book-fit] .chapter-link{margin-top:12px}
+html[data-book-fit] .reader-controls{margin:4px auto 0;height:48px;padding:0 8px;max-width:100%;box-shadow:none}
+html[data-book-fit] .motion-controls{min-height:0;height:34px}
+html[data-book-fit] .motion-toggle{margin:0 auto;min-height:30px;padding:4px 12px}
+html[data-book-fit] footer{width:min(1200px,calc(100% - 48px));padding:5px 0;align-items:center;font-size:8px}
+html[data-book-fit] .project-scene,html[data-book-fit] .savvy-study{width:100%;padding:8px 0;margin:auto 0}
+html[data-book-fit] .scene-stage,html[data-book-fit] .savvy-stage{padding:0;max-height:calc(100cqh - 160px)}
+html[data-book-fit] .scene-stage svg,html[data-book-fit] .savvy-stage svg{max-height:calc(100cqh - 160px)}
+html[data-book-fit] .cabinet-stage{padding:0 10px}
+html[data-book-fit] .cabinet-stage svg{max-height:calc(100cqh - 215px)}
+html[data-book-fit] .cabinet-controls{margin-top:8px}
+html[data-book-fit] .project-scene figcaption{margin-top:8px;min-height:0}
+html[data-book-fit] .interface-preview{margin-top:8px}
+html[data-book-fit] .interface-preview .feature-media img{max-height:calc(100cqh - 180px)}
+html[data-book-fit] .recognition-record .award-list{gap:6px;padding:0}
+html[data-book-fit] .recognition-record .award-list li{padding-top:8px}
+html[data-book-fit] .award-list:not(:has(li:not([hidden]))){display:none}
+.page-pager{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:38px;border-top:1px solid var(--rule);margin-top:8px;flex-shrink:0;font:9px var(--mono);color:var(--rust)}
+.page-pager button{border:0;background:none;min-width:44px;min-height:36px;font-size:18px}.page-pager button:disabled{opacity:.3;cursor:default}
+.page[data-measuring]{display:flex!important;position:absolute;inset:0;visibility:hidden;pointer-events:none}
+.turn-single .turn-leaf{left:0;width:100%;top:0;height:100%}.turn-single.turn-reverse .turn-leaf{left:100%;transform-origin:0 50%}
+@media(max-width:760px){
+ html[data-book-fit] body{grid-template-rows:52px minmax(0,1fr) 36px}
+ html[data-book-fit] .masthead{height:52px;width:calc(100% - 28px)}
+ html[data-book-fit] .brand{font-size:20px}.brand small{font-size:7px}
+ html[data-book-fit] .reader{width:calc(100% - 24px);grid-template-rows:42px minmax(0,1fr) 50px 32px}
+ html[data-book-fit] .chapter-tabs{height:42px;padding-left:3px;gap:3px}
+ html[data-book-fit] .chapter-tabs a{padding-inline:12px;font-size:10px}
+ html[data-book-fit] .book-binding>.spread{grid-template-columns:1fr}
+ html[data-book-fit] .book-binding>.spread[data-side=left]>.page-right,html[data-book-fit] .book-binding>.spread[data-side=right]>.page-left{display:none}
+ html[data-book-fit] .page{padding:14px 22px 12px}
+ html[data-book-fit] .page-right{border-top:0;box-shadow:none}
+ html[data-book-fit] .reader-controls{width:100%}
+ html[data-book-fit] .reader-controls span{font-size:9px}
+ html[data-book-fit] footer{width:calc(100% - 28px);flex-direction:row;font-size:7px;gap:8px}
+ html[data-book-fit] .intro-heading h1{font-size:clamp(48px,9vh,70px)}
+}
+@media(max-height:650px){html[data-book-fit] .masthead{height:48px}html[data-book-fit] body{grid-template-rows:48px minmax(0,1fr) 30px}html[data-book-fit] .chapter-copy{padding-top:10px}html[data-book-fit] .chapter-label{margin-bottom:8px}html[data-book-fit] h2{font-size:28px}}
+
+@media(max-width:480px){html[data-book-fit] .reader{grid-template-rows:66px minmax(0,1fr) 50px 32px}html[data-book-fit] .chapter-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));height:66px;overflow:visible;padding:0;align-items:stretch}html[data-book-fit] .chapter-tabs a,html[data-book-fit] .chapter-tabs a[aria-current=page]{padding:5px 8px;min-height:30px;gap:5px;font-size:9px;border-radius:4px 4px 0 0}}
+
+html[data-book-fit] .opening .hand-note{display:flex;align-items:baseline;gap:4px 10px;flex-wrap:wrap}html[data-book-fit] .opening .hand-note span{margin-left:0}html[data-book-fit] .project-recognition ul:not(:has(li:not([hidden]))){display:none}
+html[data-book-fit] .intro-heading{padding-right:4px}
+html[data-book-fit] .page[data-measuring]{width:50%}
+@media(max-width:760px){html[data-book-fit] .page[data-measuring]{width:100%}}
+
+html[data-book-fit] .interface-preview .feature-media img{max-height:calc(var(--content-height,100cqh) - 92px)}html[data-book-fit] .feature-media:not(:has(> :not([hidden]))){display:none}
+
+/* Keep short landscape screens compact; never make an unbreakable unit inaccessible. */
+html[data-book-fit] .page-content[data-overflow]{overflow-y:auto;scrollbar-width:thin;overscroll-behavior:contain}
+html[data-book-fit] .page-content[data-overflow]::-webkit-scrollbar{display:block;width:6px}
+@media(max-height:480px){
+ html[data-book-fit] body{grid-template-rows:36px minmax(0,1fr)}
+ html[data-book-fit] footer{display:none}
+ html[data-book-fit] .masthead{height:36px}.masthead .brand small{display:none}
+ html[data-book-fit] .reader{grid-template-rows:34px minmax(0,1fr) 44px 26px;gap:2px}
+ html[data-book-fit] .chapter-tabs{height:34px}
+ html[data-book-fit] .chapter-tabs a,html[data-book-fit] .chapter-tabs a[aria-current=page]{min-height:30px;padding-block:5px}
+ html[data-book-fit] .reader-controls{height:42px;margin:0 auto}
+ html[data-book-fit] .motion-controls{height:26px}
+ html[data-book-fit] .motion-toggle{min-height:26px;padding:2px 10px}
+ html[data-book-fit] .page{padding-block:8px}
+ html[data-book-fit] .folio-head{padding-bottom:5px}
+ html[data-book-fit] .folio-foot{padding-top:5px}
+ html[data-book-fit] .chapter-copy,html[data-book-fit] .project-spread .chapter-copy{padding-top:8px}
+ html[data-book-fit] .intro-heading h1{font-size:42px}
+ html[data-book-fit] h2{font-size:26px}
+ html[data-book-fit] .page-pager{margin-top:4px;min-height:36px}
+}
+@media(max-height:480px) and (max-width:480px){html[data-book-fit] .chapter-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));height:34px}html[data-book-fit] .chapter-tabs a,html[data-book-fit] .chapter-tabs a[aria-current=page]{padding:2px;font-size:8px;white-space:normal;text-align:center;justify-content:center;line-height:1.15}html[data-book-fit] .chapter-tabs a span{display:none}}
+@media(max-height:480px){html[data-book-fit] .recognition-preview{margin-top:12px}}

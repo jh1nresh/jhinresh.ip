@@ -35,6 +35,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check script.js
+          node --check fit-reader.js
           node --check page-curl.js
           node --check cabinet.js
           node --check workflows.js
@@ -50,5 +51,6 @@ jobs:
       - name: Check navigation and cabinet lifecycle
         run: |
           node scripts/test-runtime.mjs
+          node scripts/test-fit-reader.mjs
           node scripts/test-page-curl.mjs
           node scripts/test-workflows.mjs
