@@ -296,7 +296,7 @@ function ezTag(p3, dx, dy, text, on = false){ const k = INK_K * ezTagK(), [X, Y]
 const prefix='book-output-';const total=EZ_TOTAL,scene=t=>ezScene3({t}),say=t=>EZ_CAP[ezScene(t)][0];
 const duration=total+3.1;const clamp=v=>Math.max(0,Math.min(1,v));const smooth=v=>{const x=clamp(v);return x*x*(3-2*x);};
 function at(t){t=Math.max(0,Math.min(duration,Number(t)||0));return t<=total+1.3?Math.min(t,total):total*(1-smooth((t-total-1.3)/1.8));}
-function render(t){VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);const svg=inkScale(scene(at(t)));return svg.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url(#([^)]+))/g,(_,id)=>'url(#'+prefix+id+')');}
+function render(t){VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);const svg=inkScale(scene(at(t)));return svg.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url\(#([^\)]+)\)/g,(_,id)=>'url(#'+prefix+id+')');}
 function caption(t){return t>total+1.3?'Resetting this illustrative workflow.':say(at(t));}
 return {duration,stillTime:total,viewBox:'',render,caption};
 })(),eznest:(()=>{
@@ -468,7 +468,7 @@ function ezScene3(st){
 const prefix='book-eznest-';const total=EZ_TOTAL,scene=t=>ezScene3({t}),say=t=>EZ_CAP[ezScene(t)][0];
 const duration=total+3.1;const clamp=v=>Math.max(0,Math.min(1,v));const smooth=v=>{const x=clamp(v);return x*x*(3-2*x);};
 function at(t){t=Math.max(0,Math.min(duration,Number(t)||0));return t<=total+1.3?Math.min(t,total):total*(1-smooth((t-total-1.3)/1.8));}
-function render(t){VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);const svg=inkScale(scene(at(t)));return svg.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url(#([^)]+))/g,(_,id)=>'url(#'+prefix+id+')');}
+function render(t){VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);const svg=inkScale(scene(at(t)));return svg.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url\(#([^\)]+)\)/g,(_,id)=>'url(#'+prefix+id+')');}
 function caption(t){return t>total+1.3?'Resetting this illustrative workflow.':say(at(t));}
 return {duration,stillTime:total,viewBox:'',render,caption};
 })(),maiat:(()=>{
@@ -521,7 +521,7 @@ function agScene(t,inventory=null){
 const prefix='book-maiat-';const total=7.7,scene=t=>agScene(t),say=t=>t<2.6?'A quote arrives at the approval station.':t<4.8?'The illustrated approval stamp meets the card.':'The approved example leaves a receipt.';
 const duration=total+3.1;const clamp=v=>Math.max(0,Math.min(1,v));const smooth=v=>{const x=clamp(v);return x*x*(3-2*x);};
 function at(t){t=Math.max(0,Math.min(duration,Number(t)||0));return t<=total+1.3?Math.min(t,total):total*(1-smooth((t-total-1.3)/1.8));}
-function render(t){VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);const svg=inkScale(scene(at(t)));return svg.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url(#([^)]+))/g,(_,id)=>'url(#'+prefix+id+')');}
+function render(t){VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);const svg=inkScale(scene(at(t)));return svg.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url\(#([^\)]+)\)/g,(_,id)=>'url(#'+prefix+id+')');}
 function caption(t){return t>total+1.3?'Resetting this illustrative workflow.':say(at(t));}
 return {duration,stillTime:total,viewBox:'',render,caption};
 })()};

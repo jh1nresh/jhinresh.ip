@@ -7,7 +7,7 @@ const root=fileURLToPath(new URL('../',import.meta.url));
 const read=path=>readFileSync(root+path,'utf8');
 const license=read('scripts/vendor/COLORFIGURES-LICENSE');
 const reset=`VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);`;
-const timeline=`const clamp=v=>Math.max(0,Math.min(1,v));const smooth=v=>{const x=clamp(v);return x*x*(3-2*x);};
+const timeline=String.raw`const clamp=v=>Math.max(0,Math.min(1,v));const smooth=v=>{const x=clamp(v);return x*x*(3-2*x);};
 function at(t){t=Math.max(0,Math.min(duration,Number(t)||0));return t<=total+1.3?Math.min(t,total):total*(1-smooth((t-total-1.3)/1.8));}
 function render(t){${reset}const svg=inkScale(scene(at(t)));return svg.replace(/id="([^"]+)"/g,(_,id)=>'id="'+prefix+id+'"').replace(/url\(#([^\)]+)\)/g,(_,id)=>'url(#'+prefix+id+')');}
 function caption(t){return t>total+1.3?'Resetting this illustrative workflow.':say(at(t));}`;
@@ -44,6 +44,8 @@ for(const [key,scene] of Object.entries(scenes)){
  scene.viewBox=`${x} ${y} ${right-x} ${bottom-y}`;
  for(const svg of frames){
   const ids=[...svg.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size,`${key} unique clip identifiers`);assert.ok(ids.every(id=>id.startsWith(`book-${key}-`)));
+  const refs=[...svg.matchAll(/url\(#([^)]+)\)/g)].map(m=>m[1]);
+  assert.ok(refs.every(id=>ids.includes(id)),`${key} clip references resolve within the rendered scene`);
  }
  const fallback=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${scene.viewBox}" role="img" aria-labelledby="${key}-title ${key}-desc"><title id="${key}-title">${titles[key]}</title><desc id="${key}-desc">${descriptions[key]}</desc><!-- ${license} -->${start}</svg>\n`;
  writeFileSync(root+'assets/figures/'+filenames[key],fallback);

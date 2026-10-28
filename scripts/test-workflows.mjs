@@ -34,4 +34,15 @@ f.document.emit('chapterleave');assert.equal(f.frames.size,0);f.document.emit('c
 f.observe(3,false);const offscreen=f.svgs[3].dataset.time;f.advance();assert.equal(f.frames.size,0);f.observe(3,true);f.advance(1);assert.ok(Math.abs(Number(f.svgs[3].dataset.time)-Number(offscreen))<=.033);f.advance(60);assert.notEqual(f.svgs[3].dataset.time,offscreen);checks.push('offscreen pause resumes without a time jump');
 f.document.hidden=true;f.document.emit('visibilitychange');assert.equal(f.frames.size,0);f.document.hidden=false;f.document.emit('visibilitychange');assert.equal(f.frames.size,1);f.select(-1);assert.equal(f.frames.size,0);assert.equal(f.toggle.hidden,true);checks.push('hidden documents and non-project chapters have no live illustration loop');
 f=fixture(true);assert.equal(f.frames.size,0);assert.equal(f.pin.attrs.opacity,'1');assert.equal(f.toggle.textContent,'Play illustrations');for(let i=1;i<4;i++){f.select(i);assert.equal(f.svgs[i].dataset.time,'5.000');assert.equal(f.frames.size,0);}f.toggle.click();f.advance(60);assert.equal(f.frames.size,1);f.motion.emit('change');assert.equal(f.frames.size,0);checks.push('reduced motion defaults to a complete still and permits an explicit opt-in');
+// Exercise the actual generated bundle, including its namespaced clip references.
+const real={window:{}};vm.runInNewContext(fs.readFileSync(new URL('../assets/figures/project-scenes.js',import.meta.url),'utf8'),real);
+for(const [key,scene] of Object.entries(real.window.bookScenes)){
+ let referenceCount=0;
+ for(let i=0;i<=100;i++){
+  const svg=scene.render(scene.duration*i/100),ids=new Set([...svg.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+  for(const [,id] of svg.matchAll(/url\(#([^)]+)\)/g)){referenceCount++;assert.ok(ids.has(id),`${key} frame ${i}: missing clip ${id}`);assert.ok(id.startsWith(`book-${key}-`));}
+ }
+ if(key==='output'||key==='eznest')assert.ok(referenceCount>0,`${key} exercises real shadow clipping`);
+}
+checks.push('generated project scenes resolve every clip reference across a complete animation cycle');
 console.log(JSON.stringify({passed:checks.length,checks},null,2));
