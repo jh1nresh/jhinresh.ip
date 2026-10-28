@@ -1,300 +1,147 @@
-const header = document.querySelector(".site-header");
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-const updateHeader = () => {
-  header?.setAttribute("data-elevated", String(window.scrollY > 24));
-};
-
-window.addEventListener("scroll", updateHeader, { passive: true });
-updateHeader();
-
-const sceneTargets = [...document.querySelectorAll("main > .scene")];
-let sceneObserver;
-const sceneHandoff = () => window.innerHeight * 0.48;
-
-const syncSceneStates = () => {
-  const handoff = sceneHandoff();
-  let activeIndex = sceneTargets.findIndex((scene) => {
-    const rect = scene.getBoundingClientRect();
-    return rect.top <= handoff && rect.bottom > handoff;
-  });
-
-  if (activeIndex < 0) {
-    const nextIndex = sceneTargets.findIndex(
-      (scene) => scene.getBoundingClientRect().top > handoff,
-    );
-    activeIndex = nextIndex < 0 ? sceneTargets.length - 1 : Math.max(0, nextIndex - 1);
+/* Native anchors remain readable without scripts; enhancement turns one retained sheet. */
+(() => {
+  const reader = document.querySelector('.reader');
+  const binding = document.querySelector('.book-binding');
+  const spreads = [...document.querySelectorAll('[data-spread]')];
+  const controls = document.querySelector('.reader-controls');
+  const previous = document.querySelector('#previous-chapter');
+  const next = document.querySelector('#next-chapter');
+  const readout = document.querySelector('#chapter-readout');
+  if (!reader || !spreads.length || !controls || !previous || !next || !readout) return;
+  const labels = ['Hello', 'Savvy', 'OUTPUT', 'EZNest', 'Agents', 'Awards & blog'];
+  const projects = ['savvy', 'output', 'eznest', 'maiat'];
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const narrow = matchMedia('(max-width: 760px)');
+  let current = -1, activeProject = 'savvy', turn = null, queued = null, serial = 0;
+  function spreadForHash(hash) {
+    if (hash === '#work') return 0;
+    const direct = spreads.findIndex(spread => `#${spread.id}` === hash);
+    if (direct >= 0) return direct;
+    const target = hash ? document.getElementById(hash.slice(1)) : null;
+    return target ? spreads.indexOf(target.closest('[data-spread]')) : 0;
   }
-
-  sceneTargets.forEach((scene, index) => {
-    scene.dataset.sceneState = index < activeIndex
-      ? "after"
-      : index > activeIndex
-        ? "before"
-        : "active";
-  });
-};
-
-const setupSceneTransitions = () => {
-  sceneObserver?.disconnect();
-  sceneObserver = undefined;
-
-  if (!("IntersectionObserver" in window) || reducedMotion.matches) {
-    document.documentElement.classList.remove("scene-transitions-ready");
-    sceneTargets.forEach((scene) => delete scene.dataset.sceneState);
-    return;
+  function selectProject(key) {
+    if (!projects.includes(key)) return;
+    activeProject = key;
+    document.documentElement.dataset.activeProject = key;
+    const link = document.querySelector('#cabinet-read-chapter');
+    link.href = `#project-${key}`;
+    link.dataset.chapter = `#project-${key}`.slice(1);
+    link.textContent = `Read the ${({savvy: 'Savvy', output: 'OUTPUT', eznest: 'EZNest', maiat: 'Maiat + Dojo'})[key]} chapter ↗`;
+    document.dispatchEvent(new CustomEvent('projectchange', {detail: key}));
   }
-
-  syncSceneStates();
-  document.documentElement.classList.add("scene-transitions-ready");
-
-  const handoff = Math.round(sceneHandoff());
-  const bottomInset = Math.max(0, window.innerHeight - handoff - 1);
-  sceneObserver = new IntersectionObserver(
-    syncSceneStates,
-    { rootMargin: `-${handoff}px 0px -${bottomInset}px`, threshold: 0 },
-  );
-
-  sceneTargets.forEach((scene) => sceneObserver.observe(scene));
-};
-
-setupSceneTransitions();
-reducedMotion.addEventListener?.("change", setupSceneTransitions);
-window.addEventListener("resize", setupSceneTransitions, { passive: true });
-window.addEventListener("pageshow", (event) => {
-  if (event.persisted) setupSceneTransitions();
-});
-
-const revealTargets = document.querySelectorAll(".reveal");
-
-if ("IntersectionObserver" in window && !reducedMotion.matches) {
-  const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.1, rootMargin: "0px 0px -6%" },
-  );
-
-  revealTargets.forEach((target) => revealObserver.observe(target));
-} else {
-  revealTargets.forEach((target) => target.classList.add("is-visible"));
-}
-
-const featureData = {
-  save: {
-    kicker: "Consumer AI · iOS",
-    title: "SAV-E",
-    thesis: "A private, evidence-backed memory for saved places.",
-    description:
-      "Turns social posts, maps, web pages, voice notes, and Google Takeout into reviewable evidence and confirmed Map Stamps—without guessing.",
-    stack: "SwiftUI · MapKit · App Intents · PostgreSQL",
-    href: "https://testflight.apple.com/join/aSVm9hRJ",
-    linkLabel: "Open SAV-E",
-  },
-  maiat: {
-    kicker: "Agent trust · Base",
-    title: "Maiat + Dojo",
-    thesis: "Verifiable reputation for AI agent work.",
-    description:
-      "Dojo is the work-order surface; Maiat turns evaluator decisions, settlement receipts, and behavioral signals into reputation for future work.",
-    stack: "Solidity · Foundry · TypeScript · EAS",
-    href: "https://app.maiat.io",
-    linkLabel: "Open Maiat",
-  },
-  sllr: {
-    kicker: "Commerce agents · Execution",
-    title: "SLL-R",
-    thesis: "Merchant-backed ordering for AI agents.",
-    description:
-      "Locks an exact merchant quote to buyer consent, prevents duplicate orders, tracks fulfillment, and issues one canonical receipt.",
-    stack: "TypeScript · MCP · Payments · Receipt lifecycle",
-    href: "https://github.com/jh1nresh/SLL-R",
-    linkLabel: "View SLL-R Source",
-  },
-  r8: {
-    kicker: "Food intelligence · Evidence",
-    title: "R8",
-    thesis: "Cross-strait food discovery backed by traceable evidence.",
-    description:
-      "Turns restaurant sources and taste signals into branch-level rankings for Taipei, New Taipei, and Shanghai—with explicit scoring and abstention boundaries.",
-    stack: "Astro · TypeScript · Evidence graph · Eval harness",
-    href: "https://github.com/jh1nresh/r8",
-    linkLabel: "View R8 Source",
-  },
-  more: {
-    kicker: "Product + protocol experiments",
-    title: "More Projects",
-    thesis: "Experiments in learning, identity, receipts, and coordination.",
-    description:
-      "Oshiami, Cloak, Jiagon, Gimi, Pincher, flops, and ClearTrade span learning, fashion, local reviews, rentals, events, infrastructure credits, and trading agents.",
-    stack: "Consumer apps · Agent systems · Protocol research",
-    href: "https://github.com/jh1nresh?tab=repositories",
-    linkLabel: "Browse Public Repositories",
-  },
-};
-
-const featureTabs = [...document.querySelectorAll("[data-feature-tab]")];
-const featureKicker = document.querySelector("[data-feature-kicker]");
-const featureTitle = document.querySelector("[data-feature-title]");
-const featureThesis = document.querySelector("[data-feature-thesis]");
-const featureDescription = document.querySelector("[data-feature-description]");
-const featureStack = document.querySelector("[data-feature-stack]");
-const featureLink = document.querySelector("[data-feature-link]");
-const featureProgress = document.querySelector("[data-feature-progress]");
-const featureCount = document.querySelector("[data-feature-count]");
-
-const selectFeature = (tab, moveFocus = false) => {
-  const key = tab.dataset.featureTab;
-  const data = key ? featureData[key] : undefined;
-  if (!data) return;
-
-  const index = featureTabs.indexOf(tab);
-  featureTabs.forEach((candidate) => {
-    const active = candidate === tab;
-    candidate.classList.toggle("is-active", active);
-    candidate.setAttribute("aria-selected", String(active));
-    candidate.tabIndex = active ? 0 : -1;
-  });
-
-  if (featureKicker) featureKicker.textContent = data.kicker;
-  if (featureTitle) featureTitle.textContent = data.title;
-  if (featureThesis) featureThesis.textContent = data.thesis;
-  if (featureDescription) featureDescription.textContent = data.description;
-  if (featureStack) featureStack.textContent = data.stack;
-  if (featureLink) {
-    featureLink.href = data.href;
-    featureLink.textContent = data.linkLabel;
-  }
-  if (featureProgress) featureProgress.style.width = `${((index + 1) / featureTabs.length) * 100}%`;
-  if (featureCount) featureCount.textContent = `${String(index + 1).padStart(2, "0")} / ${String(featureTabs.length).padStart(2, "0")}`;
-  if (moveFocus) tab.focus();
-};
-
-featureTabs.forEach((tab) => {
-  tab.addEventListener("click", () => selectFeature(tab));
-  tab.addEventListener("keydown", (event) => {
-    const currentIndex = featureTabs.indexOf(tab);
-    let nextIndex;
-
-    if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % featureTabs.length;
-    if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + featureTabs.length) % featureTabs.length;
-    if (event.key === "Home") nextIndex = 0;
-    if (event.key === "End") nextIndex = featureTabs.length - 1;
-    if (nextIndex === undefined) return;
-
-    event.preventDefault();
-    selectFeature(featureTabs[nextIndex], true);
-  });
-});
-
-const activeFeatureTab = featureTabs.find((tab) => tab.classList.contains("is-active"));
-if (activeFeatureTab) selectFeature(activeFeatureTab);
-
-const HLS_LIBRARY_URL = "https://cdn.jsdelivr.net/npm/hls.js@1.6.16/dist/hls.min.js";
-const HLS_LIBRARY_INTEGRITY = "sha384-5E8B0pTlZZJMabWpC0fyYf6OUpe15jJij34BqBAh4NXoHAlLNOjCPRrwtOXOQFAn";
-
-let hlsInstance;
-let hlsLoadTimeout;
-const hlsVideo = document.querySelector("[data-hls-video]");
-
-const safePlay = (video) => {
-  if (reducedMotion.matches) {
-    video.pause();
-    return;
-  }
-  video.play().catch(() => {});
-};
-
-const markMediaFallback = (video) => {
-  video.parentElement?.classList.add("media-fallback");
-};
-
-const clearMediaFallback = (video) => {
-  video.parentElement?.classList.remove("media-fallback");
-};
-
-document.querySelectorAll("video").forEach((video) => {
-  video.addEventListener("canplay", () => safePlay(video));
-  video.addEventListener("error", () => markMediaFallback(video));
-  if (reducedMotion.matches) video.removeAttribute("autoplay");
-});
-
-const attachHlsSource = () => {
-  if (!hlsVideo) return false;
-
-  const source = hlsVideo.dataset.src;
-  if (!source) return false;
-
-  if (hlsVideo.canPlayType("application/vnd.apple.mpegurl")) {
-    clearMediaFallback(hlsVideo);
-    hlsVideo.src = source;
-    hlsVideo.addEventListener("loadedmetadata", () => safePlay(hlsVideo), { once: true });
-    return true;
-  }
-
-  const HlsConstructor = window.Hls;
-  if (HlsConstructor?.isSupported()) {
-    clearMediaFallback(hlsVideo);
-    hlsInstance = new HlsConstructor();
-    hlsInstance.loadSource(source);
-    hlsInstance.attachMedia(hlsVideo);
-    hlsInstance.on(HlsConstructor.Events.MANIFEST_PARSED, () => safePlay(hlsVideo));
-    hlsInstance.on(HlsConstructor.Events.ERROR, (_event, data) => {
-      if (!data?.fatal) return;
-      hlsInstance?.destroy();
-      hlsInstance = undefined;
-      markMediaFallback(hlsVideo);
-    });
-    return true;
-  }
-
-  return false;
-};
-
-const loadHlsLibrary = () => {
-  if (!hlsVideo || window.Hls) {
-    if (!attachHlsSource() && hlsVideo) markMediaFallback(hlsVideo);
-    return;
-  }
-
-  const script = document.createElement("script");
-  script.src = HLS_LIBRARY_URL;
-  script.integrity = HLS_LIBRARY_INTEGRITY;
-  script.crossOrigin = "anonymous";
-  script.async = true;
-  script.dataset.hlsLibrary = "";
-  script.addEventListener("load", () => {
-    window.clearTimeout(hlsLoadTimeout);
-    if (!attachHlsSource()) markMediaFallback(hlsVideo);
-  }, { once: true });
-  script.addEventListener("error", () => {
-    window.clearTimeout(hlsLoadTimeout);
-    markMediaFallback(hlsVideo);
-  }, { once: true });
-
-  hlsLoadTimeout = window.setTimeout(() => markMediaFallback(hlsVideo), 8000);
-  document.head.append(script);
-};
-
-if (!attachHlsSource()) {
-  loadHlsLibrary();
-}
-
-reducedMotion.addEventListener?.("change", () => {
-  document.querySelectorAll("video").forEach((video) => {
-    if (reducedMotion.matches) {
-      video.pause();
-    } else {
-      safePlay(video);
+  function face(spread, side, className) {
+    const source = spread.querySelector(`.page-${side}`);
+    const copy = source.cloneNode(true);
+    // Cloned pages are visual only. Prefix SVG/HTML references instead of duplicating IDs.
+    const prefix = `turn-${++serial}-`, ids = new Map();
+    const nodes = [copy, ...copy.querySelectorAll('*')];
+    for (const node of nodes) if (node.id) { ids.set(node.id, prefix + node.id); node.id = prefix + node.id; }
+    for (const node of nodes) for (const attr of [...node.attributes]) {
+      let value = attr.value.replace(/url\(#([^)]+)\)/g, (all,id) => ids.has(id) ? `url(#${ids.get(id)})` : all);
+      if (['aria-labelledby','aria-describedby','aria-controls'].includes(attr.name)) value = value.split(' ').map(id => ids.get(id) || id).join(' ');
+      if (attr.name === 'href' && value[0] === '#' && ids.has(value.slice(1))) value = '#' + ids.get(value.slice(1));
+      node.setAttribute(attr.name,value);
     }
+    copy.style.background = getComputedStyle(source).background;
+    copy.style.setProperty('--chapter',getComputedStyle(source).getPropertyValue('--chapter'));
+    const scrollTop=source.querySelector('.page-content').scrollTop;
+    const wrapper = document.createElement('div');
+    wrapper.className = `${spread.className} turn-face ${className}`;
+    wrapper.append(copy);wrapper.savedScroll=scrollTop;
+    return wrapper;
+  }
+  function turnSheet(from, to, forward, finish) {
+    if (!binding || !binding.animate || !window.bookCurl || motion.matches || document.hidden) { finish(); return; }
+    const layer = document.createElement('div');
+    layer.className = `turn-layer${forward ? '' : ' turn-reverse'}${narrow.matches ? ' turn-vertical' : ''}`;
+    layer.inert = true;
+    layer.setAttribute('aria-hidden','true');
+    const under = face(from,forward ? 'left' : 'right','turn-under');
+    const leaf = document.createElement('div');
+    leaf.className = 'turn-leaf';
+    layer.append(under,leaf);binding.append(layer);
+    const vertical=narrow.matches,axis=vertical?'X':'Y';
+    const bounds=from.querySelector('.page-right').getBoundingClientRect();
+    const width=bounds.width,height=bounds.height,length=vertical?height:width;
+    const count=window.bookCurl.segments,step=length/count,duration=980;
+    const steps=window.bookCurl.keyframes;
+    const poses=Array.from({length:steps+1},(_,i)=>window.bookCurl.sample(i/steps,length,!forward,vertical));
+    const animations=[];
+    // Clip full-size page copies into material strips; neighbouring ends share one curve.
+    leaf.replaceChildren();
+    for(let i=0;i<count;i++){
+      const strip=document.createElement('div');strip.className='curl-strip';
+      strip.style.width=`${vertical?width:step+.35}px`;strip.style.height=`${vertical?step+.35:height}px`;
+      for(const back of [false,true]){
+        const panel=document.createElement('div');panel.className=`curl-face ${back?'curl-back':'curl-front'}`;
+        const page=face(back?to:from,back?(forward?'left':'right'):(forward?'right':'left'),'curl-content');
+        page.style.width=`${width}px`;page.style.height=`${height}px`;
+        const crop=back?(forward?count-1-i:i):(forward?i:count-1-i);
+        page.style[vertical?'top':'left']=`${-crop*step}px`;
+        const shade=document.createElement('div');shade.className='curl-shade';
+        panel.append(page,shade);strip.append(panel);
+        animations.push(shade.animate(poses.map((pose,index)=>({offset:index/steps,opacity:pose[i].shade})),{duration,easing:'linear',fill:'both'}));
+      }
+      leaf.append(strip);
+      animations.push(strip.animate(poses.map((pose,index)=>({offset:index/steps,transform:`translate3d(${pose[i].x}px,${pose[i].y}px,${pose[i].z}px) rotate${axis}(${pose[i].angle}deg)`})),{duration,easing:'linear',fill:'both'}));
+    }
+    layer.querySelectorAll('.turn-face').forEach(page=>{page.querySelector('.page-content').scrollTop=page.savedScroll;});
+    const clock=leaf.animate([{transform:'translateZ(0px)'},{transform:'translateZ(0px)'}],{duration,easing:'linear',fill:'forwards'});
+    animations.push(clock);
+    if(typeof document.timeline?.currentTime==='number'){const started=performance.now();animations.forEach(animation=>{animation.startTime=started;});}
+    const animation={finished:clock.finished,finish(){animations.forEach(item=>item.finish());}};
+    let done = false;
+    const cleanup = () => { if(done)return;done=true;layer.remove();turn=null;reader.removeAttribute('aria-busy');finish();const pending=queued;queued=null;if(pending)showChapter(...pending); };
+    turn = {animation,cleanup};reader.setAttribute('aria-busy','true');
+    animation.finished.then(cleanup,cleanup);
+  }
+  function showChapter(index, navigate = false, targetHash = null) {
+    index = Math.max(0, Math.min(spreads.length - 1,index));
+    if (turn) { queued=[index,navigate,targetHash];return; }
+    if(index===current && !navigate)return;
+    const old = current >= 0 ? spreads[current] : null, forward=index>current;
+    const destination = targetHash || `#${spreads[index].id}`;
+    if(navigate) {
+      spreads[index].querySelectorAll('.page-content').forEach(page=>{page.scrollTop=0;});
+      // Align only when entering the book from outside it, never after a turn finishes.
+      const rect=reader.getBoundingClientRect();
+      if(rect.top>=innerHeight || rect.bottom<=0 || (narrow.matches && rect.top<0))reader.scrollIntoView({block:'start',behavior:'instant'});
+      if(location.hash!==destination)history.pushState(null,'',destination);
+    }
+    const finish = () => {
+      document.dispatchEvent(new CustomEvent('chapterchange',{detail:spreads[current].id}));
+      if(!navigate)return;
+      if(destination!==`#${spreads[current].id}` && !['#work','#home'].includes(destination))document.getElementById(destination.slice(1))?.scrollIntoView({block:destination==='#research'?'start':'nearest',behavior:'instant'});
+      const heading=(destination==='#research'&&document.getElementById('awards-title'))||spreads[current].querySelector('h1,h2');heading.setAttribute('tabindex','-1');heading.focus({preventScroll:true});
+    };
+    // Snapshot before hiding the old spread; then reveal the destination under the turning leaf.
+    // turnSheet creates its snapshot synchronously, before returning control to this task.
+    const animate = old && old!==spreads[index] && binding?.animate && window.bookCurl && !motion.matches && !document.hidden;
+    const startTurn=animate?()=>turnSheet(old,spreads[index],forward,finish):null;
+    current=index;
+    if(startTurn)startTurn();
+    spreads.forEach((spread,i)=>{spread.hidden=i!==current;});
+    document.querySelectorAll('.chapter-tabs a').forEach(link=>{if(link.dataset.chapter===spreads[current].id)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');});
+    previous.disabled=current===0;next.disabled=current===spreads.length-1;
+    readout.textContent=`${String(current*2+1).padStart(2,'0')}–${String(current*2+2).padStart(2,'0')} / ${String(spreads.length*2).padStart(2,'0')} — ${labels[current]}`;
+    if(current>=1&&current<=4)selectProject(projects[current-1]);
+    document.dispatchEvent(new CustomEvent('chapterleave'));
+    if(!startTurn)finish();
+  }
+  document.addEventListener('click',event=>{
+    const link=event.target.closest('a[data-chapter]');
+    if(!link||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button>0)return;
+    const index=spreadForHash(link.getAttribute('href'));if(index<0)return;
+    event.preventDefault();showChapter(index,true,link.getAttribute('href'));
   });
-});
-
-window.addEventListener("pagehide", () => {
-  window.clearTimeout(hlsLoadTimeout);
-  hlsInstance?.destroy();
-}, { once: true });
+  document.querySelectorAll('[data-cabinet]').forEach(button=>button.addEventListener('click',()=>selectProject(button.dataset.cabinet)));
+  previous.addEventListener('click',()=>showChapter(current-1,true));next.addEventListener('click',()=>showChapter(current+1,true));
+  const restore=()=>showChapter(Math.max(0,spreadForHash(location.hash)));
+  window.addEventListener('popstate',restore);window.addEventListener('hashchange',restore);
+  motion.addEventListener('change',()=>{if(motion.matches)turn?.animation.finish();});
+  window.addEventListener('resize',()=>{if(turn)turn.animation.finish();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)turn?.animation.finish();});
+  document.documentElement.dataset.projectNavigation='ready';selectProject(activeProject);
+  reader.classList.add('reader-enhanced');restore();controls.hidden=false;
+})();

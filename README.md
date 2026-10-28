@@ -1,60 +1,76 @@
-# jhinresh.ip
+# JhiNResH / Jerry Chen
 
-A cinematic, static portfolio built from Jerry Chen's verified product work and a
-video-led editorial layout.
+A personal website presented as a six-chapter illustrated field book. The user’s
+Every Joule reference guides the reading experience, with Colorfigures/Anatomy
+objects, colored bookmarks, warm paper and a cloth binding. All personal/project
+content is static HTML; no accounts, forms, analytics or payment actions exist.
 
-The page is intentionally not a repository dump. Projects are selected when their local source provides a coherent product statement plus inspectable implementation, public source, live proof, or a technical primitive worth evaluating.
+Chapters: Hello → Savvy → OUTPUT → EZNest → Agents → Awards & blog/contact.
+Savvy’s TestFlight status, OUTPUT’s devnet/no-production limits and EZNest’s
+workflow-preview/synthetic-shape limits remain visible with their illustrations.
+The withdrawn desktop-pet article and SLL-R are excluded.
 
-## Included work
-
-### Flagship systems
-
-- SAV-E — private place memory for iOS
-- Maiat + Dojo — reputation clearing for agent work
-- SLL-R — merchant-backed order execution for AI agents
-- R8 — branch-level cross-strait food evidence and discovery
-
-### Product and protocol experiments
-
-- Oshiami
-- Cloak
-- Jiagon
-- Gimi
-- Pincher
-- flops
-- ClearTrade Agent
-
-### Research
-
-- Hedge / AMM risk infrastructure, clearly labeled as research rather than a shipped product
-
-See [`docs/portfolio-scope.md`](./docs/portfolio-scope.md) for the selection rule, information architecture, acceptance criteria, and safety receipt.
+The opening page pairs Jerry’s owned portrait and a short first-person introduction
+with two inherited recognition highlights. Maiat/Dojo includes project-specific
+recognition; the final spread gives awards and writing one page each. The left
+page openly lists all12 inherited awards, grants and cohort entries by year; the
+right page reserves a blank Blog area. Article links await the owner’s selection. Recognition links focus the full record heading.
 
 ## Run locally
 
 ```bash
-python3 -m http.server 4173
+python3 -m http.server 4174 --bind 127.0.0.1
 ```
 
-Open `http://localhost:4173`.
+Open `http://127.0.0.1:4174/`.
 
-## Verification
+## Build and verify
 
 ```bash
+node scripts/build-cabinet.mjs
+node scripts/build-savvy.mjs
+node scripts/build-project-scenes.mjs
 node --check script.js
+node --check page-curl.js
+node --check cabinet.js
+node --check workflows.js
+node scripts/test-runtime.mjs
+node scripts/test-page-curl.mjs
+node scripts/test-workflows.mjs
 python3 scripts/validate.py
 ```
 
-Then inspect desktop and mobile widths in a browser and check the browser console.
+The builders update standalone SVGs, inventories and inline fallbacks. The cabinet
+has70 solids; Savvy has48; the new Maiat approval/receipt mechanism has47.
+OUTPUT/EZNest reuse the pure scene models from the canonical EZNest landing.
+Source provenance and MIT notices live in `scripts/figure-sources/README.md`,
+`LICENSES.txt` and the generated bundle. Archivo/OFL stays local.
 
-## Deployment
+## Reading and animation
 
-This is plain HTML, CSS, and JavaScript. It can be deployed to Vercel, GitHub Pages,
-Netlify, or any static host without a build step. Cinematic backgrounds load from the
-supplied CloudFront and Mux URLs, with hls.js loaded from a pinned jsDelivr URL; the
-content remains readable if those media resources are unavailable.
+All six chapters share a fixed book frame and twelve consecutive folios.
+A retained sheet has the old page on its front and the incoming page on its back;
+the sheet bends across18 connected material strips, with the outer edge leading
+the spine and a soft, flat landing. Its front/back crops keep the original page
+layout and scroll gutters. The cover, page boxes and navigation keep their size.
+Rapid input queues the latest destination; completion removes the overlay before
+starting another turn. Chapter navigation does not scroll the desktop viewport.
+Mobile alignment happens before a turn; contact can scroll to its explicit target.
+History preserves the page's reading position. Without scripts all chapters and
+native anchors remain readable.
 
-The supplied CloudFront and Mux media are third-party dependencies. Confirm reuse
-rights or replace/self-host them before treating a public deployment as durable.
+The four Look Inside diagrams autoplay on chapter entry and loop while visible.
+One host RAF clock renders only the active project at up to30fps. It pauses during
+paper turns, when offscreen/hidden, and on the global Pause illustrations button.
+Reduced-motion preferences default to meaningful stills and instant page changes;
+readers can explicitly opt into diagram motion. No GIF/video player is involved.
+The real Savvy/Maiat interfaces remain separately expandable. All diagrams are
+illustrative: no real search, approval, printing, signature or payment occurs.
 
-No analytics, backend, form submission, authentication, or private phone number is included.
+Runtime checks exercise actual reader and motion handlers with deterministic
+DOM/frame/media-query/animation adapters. Browser verification must additionally
+inspect the turning faces, frame geometry, scrolling and autonomous SVG states.
+These checks do not establish physical-device/Safari acceptance.
+
+GitHub Pages packages the actual HTML/CSS/JS, font, portrait, media and licenses.
+Current delivery is local preview plus PR; merge/deployment are separate actions.
