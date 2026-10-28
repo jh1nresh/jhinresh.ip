@@ -28,31 +28,31 @@ class Element {
  click(){if(!this.disabled)this.emit('click');}
  closest(selector){return selector==='a[data-chapter]'&&this.attrs.href&&this.dataset.chapter?this:null;}
 }
-function fixture({reduced=false,hash='',main=true,animate=false}={}){
+function fixture({reduced=false,hash='',main=true,animate=false,mobile=false}={}){
  const animations=[];animationSink=animations;
  const ids=['home','project-savvy','project-output','project-eznest','project-maiat','about'];
  const labels=['Hello','Savvy','OUTPUT','EZNest','Agents','Awards & blog'];
  const binding=new Element();if(!animate)binding.animate=null;
  const reader=new Element(),controls=new Element(),previous=new Element(),next=new Element(),chapterReadout=new Element(),figure=new Element(),cabinetControls=new Element(),drawerReadout=new Element(),readLink=new Element({href:'#project-savvy'});
  controls.hidden=true;cabinetControls.hidden=true;
- const spreads=ids.map(id=>{const e=Object.assign(new Element(),{id});e.heading=new Element();e.pages=[new Element(),new Element()];e.pages.forEach(page=>{page.className='page-content';});e.className='spread project-spread';const sides=e.pages.map(page=>{const side=new Element();side.append(page);return side;});e.querySelector=selector=>selector==='.page-left'?sides[0]:selector==='.page-right'?sides[1]:e.heading;e.querySelectorAll=()=>e.pages;return e;});
+ const spreads=ids.map(id=>{const e=Object.assign(new Element(),{id});e.heading=new Element();e.pages=[new Element(),new Element()];e.pages.forEach(page=>{page.className='page-content';});e.className='spread project-spread';const sides=e.pages.map((page,i)=>{const side=new Element();side.append(page);side.getBoundingClientRect=()=>({top:100,bottom:880,width:mobile&&e.dataset.side!==(i?'right':'left')?0:600,height:mobile&&e.dataset.side!==(i?'right':'left')?0:780});return side;});e.querySelector=selector=>selector==='.page-left'?sides[0]:selector==='.page-right'?sides[1]:e.heading;e.querySelectorAll=()=>e.pages;return e;});
  const links=ids.map((id,i)=>Object.assign(new Element({href:`#${id}`}),{dataset:{chapter:id},textContent:labels[i]}));
  const buttons=['savvy','output','eznest','maiat'].map(key=>Object.assign(new Element(),{dataset:{cabinet:key}}));
  const drawers=buttons.map(button=>Object.assign(new Element(),{dataset:{drawer:button.dataset.cabinet}}));
  figure.querySelectorAll=()=>drawers;cabinetControls.querySelectorAll=()=>buttons;
- const contact=new Element();contact.closest=()=>spreads[5];const awardsHeading=new Element();
- const motion=Object.assign(new Element(),{matches:reduced});
+ const contact=new Element();contact.closest=selector=>selector==='[data-spread]'?spreads[5]:selector==='.page-right'?contact:null;const research=new Element();research.closest=selector=>selector==='[data-spread]'?spreads[5]:null;const awardsHeading=new Element();
+ const motion=Object.assign(new Element(),{matches:reduced}),narrow=Object.assign(new Element(),{matches:mobile});
  const window=new Element(),document=Object.assign(new Element(),{hidden:false,documentElement:{dataset:{}}});
  const selectors={'.book-binding':binding,'.reader':reader,'.reader-controls':controls,'#previous-chapter':previous,'#next-chapter':next,'#chapter-readout':chapterReadout,'#project-cabinet':figure,'.cabinet-controls':cabinetControls,'#cabinet-readout':drawerReadout,'#cabinet-read-chapter':readLink};
  document.createElement=()=>new Element();
  document.querySelector=selector=>selectors[selector];
  document.querySelectorAll=selector=>selector==='[data-spread]'?spreads:selector==='.chapter-tabs a'?links:buttons;
- document.getElementById=id=>id==='awards-title'?awardsHeading:id==='contact'||id==='research'?contact:spreads.find(spread=>spread.id===id);
+ document.getElementById=id=>id==='awards-title'?awardsHeading:id==='contact'?contact:id==='research'?research:id.startsWith('page-')?{closest:selector=>selector==='.page-right'?contact:spreads[Number(id.slice(5))/2-1]}:spreads.find(spread=>spread.id===id);
  const frames=new Map(),observers=[];let id=0,now=0;
  function Observer(callback){observers.push(callback);this.observe=()=>{};}
  window.IntersectionObserver=Observer;
  const location={hash},stack=[];
- const context={window,document,innerHeight:900,getComputedStyle:()=>({background:'#fff',getPropertyValue:()=> '#abc'}),location,history:{pushState(_s,_t,path){stack.push(path);location.hash=path;}},matchMedia:query=>query.includes('max-width')?{matches:false}:motion,IntersectionObserver:Observer,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},requestAnimationFrame:callback=>{frames.set(++id,callback);return id;},cancelAnimationFrame:key=>frames.delete(key)};
+ const context={window,document,innerHeight:900,getComputedStyle:()=>({background:'#fff',getPropertyValue:()=> '#abc'}),location,history:{pushState(_s,_t,path){stack.push(path);location.hash=path;}},matchMedia:query=>query.includes('max-width')?narrow:motion,IntersectionObserver:Observer,CustomEvent:class{constructor(type,options={}){this.type=type;this.detail=options.detail;}},requestAnimationFrame:callback=>{frames.set(++id,callback);return id;},cancelAnimationFrame:key=>frames.delete(key)};
  vm.runInNewContext(curlSource,context);
  if(main)vm.runInNewContext(sources[0],context);
  vm.runInNewContext(sources[1],context);
@@ -60,7 +60,7 @@ function fixture({reduced=false,hash='',main=true,animate=false}={}){
  function linkClick(link,extra={}){let prevented=false;document.emit('click',{target:link,button:0,preventDefault(){prevented=true;},...extra});return prevented;}
  const position=key=>Number(drawers.find(drawer=>drawer.dataset.drawer===key).getAttribute('transform').match(/ ([\d.]+)\)/)[1])*2;
  const active=()=>spreads.findIndex(spread=>!spread.hidden);
- return {awardsHeading,binding,reader,get animations(){return animations.filter(item=>item.target.className==='turn-leaf');},allAnimations:animations,document,window,location,stack,spreads,links,buttons,controls,previous,next,chapterReadout,cabinetControls,drawerReadout,readLink,drawers,motion,frames,advance,position,active,linkClick,contact,observe:visible=>observers[0]([{isIntersecting:visible}])};
+ return {narrow,awardsHeading,binding,reader,get animations(){return animations.filter(item=>item.target.className==='turn-leaf');},allAnimations:animations,document,window,location,stack,spreads,links,buttons,controls,previous,next,chapterReadout,cabinetControls,drawerReadout,readLink,drawers,motion,frames,advance,position,active,linkClick,contact,observe:visible=>observers[0]([{isIntersecting:visible}])};
 }
 const checks=[];
 const markup=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
@@ -72,7 +72,7 @@ f.next.click();f.advance();assert.equal(f.active(),1);assert.equal(f.spreads[1].
 f.linkClick(f.links[5]);assert.equal(f.next.disabled,true);f.next.click();assert.equal(f.active(),5);f.previous.click();assert.equal(f.active(),4);checks.push('chapter links and previous/next respect first and final chapters');
 f.buttons[0].click();f.advance(2);f.buttons[3].click();f.advance(3);f.buttons[1].click();f.advance();assert.equal(f.position('output'),28);assert.equal(f.position('savvy'),0);assert.equal(f.readLink.href,'#project-output');checks.push('rapid drawer choices settle and update the read-chapter link');
 f.linkClick(f.readLink);assert.equal(f.active(),2);f.location.hash='#home';f.window.emit('popstate');assert.equal(f.active(),0);checks.push('selected drawer opens its chapter; browser back restores the cover');
-const contactLink=Object.assign(new Element({href:'#contact'}),{dataset:{chapter:'about'}});f.linkClick(contactLink);assert.equal(f.active(),5);assert.equal(f.location.hash,'#contact');assert.equal(f.contact.scrolled,true);checks.push('contact alias reveals the final chapter and scrolls to contact');
+const contactLink=Object.assign(new Element({href:'#contact'}),{dataset:{chapter:'about'}});f.linkClick(contactLink);assert.equal(f.active(),5);assert.equal(f.location.hash,'#contact');assert.equal(f.contact.scrolled,undefined);checks.push('contact alias reveals the final chapter without viewport scrolling');
 assert.equal(f.linkClick(f.links[1],{metaKey:true}),false);assert.equal(f.linkClick(f.links[1],{button:1}),false);checks.push('modified chapter clicks retain native browser behavior');
 f.buttons[0].click();f.advance(2);f.observe(false);const frozen=f.drawers[0].getAttribute('transform');f.advance();assert.equal(f.frames.size,0);assert.equal(f.drawers[0].getAttribute('transform'),frozen);f.observe(true);f.advance();assert.equal(f.position('savvy'),28);checks.push('offscreen drawer motion pauses and resumes');
 f.buttons[3].click();f.advance(2);f.document.hidden=true;f.document.emit('visibilitychange');assert.equal(f.frames.size,0);f.document.hidden=false;f.document.emit('visibilitychange');f.advance();assert.equal(f.position('maiat'),28);checks.push('hidden-page drawer motion pauses and resumes');
@@ -96,4 +96,8 @@ f=fixture({animate:true});f.next.click();f.document.hidden=true;f.document.emit(
 f=fixture({animate:true});f.next.click();f.location.hash='#home';f.window.emit('popstate');f.location.hash='#project-savvy';f.window.emit('popstate');f.animations[0].finish();await Promise.resolve();assert.equal(f.active(),1);assert.equal(f.location.hash,'#project-savvy');assert.equal(f.chapterReadout.textContent,'03–04 / 12 — Savvy');assert.equal(f.animations.length,1);checks.push('Back then Forward during a turn cancels the stale queued destination');
 f=fixture({animate:true});f.next.click();f.next.click();f.document.hidden=true;f.document.emit('visibilitychange');await Promise.resolve();assert.equal(f.active(),2);assert.equal(f.animations.length,1);assert.equal(f.binding.children.length,0);assert.equal(f.reader.getAttribute('aria-busy'),null);checks.push('hidden-page cleanup settles queued navigation without starting a background turn');
 f=fixture();const awardsLink=Object.assign(new Element({href:'#research'}),{dataset:{chapter:'about'}});f.linkClick(awardsLink);assert.equal(f.active(),5);assert.equal(f.awardsHeading.focused,true);assert.equal(f.chapterReadout.textContent,'11–12 / 12 — Awards & blog');checks.push('recognition links open the full record and focus its heading');
+f=fixture({mobile:true});assert.equal(f.chapterReadout.textContent,'01 / 12 — Hello');f.next.click();assert.equal(f.active(),0);assert.equal(f.spreads[0].dataset.side,'right');assert.equal(f.location.hash,'#page-02');assert.equal(f.chapterReadout.textContent,'02 / 12 — Hello');f.next.click();assert.equal(f.active(),1);assert.equal(f.chapterReadout.textContent,'03 / 12 — Savvy');f.previous.click();assert.equal(f.chapterReadout.textContent,'02 / 12 — Hello');checks.push('mobile navigates every physical page once without stacked pages');
+f=fixture({mobile:true,hash:'#page-12'});assert.equal(f.active(),5);assert.equal(f.next.disabled,true);assert.equal(f.chapterReadout.textContent,'12 / 12 — Awards & blog');f.previous.click();assert.equal(f.chapterReadout.textContent,'11 / 12 — Awards & blog');f.narrow.matches=false;f.narrow.emit('change');assert.equal(f.chapterReadout.textContent,'11–12 / 12 — Awards & blog');checks.push('mobile leaf URLs and resizing restore the correct desktop spread');
+f=fixture({mobile:true,animate:true});f.next.click();assert.equal(f.animations.length,1);assert.ok(f.binding.children[0].className.includes('turn-single'));assert.equal(f.allAnimations.find(a=>a.target.className==='curl-strip').target.style.height,'780px');f.animations[0].finish();await Promise.resolve();assert.equal(f.binding.children.length,0);assert.equal(f.chapterReadout.textContent,'02 / 12 — Hello');checks.push('mobile page changes use the retained curved sheet and clean up');
+f=fixture({mobile:true,hash:'#page-04'});f.narrow.matches=false;f.narrow.emit('change');f.narrow.matches=true;f.narrow.emit('change');assert.equal(f.location.hash,'#page-04');assert.equal(f.chapterReadout.textContent,'04 / 12 — Savvy');checks.push('breakpoint round-trips preserve an even-page URL and visible folio');
 console.log(JSON.stringify({passed:checks.length,checks},null,2));

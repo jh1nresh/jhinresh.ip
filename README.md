@@ -31,10 +31,12 @@ node scripts/build-cabinet.mjs
 node scripts/build-savvy.mjs
 node scripts/build-project-scenes.mjs
 node --check script.js
+node --check fit-reader.js
 node --check page-curl.js
 node --check cabinet.js
 node --check workflows.js
 node scripts/test-runtime.mjs
+node scripts/test-fit-reader.mjs
 node scripts/test-page-curl.mjs
 node scripts/test-workflows.mjs
 python3 scripts/validate.py
@@ -48,15 +50,21 @@ Source provenance and MIT notices live in `scripts/figure-sources/README.md`,
 
 ## Reading and animation
 
-All six chapters share a fixed book frame and twelve consecutive folios.
+All six chapters share a viewport-sized book frame and twelve consecutive folios.
+Desktop shows two facing pages; mobile shows one physical page at a time, with
+matching page URLs and next/previous controls. Text that exceeds the available
+page height uses readable sections with Continue reading controls, without
+scrolling or reducing the whole book to a miniature. Resize and font/image loads
+recompute section boundaries. Without the reader enhancement, native content
+remains fully readable.
 A retained sheet has the old page on its front and the incoming page on its back;
 the sheet bends across18 connected material strips, with the outer edge leading
 the spine and a soft, flat landing. Its front/back crops keep the original page
 layout and scroll gutters. The cover, page boxes and navigation keep their size.
 Rapid input queues the latest destination; completion removes the overlay before
 starting another turn. Chapter navigation does not scroll the desktop viewport.
-Mobile alignment happens before a turn; contact can scroll to its explicit target.
-History preserves the page's reading position. Without scripts all chapters and
+Contact opens the correct physical page without moving the viewport.
+History restores chapter/leaf URLs. Without scripts all chapters and
 native anchors remain readable.
 
 The four Look Inside diagrams autoplay on chapter entry and loop while visible.
