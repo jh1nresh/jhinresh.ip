@@ -57,3 +57,5 @@ footer{width:min(1200px,calc(100% - 88px));margin:auto;padding:30px 5px 35px;dis
 /* The final spread gives recognition and writing their own page. */
 .awards-page{margin-top:0;padding-top:0;border-top:0}.awards-page .recognition-meta{margin-top:16px}.awards-page .award-year{margin-top:22px}
 .blog-page{width:100%;max-width:none;flex:1;display:flex;flex-direction:column}.blog-page #contact{margin-top:auto}.blog-page .social-links{gap:24px;flex-wrap:wrap;margin-top:12px}
+
+.awards-scroll{scrollbar-width:none}.awards-scroll::-webkit-scrollbar{display:none}
