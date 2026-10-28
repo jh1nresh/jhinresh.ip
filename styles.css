@@ -153,3 +153,4 @@ html[data-book-fit] .page-content[data-overflow]::-webkit-scrollbar{display:bloc
  html[data-book-fit] .page-pager{margin-top:4px;min-height:36px}
 }
 @media(max-height:480px) and (max-width:480px){html[data-book-fit] .chapter-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));height:34px}html[data-book-fit] .chapter-tabs a,html[data-book-fit] .chapter-tabs a[aria-current=page]{padding:2px;font-size:8px;white-space:normal;text-align:center;justify-content:center;line-height:1.15}html[data-book-fit] .chapter-tabs a span{display:none}}
+@media(max-height:480px){html[data-book-fit] .recognition-preview{margin-top:12px}}
