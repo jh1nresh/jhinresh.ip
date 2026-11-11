@@ -11,7 +11,7 @@
   let positions = drawers.map(drawer => drawer.dataset.drawer === selected ? 28 : 0);
   let frame = 0, lastTime = null, visible = true;
   function draw(settled) {
-    drawers.forEach((drawer, i) => drawer.setAttribute('transform', `translate(${-positions[i] * Math.sqrt(3) / 2} ${positions[i] / 2})`));
+    drawers.forEach((drawer, i) => drawer.setAttribute('transform', `translate(${positions[i]} 0)`));
     controls.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.cabinet === selected)));
     const message = settled ? descriptions[selected] : `Opening ${({savvy: 'Savvy', output: 'OUTPUT', eznest: 'EZNest', maiat: 'Maiat + Dojo'})[selected]}…`;
     if (readout.textContent !== message) readout.textContent = message;

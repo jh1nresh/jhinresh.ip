@@ -58,7 +58,7 @@ function fixture({reduced=false,hash='',main=true,animate=false,mobile=false}={}
  vm.runInNewContext(sources[1],context);
  function advance(count=200){for(let i=0;i<count&&frames.size;i++){now+=16;const callbacks=[...frames.values()];frames.clear();callbacks.forEach(fn=>fn(now));assert.ok(frames.size<=1,'single drawer loop');}}
  function linkClick(link,extra={}){let prevented=false;document.emit('click',{target:link,button:0,preventDefault(){prevented=true;},...extra});return prevented;}
- const position=key=>Number(drawers.find(drawer=>drawer.dataset.drawer===key).getAttribute('transform').match(/ ([\d.]+)\)/)[1])*2;
+ const position=key=>Number(drawers.find(drawer=>drawer.dataset.drawer===key).getAttribute('transform').match(/translate\(([-\d.]+)/)[1]);
  const active=()=>spreads.findIndex(spread=>!spread.hidden);
  return {narrow,awardsHeading,binding,reader,get animations(){return animations.filter(item=>item.target.className==='turn-leaf');},allAnimations:animations,document,window,location,stack,spreads,links,buttons,controls,previous,next,chapterReadout,cabinetControls,drawerReadout,readLink,drawers,motion,frames,advance,position,active,linkClick,contact,observe:visible=>observers[0]([{isIntersecting:visible}])};
 }

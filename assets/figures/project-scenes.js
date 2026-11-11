@@ -1,4 +1,4 @@
-/* Native project scenes. Geometry/model adapted from EZNest landing, 27 Oct 2026.
+/* Dusk-desk project scenes. OUTPUT and EZNest keep their original timelines and synthetic part data.
 MIT License
 
 Copyright (c) 2026 April Zhu (Colorfigures: colour, hand-drawn style, 3D props, template, examples)
@@ -215,83 +215,31 @@ let INK_K = 1;
 const inkScale = svg => INK_K === 1 ? svg : svg.replace(/stroke-width="([\d.]+)"/g, (_, w) => `stroke-width="${(+w * INK_K).toFixed(2)}"`);
 
 window.bookScenes={output:(()=>{
-/* EZNest -> OUTPUT hand-off figure (DESIGN, 2026-10-27). Built on Colorfigures (April Zhu, MIT). Synthetic shapes only.
-   OUTPUT is a SEPARATE pilot network (test network, no production printing); this scene is explanation, not an EZNest feature. */
-PALS.output = { l:'#006cf5', m:'#0054c2', d:'#003b8a' };          // tokens: blue / blue-hover / blue-shadow
-const EZP = { out:PALS.output, sheet:{ l:'#ffffff', m:'#f7f7f2', d:'#dce1dd' },
-  parts:[ PALS.output, matOf('#c19753'), matOf('#91aaa0'), matOf('#5c6870') ] };   // blue, ochre, sage, slate (live site colours)
-const EZ_VBH = .70;
-const EZ_INK='#182136', EZ_SHADOW='#dce1dd', EZ_STAGE='#f7f7f2', EZ_BLUE='#006cf5';
-
-const EZ_OCHRE = matOf('#c19753');
-const ezBH = 3, ezBoard = [-12, -14, 156, 118];
-const ezClamp = (v,a=0,b=1) => Math.max(a, Math.min(b, v)), ezOut = k => 1 - Math.pow(1-k, 4), ezQuant = (k,n) => Math.floor(ezClamp(k)*n + 1e-9)/n, ezLerp = (a,b,k) => a + (b-a)*k;
-const EZ_T = { drop0:.9, drop:.7, ping0:3.4, trav:1.6, find0:5.0, open0:5.4, fly0:6.3, flyDur:1.2, sheet0:7.5, sheetDur:1.0 };
-const EZ_E = [0.7, 3.2, 6.1, 9.0], EZ_TOTAL = 9.0;
-const YM = [4, 68, 44, 100], NM = [110, 6, 150, 38], HB = [58, 42, 78, 62];   // machine footprints (x0,y0,x1,y1)
-const ezScene = t => t < EZ_T.drop0 ? 0 : t < EZ_E[1] ? 1 : t < EZ_E[2] ? 2 : 3;
-const EZ_CAP = [ ['Your shop, a nearby shop, and OUTPUT in between.', 'A separate pilot network. EZNest works on its own.'],
+/* OUTPUT hand-off, redrawn as a dusk desk. Same story and limits: a test-network
+   illustration. No production printing or production escrow is performed. */
+const EZ_TOTAL = 9.0;
+const EZ_T = { drop0: .9, fly0: 6.3, open0: 5.4, sheet0: 7.5 };
+const ezClamp = value => Math.max(0, Math.min(1, value));
+const ezEase = value => { const k = ezClamp(value); return k * k * (3 - 2 * k); };
+const ezScene = t => t < EZ_T.drop0 ? 0 : t < 3.2 ? 1 : t < 6.1 ? 2 : 3;
+const EZ_CAP = [
+  ['Your shop, a nearby shop, and OUTPUT in between.', 'A separate pilot network. EZNest works on its own.'],
   ['A shop receives a job it cannot make today.', 'Synthetic shapes. Illustration only.'],
   ['OUTPUT looks for a nearby shop with an open machine.', 'Pilot on a test network. No production printing.'],
-  ['Illustrated hand-off reaches the nearby shop.', 'Test-network illustration. No production printing.'] ];
-function ezMachine(b, m, label, state){ const [x0,y0,x1,y1] = b; let s = '';
-  s += box(x0, y0, ezBH, x1, y1, ezBH + 9, m, tone, 1.5);
-  s += box(x0 + 1, y0 + 1, ezBH + 9, x1 - 1, y0 + 8, ezBH + 22, m, tone, 1.4);
-  s += shape(on(PZ(ezBH + 9.05), rectUV(x0 + 4, y0 + 10, x1 - 4, y1 - 4)), '#ffffff', 1);
-  s += shape(on(PX(x1 + .1), ellUV((y0 + y1)/2, ezBH + 5, 1.7, 1.7, 14)), state === 'on' ? '#ffffff' : (state === 'wait' ? '#9fc3ff' : '#3e4855'), .8);
-  return s; }
-function ezHub(t){ const [x0,y0,x1,y1] = HB; const pulse = ezQuant(ezClamp((t - EZ_T.find0)/1.2), 4); let s = '';
-  for (let i = 0; i < 2; i++){ const k = ezClamp((t - EZ_T.ping0 - 1.2 - i*.5)/1.4); if (k <= 0 || k >= 1) continue; const r = 14 + ezQuant(k,8)*26;
-    s += `<path d="${pd(Array.from({length:28},(_,j)=>[ (x0+x1)/2 + r*Math.cos(j/28*6.2832), (y0+y1)/2 + r*Math.sin(j/28*6.2832), ezBH + .2]))}Z" fill="none" stroke="${EZ_BLUE}" stroke-width="1.4" stroke-dasharray="3 3" opacity="${(1-ezQuant(k,8)).toFixed(2)}"/>`; }
-  s += box(x0, y0, ezBH, x1, y1, ezBH + 16, EZP.out, tone, 1.5);
-  s += box(x0 + 3, y0 + 3, ezBH + 16, x1 - 3, y1 - 3, ezBH + 19, EZP.out, tone, 1.2);
-  s += tx(x1 + .2, (y0 + y1)/2, ezBH + 10, 'OUTPUT', 3.6, '#ffffff', 800);
-  s += tx(x1 + .2, (y0 + y1)/2, ezBH + 5, 'TEST NET', 2.6, '#9fc3ff', 800);
-  return s; }
-function ezCard3(t){ // the job card: drops onto your tray, later flies to the nearby shop's tray
-  const own = [(YM[0]+YM[2])/2, (YM[1]+YM[3])/2 + 6, ezBH + 10.3], oth = [(NM[0]+NM[2])/2, (NM[1]+NM[3])/2 + 6, ezBH + 10.3];
-  if (t < EZ_T.drop0 - .05) return ''; const kd = ezOut(ezClamp((t - EZ_T.drop0)/EZ_T.drop)), kf = ezOut(ezClamp((t - EZ_T.fly0)/EZ_T.flyDur));
-  const x = ezLerp(own[0], oth[0], kf), y = ezLerp(own[1], oth[1], kf), z = ezLerp(own[2] + 14*(1-kd), oth[2], kf) + 24*Math.sin(Math.PI*kf), w = 9, h = 6.5;
-  const R = [[x - w, y - h, z], [x + w, y - h, z], [x + w, y + h, z], [x - w, y + h, z]], B = R.map(q => [q[0], q[1], q[2] + .6]);
-  return { at:[x, y, z], svg: ink(pd(R), .8) + loft(R, B, n => toneI(n, EZP.sheet)) + fill(pd(B), '#fff') + ink(pd(B), .9)
-    + `<path d="${pd([[x - w*.6, y - h*.5, z + .7], [x - w*.1, y - h*.5, z + .7], [x - w*.1, y + h*.1, z + .7], [x - w*.6, y + h*.1, z + .7]])}" fill="${EZ_BLUE}" opacity=".85"/>`
-    + `<path d="${pd([[x + w*.1, y + h*.2, z + .7], [x + w*.7, y + h*.2, z + .7], [x + w*.7, y + h*.7, z + .7], [x + w*.1, y + h*.7, z + .7]])}" fill="${EZ_BLUE}" opacity=".55"/>` }; }
-function ezPix(t){ // 3 stepped 8-unit squares: your shop -> OUTPUT -> nearby shop (OUTPUT's own transfer motif)
-  let s = ''; const A = [(YM[2]+8), (YM[1]+YM[3])/2], H = [(HB[0]+HB[2])/2, (HB[1]+HB[3])/2], N = [NM[0] - 2, (NM[1]+NM[3])/2];
-  const seg = (P0, P1, k, i) => { const kk = ezQuant(ezClamp(k*1.5 - i*.2), 8); if (kk <= 0 || kk >= 1) return ''; const x = ezLerp(P0[0], P1[0], kk), y = ezLerp(P0[1], P1[1], kk);
-    return shape(on(PZ(ezBH + .3), rectUV(x - 2.5, y - 2.5, x + 2.5, y + 2.5)), EZ_BLUE, 1); };
-  for (let i = 0; i < 3; i++){ s += seg(A, H, (t - EZ_T.ping0)/EZ_T.trav, i) + seg(H, N, (t - EZ_T.open0 - .2)/EZ_T.trav, i); }
-  return s; }
-function ezScene3(st){ const t = st.t; let s = board(ezBoard[0], ezBoard[1], ezBoard[2], ezBoard[3], ezBH, 6, { l:'#ffffff', m:'#f0f1ee', d:'#dce1dd' });
-  const top = boardTop(ezBoard[0], ezBoard[1], ezBoard[2], ezBoard[3], ezBH, 6);
-  const pb = (b, h) => [[b[0],b[1],ezBH],[b[2],b[1],ezBH],[b[2],b[3],ezBH],[b[0],b[3],ezBH],[b[0],b[1],ezBH+h],[b[2],b[1],ezBH+h],[b[2],b[3],ezBH+h],[b[0],b[3],ezBH+h]];
-  s += castShadow(pb(YM, 22), ezBH, top) + castShadow(pb(NM, 22), ezBH, top) + castShadow(pb(HB, 19), ezBH, top);
-  // dotted route on the board (static, quiet)
-  const L = (a, b) => `<path d="M${P(a[0], a[1], ezBH + .1).map(f).join(' ')}L${P(b[0], b[1], ezBH + .1).map(f).join(' ')}" stroke="${EZ_INK}" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round" fill="none" opacity=".45"/>`;
-  s += L([YM[2] + 8, (YM[1]+YM[3])/2], [(HB[0]+HB[2])/2, (HB[1]+HB[3])/2]) + L([(HB[0]+HB[2])/2, (HB[1]+HB[3])/2], [NM[0] - 2, (NM[1]+NM[3])/2]);
-  const nState = t >= EZ_T.open0 ? 'on' : 'off', yState = t >= EZ_T.drop0 + EZ_T.drop ? 'wait' : 'off';
-  const items = [ { at:[(YM[0]+YM[2])/2, (YM[1]+YM[3])/2, ezBH + 8], svg: ezMachine(YM, EZP.out, 'YOUR SHOP', yState) },
-                  { at:[(NM[0]+NM[2])/2, (NM[1]+NM[3])/2, ezBH + 8], svg: ezMachine(NM, EZ_OCHRE, 'NEARBY SHOP', nState) },
-                  { at:[(HB[0]+HB[2])/2, (HB[1]+HB[3])/2, ezBH + 8], svg: ezHub(t) } ];
-  const c = ezCard3(t); if (c) items.push(c);
-  if (t >= EZ_T.sheet0){ const k = ezQuant((t - EZ_T.sheet0)/EZ_T.sheetDur, 8), x1 = NM[2] + 1, len = 22*k;
-    items.push({ at:[x1 + len/2, (NM[1]+NM[3])/2, ezBH + 1], svg: box(x1, NM[1] + 6, ezBH, x1 + len, NM[3] - 6, ezBH + .9, EZP.sheet, tone, 1) + (k > .3 ? shape(on(PZ(ezBH + 1), rectUV(x1 + 3, NM[1] + 10, x1 + Math.max(4, len - 3), NM[3] - 10)), EZ_BLUE, 0) : '') }); }
-  s += byDepth(items) + ezPix(t);
-  const sc = ezScene(t), tg = [];
-  const tg2 = (p, dx, dy, txt, on) => tg.push(ezTag(p, dx, dy, txt, on));
-  tg2([(YM[0]+YM[2])/2, YM[1] + 3, ezBH + 22], -10, -36, 'YOUR SHOP', sc === 1);
-  if (sc >= 2) tg2([(HB[0]+HB[2])/2, HB[1], ezBH + 19], -4, -42, 'OUTPUT', true);
-  if (sc >= 2) tg2([(NM[0]+NM[2])/2, NM[1] + 3, ezBH + 22], 12, -38, t >= EZ_T.open0 ? 'OPEN MACHINE' : 'NEARBY SHOP', sc === 2 && t >= EZ_T.open0);
-  if (sc === 3 && t > EZ_T.sheet0 + .5) tg2([NM[2] + 12, (NM[1]+NM[3])/2, ezBH + 1], 20, 38, 'MADE NEARBY', true);
-  if (sc === 0) tg2([(NM[0]+NM[2])/2, NM[1] + 3, ezBH + 22], 12, -38, 'NEARBY SHOP', false);
-  s += tg.join('');
-  return s.split(SHADOW).join(EZ_SHADOW).split(INK).join(EZ_INK).split('ui-monospace,Menlo,monospace').join('OUTPUT Shop,Arial,sans-serif'); }
-function ezTagK(){ return 1.25; }
-function ezTag(p3, dx, dy, text, on = false){ const k = INK_K * ezTagK(), [X, Y] = P(...p3), fs = 8.6*k, w = text.length*fs*.6 + fs*1.5, h = fs*1.8, cx = X + dx*k, cy = Y + dy*k;
-  return `<g class="tag${on ? ' on' : ''}"><path d="M${f(X)} ${f(Y)}L${f(cx)} ${f(cy)}" fill="none" stroke="${INK}" stroke-width="1"/>`
-   + `<circle cx="${f(X)}" cy="${f(Y)}" r="${f(1.3*k)}" fill="${INK}"/>`
-   + `<rect x="${f(cx - w/2)}" y="${f(cy - h/2)}" width="${f(w)}" height="${f(h)}" rx="${f(h/2)}" fill="#fff" stroke="${INK}" stroke-width="1.2"/>`
-   + `<text x="${f(cx)}" y="${f(cy + fs*.36)}" font-size="${f(fs)}" text-anchor="middle" font-weight="800" fill="${INK}">${text}</text></g>`; }
+  ['Illustrated hand-off reaches the nearby shop.', 'Test-network illustration. No production printing.'],
+];
+
+function ezScene3(st) {
+  const t = st.t;
+  const dropped = ezEase((t - EZ_T.drop0) / .7);
+  const flying = ezEase((t - EZ_T.fly0) / 1.2);
+  const cardX = 54 + dropped * 8 + flying * 196;
+  const cardY = 78 - Math.sin(Math.PI * flying) * 28 - (1 - dropped) * 24;
+  const open = t >= EZ_T.open0;
+  const sheet = ezClamp((t - EZ_T.sheet0) / 1);
+  const nearby = open ? 'OPEN MACHINE' : 'NEARBY SHOP';
+  return `<defs><linearGradient id="outSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2748"/><stop offset="1" stop-color="#e7b07a"/></linearGradient><linearGradient id="outBrass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0c2"/><stop offset="1" stop-color="#d0893a"/></linearGradient><clipPath id="outCard"><rect x="${cardX.toFixed(1)}" y="${cardY.toFixed(1)}" width="54" height="36" rx="8"/></clipPath></defs><rect width="360" height="230" rx="24" fill="url(#outSky)"/><path d="M-8 176 C70 156 140 160 190 176 C250 196 300 184 372 164 L372 246 L-8 246 Z" fill="#6b4124"/><circle cx="316" cy="36" r="16" fill="url(#outBrass)"/><path d="M78 118 C140 100 210 100 278 118" fill="none" stroke="#fffaf2" stroke-width="2" stroke-dasharray="2 6" opacity=".7"/><g><rect x="28" y="96" width="92" height="70" rx="18" fill="#fffaf2"/><text x="74" y="128" text-anchor="middle" fill="#1c2428" font-family="Georgia,serif" font-size="11">YOUR SHOP</text><circle cx="74" cy="146" r="6" fill="${t >= EZ_T.drop0 + .7 ? '#e7b07a' : '#c5d0bf'}"/></g><g><rect x="136" y="78" width="88" height="64" rx="22" fill="#145e58"/><text x="180" y="106" text-anchor="middle" fill="#fffaf2" font-family="Georgia,serif" font-size="13">OUTPUT</text><text x="180" y="124" text-anchor="middle" fill="#d7efe8" font-family="Georgia,serif" font-size="8">TEST NET</text></g><g><rect x="246" y="96" width="96" height="70" rx="18" fill="#fffaf2"/><text x="294" y="126" text-anchor="middle" fill="#1c2428" font-family="Georgia,serif" font-size="10">${nearby}</text><circle cx="294" cy="146" r="6" fill="${open ? '#f6d78a' : '#c5d0bf'}"/></g><g clip-path="url(#outCard)"><rect x="${cardX.toFixed(1)}" y="${cardY.toFixed(1)}" width="54" height="36" rx="8" fill="#fffaf2" stroke="#e7c98a"/><rect x="${(cardX + 8).toFixed(1)}" y="${(cardY + 10).toFixed(1)}" width="28" height="5" rx="2" fill="#145e58"/></g>${sheet > 0 ? `<rect x="300" y="168" width="${(40 * sheet).toFixed(1)}" height="22" rx="6" fill="#fffaf2" stroke="#145e58"/>` : ''}<text x="18" y="28" fill="#fffaf2" font-family="Georgia,serif" font-size="13">${EZ_CAP[ezScene(t)][0].split('.')[0]}</text>`;
+}
 
 const prefix='book-output-';const total=EZ_TOTAL,scene=t=>ezScene3({t}),say=t=>EZ_CAP[ezScene(t)][0];
 const duration=total+3.1;const clamp=v=>Math.max(0,Math.min(1,v));const smooth=v=>{const x=clamp(v);return x*x*(3-2*x);};
@@ -426,43 +374,38 @@ function ezCutLines(t){ if (t < EZ_T.cut0) return ''; const k = ezClamp((t - EZ_
     s += ink(pd(ring), 1.3).replace(INK, EZ_BLUE).replace('<path', `<path pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${(1 - kk).toFixed(3)}"`); });
   return s; }
 /* ---- scene ---- */
+function ezFlat(points, fill) {
+  const d = points.map((point, index) => `${index ? 'L' : 'M'}${point[0].toFixed(2)} ${point[1].toFixed(2)}`).join('') + 'Z';
+  return `<path d="${d}" fill="${fill}" stroke="#fffaf2" stroke-width="1" stroke-linejoin="round"/>`;
+}
 function ezScene3(st){
-  const t = st.t; let s = board(ezBoard[0], ezBoard[1], ezBoard[2], ezBoard[3], ezBH, 6, { l:'#ffffff', m:'#f0f1ee', d:'#dce1dd' });
-  const top = boardTop(ezBoard[0], ezBoard[1], ezBoard[2], ezBoard[3], ezBH, 6);
-  const ptsBox = (x0,y0,x1,y1,h) => [[x0,y0,ezBH],[x1,y0,ezBH],[x1,y1,ezBH],[x0,y1,ezBH],[x0,y0,ezBH+h],[x1,y0,ezBH+h],[x1,y1,ezBH+h],[x0,y1,ezBH+h]];
-  s += castShadow(ptsBox(-12, 62, 0, 106, 40), ezBH, top) + castShadow(ptsBox(ezFX, ezFY, ezFX + ezFW, ezFY + ezFD, ezFH), ezBH, top) + castShadow(ptsBox(-6, 0, 10, ezW, 16), ezBH, top);
-  // parts pad
-  s += box(ezBX - 4, ezBY - 4, ezBH, ezBX + ezBW + 4, ezBY + ezBD + 4, ezZP, { l:'#f7f7f2', m:'#e9e6dd', d:'#cfd4d0' }, toneI, 1);
-  // strip (material) from the roll to the far end, and the "saved" tail
-  s += box(2, 0, ezBH, ezEnd, ezW, ezZS, EZP.sheet, toneI, 1);
-  const Lm = t >= EZ_T.mark0 ? ezMarkLen(t) : ezLb;
-  if (Lm < ezLb - .5){ const a = ezXS + Lm + 2, b = ezXS + ezLb + 2;
-    s += `<path d="${pd(on(PZ(ezZS + .05), rectUV(a, 1, b, ezW - 1)))}" fill="#edf4ff" stroke="${EZ_BLUE}" stroke-width="1.1" stroke-dasharray="3 2.2" stroke-linejoin="round"/>`; }
-  s += ezCutLines(t);
-  // objects, back to front
-  const items = [];
-  items.push({ at:[2, ezW/2, ezBH + 8], svg: ezRoll() });
-  const stTxt = ['READY','ROWS','NEST','CUTS','EXPORT','DONE'][ezScene(t)];
-  const bar = t < EZ_T.row0 ? 0 : ezClamp((t - EZ_T.row0)/(EZ_E[4] - EZ_T.row0));
-  items.push({ at:[-6, 84, ezBH + 20], svg: ezMonitor(stTxt, bar) });
-  items.push({ at:[ezFX + 13, ezFY + 14, ezBH + 5], svg: ezFolder(t) });
-  ezD.parts.forEach(p => { const pose = ezPose(p, t); items.push({ at: ezCentre(p, pose), svg: ezPart(p, pose) }); });
-  const cd = ezCard(t); if (cd) items.push({ at:[ezFX, 22, 30], svg: cd });
-  s += byDepth(items);
-  // length marker (a flag across the roll at the used length)
-  if (t >= EZ_T.row0 + 13*EZ_T.rowStag + EZ_T.rowHop - .1){ const xm = ezXS + Lm + 3;
-    s += box(xm, -2, ezZS, xm + 1.6, ezW + 2, ezZS + 4.5, EZP.out, toneI, 1); }
-  s += ezPixels(t);
-  // labels (a few, per scene)
-  const sc = ezScene(t), tg = [];
-  if (sc === 0) tg.push(ezTag([2, ezW*.8, ezBH + 16], -34, -30, 'MATERIAL WIDTH'), ezTag([ezBX + 70, ezBY + 14, ezZP + 2], 30, 36, 'PARTS'));
-  if (sc === 1) tg.push(ezTag([ezXS + ezLb*.62, 2, ezZS + 2], 30, -52, 'ROW LAYOUT', true));
-  if (sc === 2) { tg.push(ezTag([ezXS + 30, 6, ezZS + 2], 20, -44, 'NESTING', true));
-    if (Lm < ezLb - 18) tg.push(ezTag([ezXS + (Lm + ezLb)/2, ezW/2, ezZS + .3], -6, 54, 'SHORTER', true)); }
-  if (sc === 3) tg.push(ezTag([ezXS + ezWorld(ezD.parts[1],'nest')[0] - ezXS, ezWorld(ezD.parts[1],'nest')[1], ezZS + 2], 20, -44, 'CUT LINES', true), ezTag([ezGapPair[1], ezGapPair[2], ezZS + 1], 52, 8, 'MIN GAP'));
-  if (sc === 4) tg.push(ezTag([ezFX + ezFW, ezFY + 14, ezBH + 8], 26, 40, 'HOT FOLDER', true));
-  s += tg.join('');
-  return s.split(SHADOW).join(EZ_SHADOW).split(INK).join(EZ_INK).split('ui-monospace,Menlo,monospace').join('OUTPUT Shop,Arial,sans-serif');
+  const t = st.t;
+  const colors = ['#1f6f68', '#d0893a', '#7d9a6a', '#8d74a8'];
+  const open = ezClamp((t - EZ_T.fold0) / EZ_T.lid) * (1 - ezClamp((t - EZ_T.close0) / EZ_T.lid));
+  let s = `<defs><linearGradient id="nestSky" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#24345c"/><stop offset="1" stop-color="#e7b07a"/></linearGradient><linearGradient id="nestSheet" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf2"/><stop offset="1" stop-color="#f0e0c4"/></linearGradient><clipPath id="nestRoll"><rect x="2" y="0" width="${ezEnd}" height="${ezW}" rx="8"/></clipPath></defs>`;
+  s += `<rect x="${ezBoard[0]}" y="${ezBoard[1]}" width="${ezBoard[2] - ezBoard[0]}" height="${ezBoard[3] - ezBoard[1]}" rx="14" fill="url(#nestSky)"/>`;
+  s += `<rect x="${ezBoard[0]}" y="${ezBoard[3] - 22}" width="${ezBoard[2] - ezBoard[0]}" height="28" rx="12" fill="#6b4124"/>`;
+  s += `<rect x="2" y="0" width="${ezEnd}" height="${ezW}" rx="10" fill="url(#nestSheet)" stroke="#e7c98a"/>`;
+  s += `<rect x="8" y="6" width="36" height="${ezW - 12}" rx="8" fill="#fffaf2" opacity=".45" clip-path="url(#nestRoll)"/>`;
+  s += `<rect x="${ezBX - 6}" y="${ezBY - 6}" width="${ezBW + 12}" height="${ezBD + 12}" rx="12" fill="#fffaf2" opacity=".88"/>`;
+  for (const part of ezD.parts) {
+    const pose = ezPose(part, t);
+    s += ezFlat(ezRing(part, pose, 0), colors[part.color]);
+  }
+  if (t >= EZ_T.cut0) {
+    const reveal = ezClamp((t - EZ_T.cut0) / EZ_T.cutDur);
+    ezD.parts.forEach((part, index) => {
+      const shown = ezClamp(reveal * 1.6 - (index / 13) * .6);
+      if (shown <= 0) return;
+      const nest = ezWorld(part, 'nest');
+      const ring = ezRing(part, {x: nest[0], y: nest[1], rot: nest[2]}, 0, 1.16);
+      const d = ring.map((point, pointIndex) => `${pointIndex ? 'L' : 'M'}${point[0].toFixed(2)} ${point[1].toFixed(2)}`).join('') + 'Z';
+      s += `<path d="${d}" fill="none" stroke="#145e58" stroke-width="1.1" stroke-dasharray="3 2" opacity="${shown.toFixed(2)}"/>`;
+    });
+  }
+  s += `<g transform="translate(${ezFX} ${ezFY})"><rect width="${ezFW}" height="${ezFD}" rx="6" fill="#145e58"/><rect y="${(-10 * open).toFixed(1)}" width="${ezFW}" height="9" rx="3" fill="#3e8f88"/><text x="${ezFW / 2}" y="${ezFD / 2 + 1}" text-anchor="middle" fill="#fffaf2" font-family="Georgia,serif" font-size="3.4">HOT</text></g>`;
+  s += `<text x="${ezBoard[0] + 6}" y="${ezBoard[1] + 10}" fill="#fffaf2" font-family="Georgia,serif" font-size="8">${['PARTS', 'ROWS', 'NESTING', 'CUT LINES', 'HOT FOLDER', 'DONE'][ezScene(t)]}</text>`;
+  return s;
 }
 
 const prefix='book-eznest-';const total=EZ_TOTAL,scene=t=>ezScene3({t}),say=t=>EZ_CAP[ezScene(t)][0];
@@ -472,50 +415,30 @@ function render(t){VIEW=0;RC=[0,0];OX=0;OY=0;INK_K=.65;_clipN=0;setLight(110);co
 function caption(t){return t>total+1.3?'Resetting this illustrative workflow.':say(at(t));}
 return {duration,stillTime:total,viewBox:'',render,caption};
 })(),maiat:(()=>{
-/* Original Maiat + Dojo figure: a quote card passes a mechanical approval stamp,
-   then becomes an illustrated receipt. It never signs, approves or pays anything. */
-const AGP={paper:{l:'#fff9e9',m:'#e6dbc5',d:'#c3b69c'},green:{l:'#739d7e',m:'#427657',d:'#24533d'},lilac:{l:'#b7a5cb',m:'#9381ad',d:'#66567d'},metal:{l:'#c5d0bf',m:'#9eae93',d:'#6e8467'},ink:{l:'#5d6c60',m:'#46584b',d:'#2b4033'}};
-const agClamp=v=>Math.max(0,Math.min(1,v));
-const agEase=v=>{const k=agClamp(v);return k*k*(3-2*k);};
-function agPose(t){
- const arrival=agEase((t-.4)/1.8),exit=agEase((t-4.8)/2.2);
- const down=agEase((t-2.6)/.7),up=agEase((t-3.7)/.7);
- return {x:24+90*arrival+64*exit,stroke:24.8*down*(1-up),approved:t>=3.3};
+/* Maiat + Dojo, redrawn as a dusk desk. A quote card meets an illustrated stamp
+   and leaves a receipt. It never signs, approves, or pays anything. */
+const agClamp = value => Math.max(0, Math.min(1, value));
+const agEase = value => { const k = agClamp(value); return k * k * (3 - 2 * k); };
+function agPose(t) {
+  const arrival = agEase((t - .4) / 1.8);
+  const exit = agEase((t - 4.8) / 2.2);
+  const down = agEase((t - 2.6) / .7);
+  const up = agEase((t - 3.7) / .7);
+  return {x: 24 + 90 * arrival + 64 * exit, stroke: 24.8 * down * (1 - up), approved: t >= 3.3};
 }
-function agScene(t,inventory=null){
- const parts=[],pose=agPose(t),items=[];
- const b=(name,x,y,z,w,d,h,m)=>{parts.push({name,x,y,z,w,d,h});items.push({at:[x+w/2,y+d/2,z+h/2],svg:box(x,y,z,x+w,y+d,z+h,m,toneI,.7)});};
- const c=(name,x,y,z0,z1,r,m)=>{parts.push({name,x:x-r,y:y-r,z:z0,w:r*2,d:r*2,h:z1-z0,shape:'cylinder'});items.push({at:[x,y,(z0+z1)/2],svg:cyl(x,y,z0,z1,r,m,toneI,.7,20)});};
- // Four feet meet the underside at z0; all other fixed parts contact the z6 top.
- let s='';for(const [x,y] of [[8,8],[196,8],[8,98],[196,98]]){parts.push({name:'platform foot',x,y,z:-6,w:12,d:12,h:6});s+=box(x,y,-6,x+12,y+12,0,AGP.ink,toneI,.7);}
- parts.push({name:'platform',x:0,y:0,z:0,w:216,d:118,h:6});s+=board(0,0,216,118,6,6,AGP.paper);
- b('quote bed',12,48,6,156,38,4,AGP.metal);
- b('receipt tray floor',168,48,6,44,38,4,AGP.metal);
- for(const y of [44,86])b('continuous card guide',12,y,6,200,4,8,AGP.green);
- for(const x of [12,208])b('track end stop',x,48,10,4,38,5,AGP.lilac);
- // The two feet support columns, which support the beam and forward cantilever.
- for(const x of [94,146])b('column mounting foot',x,26,6,16,20,4,AGP.metal);
- for(const x of [98,150])b('column',x,30,10,8,12,72,AGP.lilac);
- b('cross beam',98,30,82,60,12,8,AGP.lilac);
- b('stamp cantilever',122,42,82,12,30,6,AGP.lilac);
- c('telescoping ram',128,66,51-pose.stroke,82,4,AGP.metal);
- b('moving stamp head',110,50,42-pose.stroke,36,32,9,AGP.lilac);
- b('pad backing',110,50,39-pose.stroke,36,32,3,AGP.metal);
- b('rubber stamp face',110,50,36-pose.stroke,36,32,3,AGP.green);
- for(const [x,y] of [[115,55],[141,55],[115,77],[141,77]])c('head retaining screw',x,y,51-pose.stroke,52-pose.stroke,1.1,AGP.ink);
- for(const x of [97,107,149,159])for(const y of [29,43])c('mounting screw',x,y,10,10.6,.9,AGP.ink);
- for(const x of [20,65,115,200])for(const y of [46,88])c('guide retaining screw',x,y,14,14.6,.9,AGP.ink);
- // Three sheet edges stay together throughout translation; their top is z11.2.
- let paper='';for(let i=0;i<3;i++){parts.push({name:'quote card sheet',x:pose.x,y:54,z:10+i*.4,w:28,d:24,h:.4});paper+=box(pose.x,54,10+i*.4,pose.x+28,78,10+(i+1)*.4,AGP.paper,toneI,.5);}
- for(let i=0;i<3;i++)paper+=shape(on(PZ(11.25),rectUV(pose.x+5,59+i*4,pose.x+22,59.8+i*4)),i===0?'#66567d':'#9eae93',0);
- if(pose.approved){const x=pose.x+18;paper+=ink(pd([[x,72,11.3],[x+2,74,11.3],[x+7,68,11.3]]),1.3).replace(INK,'#427657');}
- items.push({at:[pose.x+14,66,11],svg:paper});
- // Indicators are fixed to the +x-facing column surface, not floating above it.
- for(let i=0;i<3;i++){parts.push({name:'column indicator',x:158,y:34,z:55+i*9,w:1,d:4,h:4,shape:'cylinder-x'});items.push({at:[158.5,36,57+i*9],svg:cylX(158,159,36,57+i*9,2,pose.approved&&i===2?AGP.green:AGP.metal,toneI,.6,16)});}
- s+=byDepth(items);
- for(const [x,label] of [[42,'QUOTE'],[128,'CONSENT'],[187,'RECEIPT']])s+=txY(x,118.1,2.7,label,3.3,'#46584b',700);
- if(inventory)inventory.push(...parts);
- return s.replaceAll(INK,'#293d38');
+function agScene(t, inventory = null) {
+  const pose = agPose(t);
+  const parts = [
+    {name: 'platform', x: 0, y: 150, w: 360, h: 70},
+    {name: 'quote bed', x: 20, y: 118, w: 250, h: 16},
+    {name: 'quote card', x: pose.x, y: 78, w: 72, h: 48},
+    {name: 'stamp', x: 150, y: 36 + pose.stroke, w: 54, h: 36, stroke: pose.stroke},
+    {name: 'receipt tray', x: 250, y: 96, w: 84, h: 70},
+  ];
+  if (inventory) inventory.push(...parts);
+  const stampY = (36 + pose.stroke).toFixed(1);
+  const cardX = pose.x.toFixed(1);
+  return `<defs><linearGradient id="agSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2748"/><stop offset="1" stop-color="#e7b07a"/></linearGradient><linearGradient id="agBrass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0c2"/><stop offset="1" stop-color="#d0893a"/></linearGradient><clipPath id="agCard"><rect x="${cardX}" y="78" width="72" height="48" rx="10"/></clipPath></defs><rect width="360" height="230" rx="24" fill="url(#agSky)"/><circle cx="320" cy="36" r="16" fill="url(#agBrass)"/><path d="M-8 168 C80 150 160 154 220 170 C290 190 320 176 372 158 L372 246 L-8 246 Z" fill="#6b4124"/><rect x="20" y="124" width="250" height="14" rx="7" fill="#c4a574"/><g clip-path="url(#agCard)"><rect x="${cardX}" y="78" width="72" height="48" rx="10" fill="#fffaf2" stroke="#e7d3b0" stroke-width="1.5"/><rect x="${(pose.x + 10).toFixed(1)}" y="90" width="40" height="5" rx="2" fill="#8d74a8"/><rect x="${(pose.x + 10).toFixed(1)}" y="100" width="28" height="4" rx="2" fill="#eadcc4"/>${pose.approved ? `<circle cx="${(pose.x + 50).toFixed(1)}" cy="108" r="8" fill="none" stroke="#145e58" stroke-width="2"/>` : ''}</g><g transform="translate(150 ${stampY})"><rect width="54" height="28" rx="10" fill="#8d74a8"/><rect y="24" width="54" height="10" rx="4" fill="#145e58"/><text x="27" y="18" text-anchor="middle" fill="#fffaf2" font-family="Georgia,serif" font-size="9">STAMP</text></g><rect x="250" y="96" width="84" height="70" rx="12" fill="#fffaf2" stroke="#e7d3b0"/><path d="M258 150 l6 8 6-8 6 8 6-8 6 8 6-8 6 8 6-8" fill="none" stroke="#c4a574" stroke-width="1.5"/><text x="46" y="210" fill="#fffaf2" font-family="Georgia,serif" font-size="13">QUOTE</text><text x="156" y="210" fill="#fffaf2" font-family="Georgia,serif" font-size="13">CONSENT</text><text x="268" y="210" fill="#fffaf2" font-family="Georgia,serif" font-size="13">RECEIPT</text>`;
 }
 
 const prefix='book-maiat-';const total=7.7,scene=t=>agScene(t),say=t=>t<2.6?'A quote arrives at the approval station.':t<4.8?'The illustrated approval stamp meets the card.':'The approved example leaves a receipt.';
@@ -526,6 +449,6 @@ function caption(t){return t>total+1.3?'Resetting this illustrative workflow.':s
 return {duration,stillTime:total,viewBox:'',render,caption};
 })()};
 })();
-window.bookScenes.output.viewBox="-128 -33 312 187";
-window.bookScenes.eznest.viewBox="-141 -50 335 220";
-window.bookScenes.maiat.viewBox="-118 -44 320 228";
+window.bookScenes.output.viewBox="-26 -18 416 282";
+window.bookScenes.eznest.viewBox="-32 -28 234 174";
+window.bookScenes.maiat.viewBox="-26 -26 416 290";

@@ -124,41 +124,36 @@ function ezCutLines(t){ if (t < EZ_T.cut0) return ''; const k = ezClamp((t - EZ_
     s += ink(pd(ring), 1.3).replace(INK, EZ_BLUE).replace('<path', `<path pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${(1 - kk).toFixed(3)}"`); });
   return s; }
 /* ---- scene ---- */
+function ezFlat(points, fill) {
+  const d = points.map((point, index) => `${index ? 'L' : 'M'}${point[0].toFixed(2)} ${point[1].toFixed(2)}`).join('') + 'Z';
+  return `<path d="${d}" fill="${fill}" stroke="#fffaf2" stroke-width="1" stroke-linejoin="round"/>`;
+}
 function ezScene3(st){
-  const t = st.t; let s = board(ezBoard[0], ezBoard[1], ezBoard[2], ezBoard[3], ezBH, 6, { l:'#ffffff', m:'#f0f1ee', d:'#dce1dd' });
-  const top = boardTop(ezBoard[0], ezBoard[1], ezBoard[2], ezBoard[3], ezBH, 6);
-  const ptsBox = (x0,y0,x1,y1,h) => [[x0,y0,ezBH],[x1,y0,ezBH],[x1,y1,ezBH],[x0,y1,ezBH],[x0,y0,ezBH+h],[x1,y0,ezBH+h],[x1,y1,ezBH+h],[x0,y1,ezBH+h]];
-  s += castShadow(ptsBox(-12, 62, 0, 106, 40), ezBH, top) + castShadow(ptsBox(ezFX, ezFY, ezFX + ezFW, ezFY + ezFD, ezFH), ezBH, top) + castShadow(ptsBox(-6, 0, 10, ezW, 16), ezBH, top);
-  // parts pad
-  s += box(ezBX - 4, ezBY - 4, ezBH, ezBX + ezBW + 4, ezBY + ezBD + 4, ezZP, { l:'#f7f7f2', m:'#e9e6dd', d:'#cfd4d0' }, toneI, 1);
-  // strip (material) from the roll to the far end, and the "saved" tail
-  s += box(2, 0, ezBH, ezEnd, ezW, ezZS, EZP.sheet, toneI, 1);
-  const Lm = t >= EZ_T.mark0 ? ezMarkLen(t) : ezLb;
-  if (Lm < ezLb - .5){ const a = ezXS + Lm + 2, b = ezXS + ezLb + 2;
-    s += `<path d="${pd(on(PZ(ezZS + .05), rectUV(a, 1, b, ezW - 1)))}" fill="#edf4ff" stroke="${EZ_BLUE}" stroke-width="1.1" stroke-dasharray="3 2.2" stroke-linejoin="round"/>`; }
-  s += ezCutLines(t);
-  // objects, back to front
-  const items = [];
-  items.push({ at:[2, ezW/2, ezBH + 8], svg: ezRoll() });
-  const stTxt = ['READY','ROWS','NEST','CUTS','EXPORT','DONE'][ezScene(t)];
-  const bar = t < EZ_T.row0 ? 0 : ezClamp((t - EZ_T.row0)/(EZ_E[4] - EZ_T.row0));
-  items.push({ at:[-6, 84, ezBH + 20], svg: ezMonitor(stTxt, bar) });
-  items.push({ at:[ezFX + 13, ezFY + 14, ezBH + 5], svg: ezFolder(t) });
-  ezD.parts.forEach(p => { const pose = ezPose(p, t); items.push({ at: ezCentre(p, pose), svg: ezPart(p, pose) }); });
-  const cd = ezCard(t); if (cd) items.push({ at:[ezFX, 22, 30], svg: cd });
-  s += byDepth(items);
-  // length marker (a flag across the roll at the used length)
-  if (t >= EZ_T.row0 + 13*EZ_T.rowStag + EZ_T.rowHop - .1){ const xm = ezXS + Lm + 3;
-    s += box(xm, -2, ezZS, xm + 1.6, ezW + 2, ezZS + 4.5, EZP.out, toneI, 1); }
-  s += ezPixels(t);
-  // labels (a few, per scene)
-  const sc = ezScene(t), tg = [];
-  if (sc === 0) tg.push(ezTag([2, ezW*.8, ezBH + 16], -34, -30, 'MATERIAL WIDTH'), ezTag([ezBX + 70, ezBY + 14, ezZP + 2], 30, 36, 'PARTS'));
-  if (sc === 1) tg.push(ezTag([ezXS + ezLb*.62, 2, ezZS + 2], 30, -52, 'ROW LAYOUT', true));
-  if (sc === 2) { tg.push(ezTag([ezXS + 30, 6, ezZS + 2], 20, -44, 'NESTING', true));
-    if (Lm < ezLb - 18) tg.push(ezTag([ezXS + (Lm + ezLb)/2, ezW/2, ezZS + .3], -6, 54, 'SHORTER', true)); }
-  if (sc === 3) tg.push(ezTag([ezXS + ezWorld(ezD.parts[1],'nest')[0] - ezXS, ezWorld(ezD.parts[1],'nest')[1], ezZS + 2], 20, -44, 'CUT LINES', true), ezTag([ezGapPair[1], ezGapPair[2], ezZS + 1], 52, 8, 'MIN GAP'));
-  if (sc === 4) tg.push(ezTag([ezFX + ezFW, ezFY + 14, ezBH + 8], 26, 40, 'HOT FOLDER', true));
-  s += tg.join('');
-  return s.split(SHADOW).join(EZ_SHADOW).split(INK).join(EZ_INK).split('ui-monospace,Menlo,monospace').join('OUTPUT Shop,Arial,sans-serif');
+  const t = st.t;
+  const colors = ['#1f6f68', '#d0893a', '#7d9a6a', '#8d74a8'];
+  const open = ezClamp((t - EZ_T.fold0) / EZ_T.lid) * (1 - ezClamp((t - EZ_T.close0) / EZ_T.lid));
+  let s = `<defs><linearGradient id="nestSky" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#24345c"/><stop offset="1" stop-color="#e7b07a"/></linearGradient><linearGradient id="nestSheet" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf2"/><stop offset="1" stop-color="#f0e0c4"/></linearGradient><clipPath id="nestRoll"><rect x="2" y="0" width="${ezEnd}" height="${ezW}" rx="8"/></clipPath></defs>`;
+  s += `<rect x="${ezBoard[0]}" y="${ezBoard[1]}" width="${ezBoard[2] - ezBoard[0]}" height="${ezBoard[3] - ezBoard[1]}" rx="14" fill="url(#nestSky)"/>`;
+  s += `<rect x="${ezBoard[0]}" y="${ezBoard[3] - 22}" width="${ezBoard[2] - ezBoard[0]}" height="28" rx="12" fill="#6b4124"/>`;
+  s += `<rect x="2" y="0" width="${ezEnd}" height="${ezW}" rx="10" fill="url(#nestSheet)" stroke="#e7c98a"/>`;
+  s += `<rect x="8" y="6" width="36" height="${ezW - 12}" rx="8" fill="#fffaf2" opacity=".45" clip-path="url(#nestRoll)"/>`;
+  s += `<rect x="${ezBX - 6}" y="${ezBY - 6}" width="${ezBW + 12}" height="${ezBD + 12}" rx="12" fill="#fffaf2" opacity=".88"/>`;
+  for (const part of ezD.parts) {
+    const pose = ezPose(part, t);
+    s += ezFlat(ezRing(part, pose, 0), colors[part.color]);
+  }
+  if (t >= EZ_T.cut0) {
+    const reveal = ezClamp((t - EZ_T.cut0) / EZ_T.cutDur);
+    ezD.parts.forEach((part, index) => {
+      const shown = ezClamp(reveal * 1.6 - (index / 13) * .6);
+      if (shown <= 0) return;
+      const nest = ezWorld(part, 'nest');
+      const ring = ezRing(part, {x: nest[0], y: nest[1], rot: nest[2]}, 0, 1.16);
+      const d = ring.map((point, pointIndex) => `${pointIndex ? 'L' : 'M'}${point[0].toFixed(2)} ${point[1].toFixed(2)}`).join('') + 'Z';
+      s += `<path d="${d}" fill="none" stroke="#145e58" stroke-width="1.1" stroke-dasharray="3 2" opacity="${shown.toFixed(2)}"/>`;
+    });
+  }
+  s += `<g transform="translate(${ezFX} ${ezFY})"><rect width="${ezFW}" height="${ezFD}" rx="6" fill="#145e58"/><rect y="${(-10 * open).toFixed(1)}" width="${ezFW}" height="9" rx="3" fill="#3e8f88"/><text x="${ezFW / 2}" y="${ezFD / 2 + 1}" text-anchor="middle" fill="#fffaf2" font-family="Georgia,serif" font-size="3.4">HOT</text></g>`;
+  s += `<text x="${ezBoard[0] + 6}" y="${ezBoard[1] + 10}" fill="#fffaf2" font-family="Georgia,serif" font-size="8">${['PARTS', 'ROWS', 'NESTING', 'CUT LINES', 'HOT FOLDER', 'DONE'][ezScene(t)]}</text>`;
+  return s;
 }

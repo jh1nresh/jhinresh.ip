@@ -4,7 +4,7 @@ A personal website presented as a six-chapter illustrated field book on an
 evening proof desk. A dusk sky, brass sun, paper clouds and a walnut desk frame
 the open book. Primary actions are glossy ink capsules, and a few workshop
 objects peek past the cover. The user’s Every Joule reference still guides the
-reading experience, with Colorfigures/Anatomy objects, colored bookmarks, warm
+reading experience, with dusk-desk project scenes, colored bookmarks, warm
 paper and a cloth binding. All personal/project content is static HTML; no
 accounts, forms, analytics or payment actions exist.
 

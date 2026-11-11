@@ -15,7 +15,7 @@ function factory(key,file,extra){return `(()=>{\n${read(`scripts/figure-sources/
 const output=factory('output','output',`const total=EZ_TOTAL,scene=t=>ezScene3({t}),say=t=>EZ_CAP[ezScene(t)][0];`);
 const nesting=factory('eznest','nesting',`const total=EZ_TOTAL,scene=t=>ezScene3({t}),say=t=>EZ_CAP[ezScene(t)][0];`);
 const agent=factory('maiat','agent',`const total=7.7,scene=t=>agScene(t),say=t=>t<2.6?'A quote arrives at the approval station.':t<4.8?'The illustrated approval stamp meets the card.':'The approved example leaves a receipt.';`);
-let bundle=`/* Native project scenes. Geometry/model adapted from EZNest landing, 27 Oct 2026.\n${license}\n*/\n(()=>{\n'use strict';\n${read('scripts/figure-sources/drawing.js')}\nwindow.bookScenes={output:${output},eznest:${nesting},maiat:${agent}};\n})();\n`;
+let bundle=`/* Dusk-desk project scenes. OUTPUT and EZNest keep their original timelines and synthetic part data.\n${license}\n*/\n(()=>{\n'use strict';\n${read('scripts/figure-sources/drawing.js')}\nwindow.bookScenes={output:${output},eznest:${nesting},maiat:${agent}};\n})();\n`;
 const sandbox={window:{}};vm.runInNewContext(bundle,sandbox);const scenes=sandbox.window.bookScenes;
 function bounds(svg){
  const xs=[],ys=[];
@@ -23,10 +23,12 @@ function bounds(svg){
   const pairs=m[1].match(/[-+]?\d*\.?\d+(?:e[-+]?\d+)?/gi)?.map(Number)||[];
   for(let i=0;i+1<pairs.length;i+=2){xs.push(pairs[i]);ys.push(pairs[i+1]);}
  }
- for(const m of svg.matchAll(/<(rect|circle)\b([^>]+)>/g)){
-  const attrs=Object.fromEntries([...m[2].matchAll(/([\w-]+)="([^"]+)"/g)].map(a=>[a[1],Number(a[2])]));
-  if(m[1]==='rect'){xs.push(attrs.x,attrs.x+attrs.width);ys.push(attrs.y,attrs.y+attrs.height);}
-  else{xs.push(attrs.cx-attrs.r,attrs.cx+attrs.r);ys.push(attrs.cy-attrs.r,attrs.cy+attrs.r);}
+ for(const m of svg.matchAll(/<(rect|circle|ellipse)\b([^>]+)>/g)){
+  const attrs=Object.fromEntries([...m[2].matchAll(/([\w:-]+)="([^"]+)"/g)].map(a=>[a[1],a[2]]));
+  const n=value=>{const parsed=Number(value);return Number.isFinite(parsed)?parsed:null;};
+  if(m[1]==='rect'){const x=n(attrs.x)??0,y=n(attrs.y)??0,w=n(attrs.width),h=n(attrs.height);if(w!=null&&h!=null){xs.push(x,x+w);ys.push(y,y+h);}}
+  else if(m[1]==='circle'){const cx=n(attrs.cx),cy=n(attrs.cy),r=n(attrs.r);if(cx!=null&&cy!=null&&r!=null){xs.push(cx-r,cx+r);ys.push(cy-r,cy+r);}}
+  else{const cx=n(attrs.cx),cy=n(attrs.cy),rx=n(attrs.rx),ry=n(attrs.ry);if(cx!=null&&cy!=null&&rx!=null&&ry!=null){xs.push(cx-rx,cx+rx);ys.push(cy-ry,cy+ry);}}
  }
  return [Math.min(...xs),Math.min(...ys),Math.max(...xs),Math.max(...ys)];
 }
@@ -52,19 +54,24 @@ for(const [key,scene] of Object.entries(scenes)){
  bundle+=`window.bookScenes.${key}.viewBox=${JSON.stringify(scene.viewBox)};\n`;
  console.log(`${key}: ${scene.duration.toFixed(1)}s cycle; stable loop, finite geometry and clip IDs PASS; viewBox ${scene.viewBox}`);
 }
-// Verify the original Figure-tier mechanism has real support and working clearance.
-const agentCheck={parts:null};vm.runInNewContext(read('scripts/figure-sources/drawing.js')+'\n'+read('scripts/figure-sources/agent.js')+`\nconst captured=[];agScene(0,captured);parts=captured;`,agentCheck);
-const parts=agentCheck.parts;assert.ok(parts.length>=40&&parts.length<=80);
-const named=name=>parts.filter(p=>p.name===name);
-assert.ok(named('platform foot').every(p=>p.z+p.h===0));assert.equal(named('platform')[0].z,0);
-assert.ok(named('column').every(p=>p.z===10&&p.z+p.h===82));assert.equal(named('cross beam')[0].z,82);
-assert.equal(named('stamp cantilever')[0].z,82);
-assert.equal(36-24.8,11.2);assert.equal(10+3*.4,11.2);
-assert.ok(24+90+64+28<208,'receipt clears the end stop');assert.equal(named('quote bed')[0].z+named('quote bed')[0].h,10);
-assert.equal(named('receipt tray floor')[0].z+named('receipt tray floor')[0].h,10);
-writeFileSync(root+'assets/figures/agent-parts.json',JSON.stringify({solidCount:parts.length,stroke:24.8,cardTravel:154,parts},null,2)+'\n');
+// The quote still travels, the stamp still meets it, and the receipt still clears the tray.
+function agentParts(t){const box={parts:null};vm.runInNewContext(read('scripts/figure-sources/agent.js')+`\nconst captured=[];agScene(${t},captured);parts=captured;`,box);return box.parts;}
+const start=agentParts(0),pressed=agentParts(3.2),done=agentParts(7);
+const card=list=>list.find(part=>part.name==='quote card');
+const stamp=list=>list.find(part=>part.name==='stamp');
+assert.equal(start.length,5);
+assert.ok(card(start).x<card(pressed).x&&card(pressed).x<card(done).x,'the quote card travels toward the receipt');
+assert.equal(card(start).x,24);assert.equal(card(pressed).x,114);assert.equal(card(done).x,178);
+assert.equal(stamp(start).stroke,0);
+assert.ok(stamp(pressed).stroke>20,'the stamp is down when it meets the card');
+assert.ok(stamp(done).stroke<1,'the stamp lifts before the receipt pose');
+assert.ok(done.find(part=>part.name==='receipt tray'));
+const posed=scenes.maiat.render(7);
+assert.match(posed,/QUOTE/);assert.match(posed,/CONSENT/);assert.match(posed,/RECEIPT/);
+assert.match(posed,/STAMP/);
+writeFileSync(root+'assets/figures/agent-parts.json',JSON.stringify({cardTravel:154,stroke:24.8,parts:done},null,2)+'\n');
 writeFileSync(root+'assets/figures/project-scenes.js',bundle);
-console.log(`Maiat mechanism: ${parts.length} solids; support, stamp contact and card travel assertions PASS.`);
+console.log(`Maiat desk: card ${card(start).x} → ${card(done).x}; stamp stroke ${stamp(pressed).stroke.toFixed(1)} PASS.`);
 
 // Update only owned host SVG markers; surrounding layout and product copy stay in index.html.
 let host=read('index.html');

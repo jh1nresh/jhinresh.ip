@@ -9,7 +9,7 @@
     const card=savvy.querySelector('#savvy-card'),pin=savvy.querySelector('#savvy-pin'),confirmed=savvy.querySelector('#savvy-confirmed');
     entries.push({svg:savvy,readout:document.querySelector('#savvy-readout'),duration:6.4,stillTime:6.4,render(t){
       const progress=2*smooth(t/6.4),travel=90*smooth(progress),stamp=smooth((progress-1.15)/.85);
-      card.setAttribute('transform',`translate(${travel*Math.sqrt(3)/2} ${travel/2})`);
+      card.setAttribute('transform',`translate(${travel} 0)`);
       confirmed.setAttribute('opacity',progress>=.98?'1':'0');pin.setAttribute('opacity',stamp>0?'1':'0');pin.setAttribute('transform',`translate(0 ${-15*(1-stamp)})`);
       return progress<.8?'01 / Save a link':progress<1.8?'02 / Review the place match':'03 / Map Stamp placed';
     }});
