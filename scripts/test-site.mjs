@@ -10,19 +10,20 @@ const checks = [];
 for (const id of ['top', 'work', 'index', 'home', 'news', 'project-savvy', 'project-output', 'project-eznest', 'project-maiat', 'about', 'research', 'blog', 'contact', 'hero-title', 'awards-title', 'view-switch']) {
   assert.match(html, new RegExp(`id="${id}"`), `missing #${id}`);
 }
-checks.push('academic page keeps the section anchors and the slider');
+checks.push('academic page keeps the section anchors and the switch');
 
-assert.match(html, /role="slider"/);
-assert.match(html, /aria-valuemin="0"/);
-assert.match(html, /aria-valuemax="100"/);
-assert.match(html, /aria-valuetext="Researcher"/);
+assert.match(html, /role="switch"/);
+assert.match(html, /aria-checked="false"/);
+assert.match(html, /id="menu-toggle"/);
+assert.match(html, /aria-controls="index"/);
+assert.match(html, /class="world"/);
 assert.match(js, /ArrowRight/);
 assert.match(js, /ArrowLeft/);
 assert.match(js, /event\.key === ' '/);
 assert.match(js, /prefers-reduced-motion/);
 assert.match(css, /prefers-reduced-motion/);
 assert.match(css, /animation:\s*none/);
-checks.push('the slider is keyboard accessible and reduced motion drops the animation');
+checks.push('the switch is keyboard accessible and reduced motion drops the sweep');
 
 for (const fact of [
   'Base Batches 003 Student Track',
@@ -117,7 +118,22 @@ function harness(reduced) {
     if (query === '#desk-scene') return scene;
     return null;
   };
-  const root = { dataset: { view: 'researcher' } };
+  const root = {
+    dataset: { view: 'researcher' },
+    style: { setProperty() {} },
+    offsetWidth: 12,
+    classList: {
+      set: new Set(),
+      add(name) { this.set.add(name); },
+      remove(name) { this.set.delete(name); },
+      contains(name) { return this.set.has(name); },
+      toggle(name, on) {
+        if (on === undefined) on = !this.set.has(name);
+        if (on) this.set.add(name);
+        else this.set.delete(name);
+      },
+    },
+  };
   const motion = { matches: reduced, addEventListener() {} };
   const context = {
     document: { documentElement: root, querySelector: (query) => query === '#view-switch' ? lens : null },
@@ -134,12 +150,12 @@ function harness(reduced) {
 
 let ui = harness(false);
 assert.equal(ui.root.dataset.view, 'researcher');
-assert.equal(ui.lens.attrs['aria-valuenow'], '0');
+assert.equal(ui.lens.attrs['aria-checked'], 'false');
 ui.emit('keydown', { key: 'ArrowRight', preventDefault() {} });
 assert.equal(ui.root.dataset.view, 'founder');
-assert.equal(ui.lens.attrs['aria-valuenow'], '100');
-assert.equal(ui.lens.attrs['aria-valuetext'], 'Founder');
-assert.equal(ui.lens.classList.contains('is-settling'), true);
+assert.equal(ui.lens.attrs['aria-checked'], 'true');
+assert.equal(ui.root.classList.contains('is-settling'), true);
+assert.equal(ui.root.classList.contains('is-sweeping'), true);
 ui.emit('keydown', { key: 'ArrowLeft', preventDefault() {} });
 assert.equal(ui.root.dataset.view, 'researcher');
 ui.emit('keydown', { key: ' ', preventDefault() {} });
@@ -162,7 +178,9 @@ checks.push('drag snaps to the nearest side; keys and click flip the view');
 ui = harness(true);
 ui.emit('keydown', { key: 'ArrowRight', preventDefault() {} });
 assert.equal(ui.root.dataset.view, 'founder');
-assert.equal(ui.lens.classList.contains('is-settling'), false);
+assert.equal(ui.lens.attrs['aria-checked'], 'true');
+assert.equal(ui.root.classList.contains('is-settling'), false);
+assert.equal(ui.root.classList.contains('is-sweeping'), false);
 checks.push('reduced motion commits the end state without the settle animation');
 
 console.log(JSON.stringify({ passed: checks.length, checks }, null, 2));
