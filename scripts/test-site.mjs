@@ -62,4 +62,11 @@ assert.match(js, /Pause motion/);
 assert.match(js, /prefers-reduced-motion/);
 checks.push('motion can be paused and respects reduced motion');
 
+assert.match(html, /id="menu-toggle"/);
+assert.match(html, /aria-controls="index"/);
+assert.equal(html.includes('class="cloud"'), false);
+assert.equal(html.includes('class="capsule"'), false);
+assert.match(css, /\.menu\{display:none\}/);
+checks.push('mobile nav is a menu and the dusk materials are gone');
+
 console.log(JSON.stringify({ passed: checks.length, checks }, null, 2));

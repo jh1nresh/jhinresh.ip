@@ -1,10 +1,11 @@
 # JhiNResH / Jerry Chen
 
-A scrolling personal site. The page is one dusk world: a layered sky, a brass
-sun, and Jerry’s portrait as the object you meet first. Projects, awards, and
-contact sit in that world as places rather than book pages. Primary actions are
-glossy ink capsules. All personal and project content is static HTML; no
-accounts, forms, analytics, or payment actions exist.
+A scrolling personal site. The page is a dark control room: a near-black field,
+a faint blueprint grid, and one cyan instrument light. Jerry’s portrait is a
+high-contrast plate, and the projects read as systems with status lines taken
+from the real copy. Primary actions are machined-metal buttons. All personal
+and project content is static HTML; no accounts, forms, analytics, or payment
+actions exist.
 
 Savvy’s TestFlight status, OUTPUT’s devnet and no-production limits, and
 EZNest’s workflow-preview and synthetic-shape limits stay visible. The
@@ -33,9 +34,9 @@ python3 scripts/validate.py
 
 The field-book reader is gone: no page curl, folio fit, cabinet clock, or
 chapter pager. `page-curl.js`, `fit-reader.js`, `cabinet.js`, and `workflows.js`
-and their tests were removed with that reader. Sky drift and a light pointer
-parallax pause for `prefers-reduced-motion`, and a Pause motion control can
-stop or resume them.
+and their tests were removed with that reader. Grid parallax and the cursor
+light pause for `prefers-reduced-motion`, and a Pause motion control can stop
+or resume them. On a narrow screen the section links sit behind a Menu button.
 
 Archivo and its OFL notice stay local. GitHub Pages packages the HTML, CSS,
 script, font, portrait, project images, and licenses.
