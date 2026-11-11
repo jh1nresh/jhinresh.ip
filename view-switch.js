@@ -18,6 +18,7 @@
   let view = root.dataset.view === 'founder' ? 'founder' : 'researcher';
   let drag = null;
   let heroDrag = null;
+  let fromPointer = false;
 
   function paint(t, settle) {
     const clamped = Math.min(1, Math.max(0, t));
@@ -79,14 +80,24 @@
     const moved = drag.moved;
     const at = ratio(event.clientX);
     drag = null;
+    fromPointer = true;
     root.classList.remove('is-dragging');
     commit(at >= 0.5 ? 'founder' : 'researcher', true, moved);
   });
   sw.addEventListener('pointercancel', (event) => {
     if (!drag || event.pointerId !== drag.id) return;
     drag = null;
+    fromPointer = true;
     root.classList.remove('is-dragging');
     commit(view, false);
+  });
+  sw.addEventListener('click', (event) => {
+    if (fromPointer) {
+      fromPointer = false;
+      return;
+    }
+    if (event.detail > 0) return;
+    commit(view === 'founder' ? 'researcher' : 'founder', true);
   });
 
   if (hero) {
