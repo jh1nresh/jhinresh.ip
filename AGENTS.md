@@ -14,6 +14,9 @@ to Vercel, GitHub Pages, Netlify, or any static host.
   they can affect the requested edit; do not require all four for a text fix.
 - Preserve the current one-page narrative: founder-engineer, verifiable agents,
   crypto rails, receipts, reputation, and proof-driven shipping.
+- The live page is a light academic column. The section nav is the day-to-night
+  track, from About to Contact. Do not put the field book back on the page. The book scripts remain
+  only because their existing tests still cover them.
 - Do not expose private phone numbers or sensitive personal data unless the user
   explicitly asks for that exact change.
 

@@ -1,9 +1,16 @@
 # JhiNResH / Jerry Chen
 
-A personal website presented as a six-chapter illustrated field book. The user’s
-Every Joule reference guides the reading experience, with Colorfigures/Anatomy
-objects, colored bookmarks, warm paper and a cloth binding. All personal/project
-content is static HTML; no accounts, forms, analytics or payment actions exist.
+The live page is a single academic column: portrait, a short focus, news,
+selected work, awards, a blank blog, and contact. Two photographs of the same
+desk, night and morning, are the page background. The section nav is the
+day-to-night track: About is day and Contact is night. There is no
+Scholar profile or CV on the site, so neither is linked. All personal and
+project content is static HTML; no accounts, forms, analytics, or payment
+actions exist.
+
+The field-book scripts are still in the repo and still have their tests. They
+are not loaded by the page. The rest of this section describes those scripts,
+not the live page.
 
 Chapters: Hello → Savvy → OUTPUT → EZNest → Agents → Awards & blog/contact.
 Savvy’s TestFlight status, OUTPUT’s devnet/no-production limits and EZNest’s
@@ -31,10 +38,12 @@ node scripts/build-cabinet.mjs
 node scripts/build-savvy.mjs
 node scripts/build-project-scenes.mjs
 node --check script.js
+node --check view-switch.js
 node --check fit-reader.js
 node --check page-curl.js
 node --check cabinet.js
 node --check workflows.js
+node scripts/test-site.mjs
 node scripts/test-runtime.mjs
 node scripts/test-fit-reader.mjs
 node scripts/test-page-curl.mjs
