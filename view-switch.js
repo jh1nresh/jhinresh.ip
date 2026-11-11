@@ -12,8 +12,15 @@
     if (!laterBg || laterBg.getAttribute('src')) return;
     const src = laterBg.getAttribute('data-src');
     if (!src) return;
-    laterBg.addEventListener?.('load', () => root.style.setProperty('--day-ready', '1'), { once: true });
-    laterBg.addEventListener?.('error', () => root.style.setProperty('--day-ready', '0'), { once: true });
+    laterBg.addEventListener?.('load', () => {
+      root.classList.remove('day-failed');
+      root.style.setProperty('--day-ready', '1');
+    }, { once: true });
+    laterBg.addEventListener?.('error', () => {
+      root.style.setProperty('--day-ready', '0');
+      root.classList.add('day-failed');
+      laterBg.removeAttribute('src');
+    }, { once: true });
     laterBg.setAttribute('src', src);
   }
   if (typeof requestIdleCallback === 'function') requestIdleCallback(loadLater, { timeout: 1500 });

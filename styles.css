@@ -66,6 +66,7 @@ ul { padding: 0; list-style: none; }
 .tone { position: absolute; inset: 0; }
 .tone-night { background: #0c121c; opacity: calc(var(--scroll) * (1 - var(--t))); }
 .tone-day { background: #f3ecdf; opacity: calc(var(--scroll) * var(--t)); }
+html.day-failed .tone-day { opacity: var(--t); }
 html.is-settling .bg,
 html.is-settling .bg-stack,
 html.is-settling .tone,

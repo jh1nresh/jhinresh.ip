@@ -35,12 +35,7 @@ const chromeBin = ['google-chrome', 'google-chrome-stable', 'chromium', 'chromiu
 assert.ok(chromeBin, 'a Chrome or Chromium binary is required for the real click test');
 const debugPort = 9222 + (port % 1000);
 const profile = mkdtempSync(join(tmpdir(), 'switch-click-'));
-const chrome = spawn(chromeBin, [
-  '--headless=new', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage',
-  '--disable-breakpad', '--no-first-run',
-  `--user-data-dir=${profile}`,
-  `--remote-debugging-port=${debugPort}`, 'about:blank',
-], { stdio: 'ignore', detached: true });
+let chrome;
 
 function cdpFactory(ws) {
   let next = 1;
@@ -66,7 +61,14 @@ function cdpFactory(ws) {
 }
 
 let cdp;
-for (let attempt = 0; attempt < 40; attempt += 1) {
+try {
+chrome = spawn(chromeBin, [
+  '--headless=new', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage',
+  '--disable-breakpad', '--no-first-run',
+  `--user-data-dir=${profile}`,
+  `--remote-debugging-port=${debugPort}`, 'about:blank',
+], { stdio: 'ignore', detached: true });
+for (let attempt = 0; attempt < 40 && !cdp; attempt += 1) {
   try {
     const version = await (await fetch(`http://127.0.0.1:${debugPort}/json/version`)).json();
     const ws = new WebSocket(version.webSocketDebuggerUrl);
@@ -75,21 +77,33 @@ for (let attempt = 0; attempt < 40; attempt += 1) {
       ws.addEventListener('error', reject);
     });
     cdp = cdpFactory(ws);
-    break;
   } catch {
     await delay(150);
   }
 }
 assert.ok(cdp, 'Chrome did not open a debugging port');
-
-try {
 const { targetId } = await cdp('Target.createTarget', { url: 'about:blank' });
 const { sessionId } = await cdp('Target.attachToTarget', { targetId, flatten: true });
 await cdp('Page.enable', {}, sessionId);
 await cdp('Runtime.enable', {}, sessionId);
+async function waitForSwitch(url) {
+  const deadline = Date.now() + 20000;
+  while (Date.now() < deadline) {
+    try {
+      const { result } = await cdp('Runtime.evaluate', {
+        expression: `location.href === ${JSON.stringify(url)} && document.readyState !== 'loading' && !!document.querySelector('#view-switch')`,
+        returnByValue: true,
+      }, sessionId);
+      if (result?.value === true) return;
+    } catch { /* navigation replaces the document */ }
+    await delay(50);
+  }
+  throw new Error(`switch was not ready for ${url}`);
+}
 await cdp('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false }, sessionId);
-await cdp('Page.navigate', { url: `http://127.0.0.1:${port}/` }, sessionId);
-await delay(2500);
+const desktopUrl = `http://127.0.0.1:${port}/`;
+await cdp('Page.navigate', { url: desktopUrl }, sessionId);
+await waitForSwitch(desktopUrl);
 
 const box = await cdp('Runtime.evaluate', {
   expression: `(() => {
@@ -122,8 +136,9 @@ const dragged = await cdp('Runtime.evaluate', {
 assert.equal(dragged.result.value, 'false', 'a drag back to Researcher stays there when its click arrives');
 
 await cdp('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true }, sessionId);
-await cdp('Page.navigate', { url: `http://127.0.0.1:${port}/?mobile=1` }, sessionId);
-await delay(2500);
+const mobileUrl = `http://127.0.0.1:${port}/?mobile=1`;
+await cdp('Page.navigate', { url: mobileUrl }, sessionId);
+await waitForSwitch(mobileUrl);
 const mobile = await cdp('Runtime.evaluate', {
   expression: `(() => { const node = document.querySelector('[role=switch]'); const rect = node.getBoundingClientRect(); return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }; })()`,
   returnByValue: true,
@@ -137,14 +152,19 @@ const mobileAfter = await cdp('Runtime.evaluate', {
 assert.equal(mobileAfter.result.value, 'true', 'a pointer click flips the switch on a phone before the day image loads');
 console.log(JSON.stringify({ passed: 1, checks: ['a real pointer click toggles while the day image is still unloaded'] }, null, 2));
 } finally {
-  try { process.kill(-chrome.pid, 'SIGKILL'); } catch { chrome.kill('SIGKILL'); }
+  if (chrome?.pid) {
+    try { process.kill(-chrome.pid, 'SIGKILL'); } catch { chrome.kill('SIGKILL'); }
+  }
+  server.closeAllConnections?.();
   server.close();
-  await Promise.race([
-    new Promise((resolve) => {
-      if (chrome.exitCode !== null || chrome.signalCode) resolve();
-      else chrome.once('exit', resolve);
-    }),
-    delay(1000),
-  ]);
+  if (chrome) {
+    await Promise.race([
+      new Promise((resolve) => {
+        if (chrome.exitCode !== null || chrome.signalCode) resolve();
+        else chrome.once('exit', resolve);
+      }),
+      delay(1000),
+    ]);
+  }
   rmSync(profile, { recursive: true, force: true, maxRetries: 20, retryDelay: 100 });
 }
