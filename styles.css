@@ -209,7 +209,8 @@ article h4 { margin-top: 16px; font-size: 13px; font-weight: 500; letter-spacing
 .when-researcher, .researcher-frame { display: none; }
 html[data-view="researcher"] .when-founder,
 html[data-view="researcher"] .founder-frame { display: none; }
-html[data-view="researcher"] .when-researcher,
+html[data-view="researcher"] span.when-researcher { display: inline; }
+html[data-view="researcher"] p.when-researcher,
 html[data-view="researcher"] .researcher-frame { display: block; }
 
 footer {
