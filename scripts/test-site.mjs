@@ -202,6 +202,8 @@ assert.equal(ui.root.dataset.view, 'founder', 'a cancelled drag keeps the commit
 assert.equal(ui.lens.attrs['aria-checked'], 'true');
 assert.equal(ui.root.classList.contains('is-dragging'), false);
 assert.equal(ui.root.classList.contains('is-settling'), false);
+ui.emit('click', { detail: 0 });
+assert.equal(ui.root.dataset.view, 'researcher', 'a click after pointer cancellation still toggles');
 checks.push('drag snaps to the nearest side; keys and click flip the view');
 
 ui = harness(true);

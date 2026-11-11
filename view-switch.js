@@ -87,7 +87,6 @@
   sw.addEventListener('pointercancel', (event) => {
     if (!drag || event.pointerId !== drag.id) return;
     drag = null;
-    fromPointer = true;
     root.classList.remove('is-dragging');
     commit(view, false);
   });
