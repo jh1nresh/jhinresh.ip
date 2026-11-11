@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-view="researcher">
+<html lang="en" data-view="founder">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,6 +25,17 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23fbfbf9'/%3E%3Ctext x='18' y='46' font-size='40' font-family='Georgia,serif' fill='%231c1c1c'%3Ej%3C/text%3E%3C/svg%3E" />
   <link rel="preload" as="image" href="./assets/bg/bg-night.webp" fetchpriority="high" />
   <link rel="stylesheet" href="./styles.css?v=20261111-stage" />
+  <script>
+    try {
+      var storedHour = localStorage.getItem('jhinresh-hour');
+      var hour = storedHour == null ? 0 : Math.min(1, Math.max(0, Number(storedHour)));
+      if (hour !== hour) hour = 0;
+      var root = document.documentElement;
+      root.style.setProperty('--hour', hour.toFixed(4));
+      root.style.setProperty('--t', (1 - hour).toFixed(4));
+      root.dataset.view = hour < 0.5 ? 'founder' : 'researcher';
+    } catch (error) {}
+  </script>
   <script src="./view-switch.js?v=20261111-stage" defer></script>
 </head>
 <body>
@@ -40,18 +51,17 @@
 <header class="bar">
   <a class="brand" href="#home">JhiNResH</a>
   <nav id="index" aria-label="Sections">
-    <a href="#home">About</a>
-    <a href="#news">News</a>
-    <a href="#work">Work</a>
-    <a href="#research">Awards</a>
-    <a href="#blog">Writing</a>
-    <a href="#contact">Contact</a>
+    <div class="nav-track">
+      <div class="hour" id="view-switch" role="slider" tabindex="0" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="Day" aria-label="Time of day"></div>
+      <span class="hour-thumb" aria-hidden="true"></span>
+      <a href="#home">About</a>
+      <a href="#news">News</a>
+      <a href="#work">Work</a>
+      <a href="#research">Awards</a>
+      <a href="#blog">Writing</a>
+      <a href="#contact">Contact</a>
+    </div>
   </nav>
-  <div class="mode" id="view-switch" role="switch" tabindex="0" aria-checked="false" aria-label="Researcher or Founder view" aria-describedby="view-switch-state">
-    <span id="view-switch-state" class="sr-only">Off is the Researcher view. On is the Founder view.</span>
-    <span class="mode-label label-researcher">Researcher</span>
-    <span class="mode-label label-founder">Founder</span>
-  </div>
   <button class="menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="index">Menu</button>
 </header>
 <main id="top">
@@ -68,8 +78,8 @@
     </div>
     <div class="intro-rest">
       <div class="pair">
-        <p class="focus when-founder" aria-hidden="true">I build the interface and the code behind it. Currently: Savvy, OUTPUT, EZNest, and agent systems.</p>
-        <p class="focus when-researcher">The same work, read as research: how a saved place becomes a Map Stamp, how a job moves between two shops, how parts fit a material, and how an agent action stays a quote, an approval, and a receipt.</p>
+        <p class="focus when-founder">I build the interface and the code behind it. Currently: Savvy, OUTPUT, EZNest, and agent systems.</p>
+        <p class="focus when-researcher" aria-hidden="true">The same work, read as research: how a saved place becomes a Map Stamp, how a job moves between two shops, how parts fit a material, and how an agent action stays a quote, an approval, and a receipt.</p>
       </div>
       <p class="links">
         <a href="mailto:jhinresh@gmail.com">jhinresh@gmail.com</a>
@@ -102,22 +112,22 @@
   </section>
 
   <section class="section" id="work" aria-labelledby="work-title">
-    <h2 id="work-title"><span class="swap"><span class="when-founder" aria-hidden="true">Selected work</span><span class="when-researcher">Research</span></span></h2>
+    <h2 id="work-title"><span class="swap"><span class="when-founder">Selected work</span><span class="when-researcher" aria-hidden="true">Research</span></span></h2>
     <div class="pair">
-      <p class="lede when-founder" aria-hidden="true">Current products, with the limits kept visible.</p>
-      <p class="lede when-researcher">Problem, approach, and what is actually true so far.</p>
+      <p class="lede when-founder">Current products, with the limits kept visible.</p>
+      <p class="lede when-researcher" aria-hidden="true">Problem, approach, and what is actually true so far.</p>
     </div>
 
     <article id="project-savvy" aria-labelledby="title-savvy">
-      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · Savvy · personal place memory</p>
+      <p class="kicker"><span class="swap"><span class="when-founder">Product</span><span class="when-researcher" aria-hidden="true">Note</span></span> · Savvy · personal place memory</p>
       <h3 id="title-savvy">The places worth keeping.</h3>
-      <div class="founder-frame" aria-hidden="true">
+      <div class="founder-frame">
         <p>Food posts and travel links are easy to save and hard to find again.</p>
         <p>I’m designing Savvy around three steps: save the source, review the place match, and keep the confirmed place as a Map Stamp.</p>
         <p>iOS beta on TestFlight. The public food map and the iOS app are separate surfaces.</p>
         <p class="note">Synthetic places. An illustrated workflow, not the app interface.</p>
       </div>
-      <div class="researcher-frame">
+      <div class="researcher-frame" aria-hidden="true">
         <h4>Problem</h4>
         <p>Food posts and travel links are easy to save and hard to find again.</p>
         <h4>Approach</h4>
@@ -140,15 +150,15 @@
     </article>
 
     <article id="project-output" aria-labelledby="title-output">
-      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · OUTPUT · print-shop collaboration</p>
+      <p class="kicker"><span class="swap"><span class="when-founder">Product</span><span class="when-researcher" aria-hidden="true">Note</span></span> · OUTPUT · print-shop collaboration</p>
       <h3 id="title-output">A job needs another shop.</h3>
-      <div class="founder-frame" aria-hidden="true">
+      <div class="founder-frame">
         <p>One shop can have more work than it can make. Another can have room on its machines. OUTPUT is my prototype for connecting the two.</p>
         <p>I’m prototyping the hand-off around job terms, a production partner, evidence, and explicit approval before payment release.</p>
         <p>Devnet sandbox. The website does not offer production printing or production escrow.</p>
         <p class="note">A job between two shops. Pilot on a test network. No production printing. Synthetic shapes; not a promise of jobs.</p>
       </div>
-      <div class="researcher-frame">
+      <div class="researcher-frame" aria-hidden="true">
         <h4>Problem</h4>
         <p>One shop can have more work than it can make. Another can have room on its machines.</p>
         <h4>Approach</h4>
@@ -163,15 +173,15 @@
     </article>
 
     <article id="project-eznest" aria-labelledby="title-eznest">
-      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · EZNest · artwork nesting</p>
+      <p class="kicker"><span class="swap"><span class="when-founder">Product</span><span class="when-researcher" aria-hidden="true">Note</span></span> · EZNest · artwork nesting</p>
       <h3 id="title-eznest">Make room for the parts.</h3>
-      <div class="founder-frame" aria-hidden="true">
+      <div class="founder-frame">
         <p>Before a design reaches a cutting machine, the artwork has to fit the material.</p>
         <p>I’m exploring how to arrange parts, add cut lines, and hand a file to a Hot folder.</p>
         <p>Workflow preview. Synthetic shapes, not a measurement. Final settings and RIP compatibility are still being confirmed.</p>
         <p class="note">Loose parts and a material roll. Illustration with synthetic shapes. Not a measurement; a nested layout is not always better than a hand layout.</p>
       </div>
-      <div class="researcher-frame">
+      <div class="researcher-frame" aria-hidden="true">
         <h4>Problem</h4>
         <p>Before a design reaches a cutting machine, the artwork has to fit the material.</p>
         <h4>Approach</h4>
@@ -186,15 +196,15 @@
     </article>
 
     <article id="project-maiat" aria-labelledby="title-maiat">
-      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · Maiat + Dojo · agent trust</p>
+      <p class="kicker"><span class="swap"><span class="when-founder">Product</span><span class="when-researcher" aria-hidden="true">Note</span></span> · Maiat + Dojo · agent trust</p>
       <h3 id="title-maiat">Before an agent takes action.</h3>
-      <div class="founder-frame" aria-hidden="true">
+      <div class="founder-frame">
         <p>An agent can propose an action. The quote, consent, and final result still need to be clear.</p>
         <p>In Maiat and Dojo, I’m connecting agent reputation with explicit approval and receipts people can inspect.</p>
         <p>Public protocol and application artifacts. Individual deployments have their own scope.</p>
         <p class="note">Quote, approval, and a receipt. Illustrated approval workflow. No real approval, signature, or payment is performed.</p>
       </div>
-      <div class="researcher-frame">
+      <div class="researcher-frame" aria-hidden="true">
         <h4>Problem</h4>
         <p>An agent can propose an action. The quote, consent, and final result still need to be clear.</p>
         <h4>Approach</h4>

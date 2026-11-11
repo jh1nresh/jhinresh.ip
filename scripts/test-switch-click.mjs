@@ -105,52 +105,60 @@ const desktopUrl = `http://127.0.0.1:${port}/`;
 await cdp('Page.navigate', { url: desktopUrl }, sessionId);
 await waitForSwitch(desktopUrl);
 
-const box = await cdp('Runtime.evaluate', {
-  expression: `(() => {
-    const node = document.querySelector('[role=switch]');
-    const rect = node.getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, checked: node.getAttribute('aria-checked'), ready: getComputedStyle(document.documentElement).getPropertyValue('--day-ready').trim() };
-  })()`,
+async function readHour() {
+  const { result } = await cdp('Runtime.evaluate', {
+    expression: `(() => {
+      const slider = document.querySelector('[role=slider]');
+      const day = getComputedStyle(document.documentElement).getPropertyValue('--t').trim();
+      return { now: slider.getAttribute('aria-valuenow'), text: slider.getAttribute('aria-valuetext'), day, ready: getComputedStyle(document.documentElement).getPropertyValue('--day-ready').trim() };
+    })()`,
+    returnByValue: true,
+  }, sessionId);
+  return result.value;
+}
+async function clickLink(href) {
+  const { result } = await cdp('Runtime.evaluate', {
+    expression: `(() => { const link = document.querySelector('#index a[href="${href}"]'); link.scrollIntoView({ inline: 'center', block: 'nearest' }); const rect = link.getBoundingClientRect(); return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }; })()`,
+    returnByValue: true,
+  }, sessionId);
+  await cdp('Input.dispatchMouseEvent', { type: 'mousePressed', x: result.value.x, y: result.value.y, button: 'left', clickCount: 1 }, sessionId);
+  await cdp('Input.dispatchMouseEvent', { type: 'mouseReleased', x: result.value.x, y: result.value.y, button: 'left', clickCount: 1 }, sessionId);
+}
+const before = await readHour();
+assert.equal(before.ready, '0', 'the day image must still be unloaded when the nav is used');
+await clickLink('#contact');
+const night = await readHour();
+assert.equal(night.text, 'Night', 'clicking Contact puts the page in night');
+assert.equal(night.now, '100');
+assert.equal(night.day, '0.0000');
+await clickLink('#home');
+const day = await readHour();
+assert.equal(day.text, 'Day', 'clicking About puts the page in day');
+assert.equal(day.now, '0');
+assert.equal(day.day, '1.0000');
+const track = await cdp('Runtime.evaluate', {
+  expression: `(() => { const rect = document.querySelector('.nav-track').getBoundingClientRect(); return { y: rect.top + rect.height / 2, left: rect.left + 6, mid: rect.left + rect.width / 2 }; })()`,
   returnByValue: true,
 }, sessionId);
-assert.equal(box.result.value.checked, 'false');
-assert.equal(box.result.value.ready, '0', 'the day image must still be unloaded when the click lands');
-await cdp('Input.dispatchMouseEvent', { type: 'mousePressed', x: box.result.value.x, y: box.result.value.y, button: 'left', clickCount: 1 }, sessionId);
-await cdp('Input.dispatchMouseEvent', { type: 'mouseReleased', x: box.result.value.x, y: box.result.value.y, button: 'left', clickCount: 1 }, sessionId);
-const after = await cdp('Runtime.evaluate', {
-  expression: `document.querySelector('[role=switch]').getAttribute('aria-checked')`,
-  returnByValue: true,
-}, sessionId);
-assert.equal(after.result.value, 'true', 'a pointer click flips the switch before the day image loads');
-const drag = await cdp('Runtime.evaluate', {
-  expression: `(() => { const rect = document.querySelector('[role=switch]').getBoundingClientRect(); return { y: rect.top + rect.height / 2, left: rect.left + 8, right: rect.right - 8 }; })()`,
-  returnByValue: true,
-}, sessionId);
-await cdp('Input.dispatchMouseEvent', { type: 'mousePressed', x: drag.result.value.right, y: drag.result.value.y, button: 'left', clickCount: 1 }, sessionId);
-await cdp('Input.dispatchMouseEvent', { type: 'mouseMoved', x: drag.result.value.left, y: drag.result.value.y, button: 'left' }, sessionId);
-await cdp('Input.dispatchMouseEvent', { type: 'mouseReleased', x: drag.result.value.left, y: drag.result.value.y, button: 'left', clickCount: 1 }, sessionId);
-const dragged = await cdp('Runtime.evaluate', {
-  expression: `document.querySelector('[role=switch]').getAttribute('aria-checked')`,
-  returnByValue: true,
-}, sessionId);
-assert.equal(dragged.result.value, 'false', 'a drag back to Researcher stays there when its click arrives');
+await cdp('Input.dispatchMouseEvent', { type: 'mousePressed', x: track.result.value.left, y: track.result.value.y, button: 'left', clickCount: 1 }, sessionId);
+await cdp('Input.dispatchMouseEvent', { type: 'mouseMoved', x: track.result.value.mid, y: track.result.value.y, button: 'left' }, sessionId);
+await cdp('Input.dispatchMouseEvent', { type: 'mouseReleased', x: track.result.value.mid, y: track.result.value.y, button: 'left', clickCount: 1 }, sessionId);
+const blend = await readHour();
+assert.equal(blend.text, 'Dusk', 'dragging to the middle gives a blend');
+const blendAmount = Number(blend.day);
+assert.ok(blendAmount > 0.35 && blendAmount < 0.65, `middle blend was ${blend.day}`);
 
 await cdp('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true }, sessionId);
 const mobileUrl = `http://127.0.0.1:${port}/?mobile=1`;
 await cdp('Page.navigate', { url: mobileUrl }, sessionId);
 await waitForSwitch(mobileUrl);
-const mobile = await cdp('Runtime.evaluate', {
-  expression: `(() => { const node = document.querySelector('[role=switch]'); const rect = node.getBoundingClientRect(); return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }; })()`,
-  returnByValue: true,
-}, sessionId);
-await cdp('Input.dispatchMouseEvent', { type: 'mousePressed', x: mobile.result.value.x, y: mobile.result.value.y, button: 'left', clickCount: 1 }, sessionId);
-await cdp('Input.dispatchMouseEvent', { type: 'mouseReleased', x: mobile.result.value.x, y: mobile.result.value.y, button: 'left', clickCount: 1 }, sessionId);
-const mobileAfter = await cdp('Runtime.evaluate', {
-  expression: `document.querySelector('[role=switch]').getAttribute('aria-checked')`,
-  returnByValue: true,
-}, sessionId);
-assert.equal(mobileAfter.result.value, 'true', 'a pointer click flips the switch on a phone before the day image loads');
-console.log(JSON.stringify({ passed: 1, checks: ['a real pointer click toggles while the day image is still unloaded'] }, null, 2));
+await clickLink('#contact');
+const mobileNight = await readHour();
+assert.equal(mobileNight.text, 'Night', 'clicking Contact puts a phone in night');
+await clickLink('#home');
+const mobileDay = await readHour();
+assert.equal(mobileDay.text, 'Day', 'clicking About puts a phone in day');
+console.log(JSON.stringify({ passed: 1, checks: ['About is day, Contact is night, and the middle of the nav is a blend'] }, null, 2));
 } finally {
   if (chrome?.pid) {
     try { process.kill(-chrome.pid, 'SIGKILL'); } catch { chrome.kill('SIGKILL'); }

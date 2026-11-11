@@ -12,10 +12,12 @@ for (const id of ['top', 'work', 'index', 'home', 'news', 'project-savvy', 'proj
 }
 checks.push('academic page keeps the section anchors and the switch');
 
-assert.match(html, /role="switch"/);
-assert.match(html, /aria-checked="false"/);
-assert.match(html, /aria-describedby="view-switch-state"/);
-assert.match(html, /Off is the Researcher view\. On is the Founder view\./);
+assert.match(html, /role="slider"/);
+assert.match(html, /aria-valuemin="0"/);
+assert.match(html, /aria-valuemax="100"/);
+assert.match(html, /aria-valuetext="Day"/);
+assert.equal(html.includes('label-researcher'), false);
+assert.equal(html.includes('>Researcher<'), false);
 assert.match(html, /id="menu-toggle"/);
 assert.match(html, /aria-controls="index"/);
 assert.match(html, /class="world"/);
@@ -28,18 +30,20 @@ assert.match(css, /html\.day-failed \.tone-day \{ opacity: var\(--t\); \}/);
 assert.match(js, /removeAttribute\('src'\)/);
 assert.match(js, /ArrowRight/);
 assert.match(js, /ArrowLeft/);
-assert.match(js, /event\.key === ' '/);
+assert.match(js, /key === 'Home'/);
+assert.match(js, /key === 'End'/);
 assert.match(js, /prefers-reduced-motion/);
 assert.match(css, /span\.when-researcher \{ display: inline; \}/);
 assert.match(css, /\.skip-link \{[\s\S]*?z-index:\s*6/);
 assert.match(css, /prefers-reduced-motion/);
 assert.match(css, /animation:\s*none/);
-assert.match(css, /1\.4s cubic-bezier\(\.22, \.7, \.2, 1\)/);
+assert.match(css, /\.7s cubic-bezier\(\.22, \.7, \.2, 1\)/);
 const bar = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
 const nav = bar.slice(bar.indexOf('<nav'), bar.indexOf('</nav>'));
-assert.match(bar, /id="view-switch"/);
-assert.equal(nav.includes('view-switch'), false);
-assert.ok(bar.indexOf('id="view-switch"') < bar.indexOf('id="menu-toggle"'));
+assert.match(nav, /id="view-switch"/);
+assert.match(nav, /href="#home"/);
+assert.match(nav, /href="#contact"/);
+assert.equal(nav.includes('>Researcher<'), false);
 const hero = html.slice(html.indexOf('id="home"'), html.indexOf('id="news"'));
 assert.equal(hero.includes('view-switch'), false);
 assert.equal(html.includes('mode-thumb'), false);
@@ -132,7 +136,20 @@ function harness(reduced) {
   const capsule = el('.capsule', { left: 0, top: 0, width: 78, height: 110 });
   const mag = el('.capsule-mag');
   const scene = el('#desk-scene');
-  const lens = el('#view-switch', { left: 0, top: 0, width: 320, height: 110 });
+  const lens = el('#view-switch', { left: 0, top: 0, width: 300, height: 36 });
+  const hrefs = ['#home', '#news', '#work', '#research', '#blog', '#contact'];
+  const links = hrefs.map((href, index) => {
+    const link = el(`a${href}`, { left: index * 50, top: 0, width: 50, height: 36 });
+    link.getAttribute = (name) => (name === 'href' ? href : link.attrs[name]);
+    link.closest = (selector) => (selector === 'a' ? link : null);
+    return link;
+  });
+  const nav = el('#index', { left: 0, top: 0, width: 300, height: 36 });
+  nav.scrollLeft = 0;
+  nav.scrollWidth = 300;
+  nav.querySelector = () => null;
+  nav.querySelectorAll = (query) => (query === 'a[href^="#"]' ? links : []);
+  nav.contains = (node) => links.includes(node);
   lens.querySelector = (query) => {
     if (query === '.lens-window') return stage;
     if (query === '.capsule') return capsule;
@@ -142,7 +159,11 @@ function harness(reduced) {
   };
   const root = {
     dataset: { view: 'researcher' },
-    style: { setProperty() {} },
+    style: {
+      props: {},
+      setProperty(name, value) { this.props[name] = String(value); },
+      getPropertyValue(name) { return this.props[name] || ''; },
+    },
     offsetWidth: 12,
     classList: {
       set: new Set(),
@@ -159,83 +180,61 @@ function harness(reduced) {
   const motion = { matches: reduced, addEventListener() {} };
   const timers = [];
   const context = {
-    document: { documentElement: root, querySelector: (query) => query === '#view-switch' ? lens : null },
+    document: {
+      documentElement: root,
+      querySelector: (query) => (query === '#view-switch' ? lens : query === '#index' ? nav : null),
+      querySelectorAll: () => [],
+    },
     matchMedia: () => motion,
     addEventListener() {},
     setTimeout(fn) { timers.push(fn); return timers.length; },
   };
   vm.createContext(context);
   vm.runInContext(js, context);
-  function emit(type, event) {
-    for (const fn of listeners[`#view-switch:${type}`] || []) fn(event);
+  function emit(selector, type, event) {
+    for (const fn of listeners[`${selector}:${type}`] || []) fn(event);
   }
-  return { root, lens, emit, flush() { while (timers.length) timers.shift()(); } };
+  return { root, lens, links, emit, flush() { while (timers.length) timers.shift()(); } };
 }
 
 let ui = harness(false);
-assert.equal(ui.root.dataset.view, 'researcher');
-assert.equal(ui.lens.attrs['aria-checked'], 'false');
-ui.emit('keydown', { key: 'ArrowRight', preventDefault() {} });
 assert.equal(ui.root.dataset.view, 'founder');
-assert.equal(ui.lens.attrs['aria-checked'], 'true');
+assert.equal(ui.lens.attrs['aria-valuenow'], '0');
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Day');
+ui.emit('#view-switch', 'keydown', { key: 'End', preventDefault() {} });
+assert.equal(ui.root.dataset.view, 'researcher');
+assert.equal(ui.lens.attrs['aria-valuenow'], '100');
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Night');
+assert.equal(ui.root.style.props['--t'], '0.0000');
 assert.equal(ui.root.classList.contains('is-settling'), true);
-assert.equal(ui.root.classList.contains('is-sweeping'), true);
-ui.emit('keydown', { key: 'ArrowLeft', preventDefault() {} });
-assert.equal(ui.root.dataset.view, 'researcher');
-ui.emit('keydown', { key: ' ', preventDefault() {} });
+ui.emit('#view-switch', 'keydown', { key: 'Home', preventDefault() {} });
 assert.equal(ui.root.dataset.view, 'founder');
-ui.emit('keydown', { key: 'Enter', preventDefault() {} });
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Day');
+assert.equal(ui.root.style.props['--t'], '1.0000');
+ui.emit('#index', 'click', { target: ui.links[5], preventDefault() {} });
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Night', 'clicking Contact puts the page in night');
 assert.equal(ui.root.dataset.view, 'researcher');
-ui.emit('click', { detail: 0 });
-assert.equal(ui.root.dataset.view, 'founder', 'a synthesized click toggles the view');
-ui.emit('click', { detail: 0 });
-assert.equal(ui.root.dataset.view, 'researcher');
-ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 20, pointerId: 1 });
-ui.emit('pointermove', { clientX: 280, pointerId: 1 });
-ui.emit('pointerup', { clientX: 280, pointerId: 1 });
-assert.equal(ui.root.dataset.view, 'founder');
-ui.emit('click', { detail: 0 });
-assert.equal(ui.root.dataset.view, 'founder', 'the click generated by a drag does not reverse the snap');
-ui.flush();
-ui.emit('click', { detail: 0 });
-assert.equal(ui.root.dataset.view, 'researcher', 'a later click still toggles after the drag click is ignored');
-ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 20, pointerId: 11 });
-ui.emit('pointermove', { clientX: 280, pointerId: 11 });
-ui.emit('pointerup', { clientX: 280, pointerId: 11 });
-assert.equal(ui.root.dataset.view, 'founder');
-ui.emit('pointerdown', { button: 0, pointerType: 'touch', clientX: 280, pointerId: 2 });
-ui.emit('pointermove', { clientX: 30, pointerId: 2 });
-ui.emit('pointerup', { clientX: 30, pointerId: 2 });
-assert.equal(ui.root.dataset.view, 'researcher');
-ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 20, pointerId: 6 });
-ui.emit('pointermove', { clientX: 100, pointerId: 6 });
-ui.emit('pointerup', { clientX: 100, pointerId: 6 });
-assert.equal(ui.root.dataset.view, 'researcher', 'a short drag snaps back to Researcher');
+ui.emit('#index', 'click', { target: ui.links[0], preventDefault() {} });
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Day', 'clicking About puts the page in day');
+assert.equal(ui.root.style.props['--t'], '1.0000');
+ui.emit('#index', 'pointerdown', { button: 0, pointerType: 'mouse', clientX: 12, pointerId: 1 });
+ui.emit('#index', 'pointermove', { pointerType: 'mouse', clientX: 150, pointerId: 1 });
+ui.emit('#index', 'pointerup', { pointerType: 'mouse', clientX: 150, pointerId: 1 });
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Dusk', 'dragging to the middle gives a blend');
+assert.equal(ui.root.style.props['--t'], '0.5000');
+ui.emit('#index', 'click', { target: ui.links[0], preventDefault() {} });
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Dusk', 'the click after a drag does not jump to the link');
+ui.emit('#index', 'pointerdown', { button: 0, pointerType: 'mouse', clientX: 20, pointerId: 4 });
+ui.emit('#index', 'pointermove', { pointerType: 'mouse', clientX: 220, pointerId: 4 });
+ui.emit('#index', 'pointercancel', { pointerType: 'mouse', clientX: 220, pointerId: 4 });
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Night', 'a drag that ends in pointercancel keeps the scrubbed hour');
 assert.equal(ui.root.classList.contains('is-settling'), true);
-ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 160, pointerId: 3 });
-ui.emit('pointerup', { clientX: 160, pointerId: 3 });
-assert.equal(ui.root.dataset.view, 'founder', 'a pointer click toggles the switch');
-assert.equal(ui.lens.attrs['aria-checked'], 'true');
-ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 160, pointerId: 5 });
-ui.emit('pointerup', { clientX: 160, pointerId: 5 });
-assert.equal(ui.root.dataset.view, 'researcher', 'a second pointer click toggles back');
-ui.emit('click', { detail: 0 });
-assert.equal(ui.root.dataset.view, 'researcher', 'a click after a pointer release does not toggle again');
-ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 20, pointerId: 4 });
-ui.emit('pointermove', { clientX: 280, pointerId: 4 });
-ui.emit('pointercancel', { clientX: 280, pointerId: 4 });
-assert.equal(ui.root.dataset.view, 'researcher', 'a cancelled drag keeps the committed view');
-assert.equal(ui.lens.attrs['aria-checked'], 'false');
-assert.equal(ui.root.classList.contains('is-dragging'), false);
-assert.equal(ui.root.classList.contains('is-settling'), false);
-ui.emit('click', { detail: 0 });
-assert.equal(ui.root.dataset.view, 'founder', 'a click after pointer cancellation still toggles');
-checks.push('drag snaps to the nearest side; keys and click flip the view');
+checks.push('the nav track scrubs day to night, and links still choose their hour');
 
 ui = harness(true);
-ui.emit('keydown', { key: 'ArrowRight', preventDefault() {} });
-assert.equal(ui.root.dataset.view, 'founder');
-assert.equal(ui.lens.attrs['aria-checked'], 'true');
+ui.emit('#view-switch', 'keydown', { key: 'End', preventDefault() {} });
+assert.equal(ui.root.dataset.view, 'researcher');
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Night');
 assert.equal(ui.root.classList.contains('is-settling'), false);
 assert.equal(ui.root.classList.contains('is-sweeping'), false);
 checks.push('reduced motion commits the end state without the settle animation');

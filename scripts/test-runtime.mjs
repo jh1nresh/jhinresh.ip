@@ -65,8 +65,8 @@ function fixture({reduced=false,hash='',main=true,animate=false,mobile=false}={}
 const checks=[];
 const markup=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
 assert.equal(markup.includes('folio-foot'), false);
-assert.match(markup, /role="switch"/);
-assert.match(markup, /aria-checked="false"/);
+assert.match(markup, /role="slider"/);
+assert.match(markup, /aria-valuemin="0"/);
 assert.match(markup, /id="view-switch"/);
 for (const fact of ['Base Batches 003 Student Track','Jito Grid Hackathon','does not offer production printing or production escrow','No real approval, signature, or payment is performed']) {
   assert.ok(markup.includes(fact), fact);

@@ -1,13 +1,18 @@
-/* Researcher is night, on the left. Founder is day, on the right. */
+/* About, on the left, is day. Contact, on the right, is night. */
 (() => {
   const root = document.documentElement;
   const sw = document.querySelector('#view-switch');
-  if (!sw) return;
+  const nav = document.querySelector('#index');
+  if (!sw || !nav) return;
+  const track = nav.querySelector('.nav-track') || nav;
+  const links = [...track.querySelectorAll('a[href^="#"]')];
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const menu = document.querySelector('#menu-toggle');
-  const nav = document.querySelector('#index');
   const hero = document.querySelector('#home');
+  const bar = document.querySelector('.bar');
   const laterBg = document.querySelector('.bg-day');
+  const storeKey = 'jhinresh-hour';
+
   function loadLater() {
     if (!laterBg || laterBg.getAttribute('src')) return;
     const src = laterBg.getAttribute('data-src');
@@ -23,18 +28,66 @@
     }, { once: true });
     laterBg.setAttribute('src', src);
   }
-  if (typeof requestIdleCallback === 'function') requestIdleCallback(loadLater, { timeout: 1500 });
-  else addEventListener('load', () => setTimeout(loadLater, 200));
-  let view = root.dataset.view === 'founder' ? 'founder' : 'researcher';
-  let drag = null;
-  let heroDrag = null;
-  let fromPointer = false;
+  loadLater();
 
-  function paint(t, settle) {
-    const clamped = Math.min(1, Math.max(0, t));
-    root.style.setProperty('--t', clamped.toFixed(4));
+  function clamp(value) {
+    return Math.min(1, Math.max(0, value));
+  }
+
+  function storedHour() {
+    const painted = parseFloat(root.style.getPropertyValue('--hour'));
+    if (!Number.isNaN(painted)) return clamp(painted);
+    try {
+      const raw = globalThis.localStorage?.getItem(storeKey);
+      if (raw != null) return clamp(Number(raw));
+    } catch { /* private browsing */ }
+    return 0;
+  }
+
+  let hour = storedHour();
+  let committed = hour;
+  let drag = null;
+  let hovering = false;
+  let suppressClick = false;
+  let holdScroll = 0;
+  let startY = globalThis.scrollY || 0;
+  let persistTimer = 0;
+
+  function label(value) {
+    const now = Math.round(value * 100);
+    if (now < 34) return 'Day';
+    if (now > 66) return 'Night';
+    return 'Dusk';
+  }
+
+  function markCopy(view) {
+    document.querySelectorAll?.('.when-founder, .founder-frame').forEach((node) => {
+      node.setAttribute?.('aria-hidden', view === 'founder' ? 'false' : 'true');
+    });
+    document.querySelectorAll?.('.when-researcher, .researcher-frame').forEach((node) => {
+      node.setAttribute?.('aria-hidden', view === 'researcher' ? 'false' : 'true');
+    });
+  }
+
+  function paint(value, settle) {
+    const next = clamp(value);
+    hour = next;
+    const view = next < 0.5 ? 'founder' : 'researcher';
+    const changed = root.dataset.view !== view;
+    root.dataset.view = view;
+    root.style.setProperty('--hour', next.toFixed(4));
+    root.style.setProperty('--t', (1 - next).toFixed(4));
+    sw.setAttribute('aria-valuenow', String(Math.round(next * 100)));
+    sw.setAttribute('aria-valuetext', label(next));
+    markCopy(view);
     const animate = Boolean(settle) && !motion.matches;
     root.classList.toggle('is-settling', animate);
+    root.classList.toggle('is-scrubbing', !animate);
+    if (changed && !motion.matches) {
+      root.classList.remove('is-fading');
+      void root.offsetWidth;
+      root.classList.add('is-fading');
+    }
     if (animate) {
       root.classList.remove('is-sweeping');
       void root.offsetWidth;
@@ -44,131 +97,166 @@
     }
   }
 
-  function markCopy() {
-    document.querySelectorAll?.('.when-founder, .founder-frame').forEach((node) => {
-      node.setAttribute?.('aria-hidden', view === 'founder' ? 'false' : 'true');
-    });
-    document.querySelectorAll?.('.when-researcher, .researcher-frame').forEach((node) => {
-      node.setAttribute?.('aria-hidden', view === 'researcher' ? 'false' : 'true');
-    });
+  function persist(value) {
+    try { globalThis.localStorage?.setItem(storeKey, clamp(value).toFixed(4)); } catch { /* ignore */ }
   }
 
-  function commit(next, settle, animateSnap) {
-    const changed = view !== next;
-    view = next;
-    root.dataset.view = next;
-    sw.setAttribute('aria-checked', next === 'founder' ? 'true' : 'false');
-    markCopy();
-    paint(next === 'founder' ? 1 : 0, settle && (changed || animateSnap));
+  function commit(value, settle) {
+    committed = clamp(value);
+    hovering = false;
+    paint(committed, settle);
+    if (typeof clearTimeout === 'function' && persistTimer) clearTimeout(persistTimer);
+    persistTimer = setTimeout(() => persist(committed), settle ? 0 : 150);
   }
 
-  function ratio(clientX) {
-    const rect = sw.getBoundingClientRect();
-    return Math.min(1, Math.max(0, (clientX - rect.left) / Math.max(1, rect.width)));
+  function hourFromX(clientX) {
+    const rect = track.getBoundingClientRect();
+    const x = clientX - rect.left + (track.scrollLeft || 0);
+    return clamp(x / Math.max(1, track.scrollWidth || rect.width));
+  }
+
+  function hourFromScroll() {
+    if (!links.length || !document.getElementById) return null;
+    const tops = [];
+    for (const link of links) {
+      const id = (link.getAttribute('href') || '').slice(1);
+      const section = id && document.getElementById(id);
+      if (!section) return null;
+      const top = section.getBoundingClientRect?.().top;
+      tops.push((typeof top === 'number' ? top : 0) + (globalThis.scrollY || 0));
+    }
+    const scrolling = document.scrollingElement || document.documentElement;
+    const viewport = globalThis.innerHeight || scrolling.clientHeight || 1;
+    const maxScroll = Math.max(1, (scrolling.scrollHeight || 0) - viewport);
+    const y = Math.min(maxScroll, globalThis.scrollY || 0);
+    const points = tops.map((top) => Math.min(maxScroll, Math.max(0, top)));
+    points[points.length - 1] = maxScroll;
+    if (y <= points[0]) return 0;
+    const last = points.length - 1;
+    if (y >= points[last]) return 1;
+    for (let i = 0; i < last; i += 1) {
+      if (y <= points[i + 1]) {
+        const span = Math.max(1, points[i + 1] - points[i]);
+        return (i + (y - points[i]) / span) / last;
+      }
+    }
+    return 1;
   }
 
   sw.addEventListener('keydown', (event) => {
     loadLater();
-    if (event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'End') {
+    const key = event.key;
+    if (key === 'ArrowRight' || key === 'ArrowUp') {
       event.preventDefault();
-      commit('founder', true);
-    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown' || event.key === 'Home') {
+      commit(committed + 0.1, true);
+    } else if (key === 'ArrowLeft' || key === 'ArrowDown') {
       event.preventDefault();
-      commit('researcher', true);
-    } else if (event.key === ' ' || event.key === 'Enter') {
+      commit(committed - 0.1, true);
+    } else if (key === 'Home') {
       event.preventDefault();
-      commit(view === 'founder' ? 'researcher' : 'founder', true);
+      commit(0, true);
+    } else if (key === 'End') {
+      event.preventDefault();
+      commit(1, true);
     }
   });
 
-  sw.addEventListener('pointerdown', (event) => {
+  track.addEventListener('pointerdown', (event) => {
     if (drag) return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     loadLater();
-    drag = { startX: event.clientX, moved: false, id: event.pointerId };
-    root.classList.add('is-dragging');
-    root.classList.remove('is-settling');
-    sw.setPointerCapture?.(event.pointerId);
+    const link = event.target && event.target.closest ? event.target.closest('a') : null;
+    drag = { startX: event.clientX, moved: false, id: event.pointerId, link: links.includes(link) ? link : null };
+    hovering = false;
   });
-  sw.addEventListener('pointermove', (event) => {
-    if (!drag || event.pointerId !== drag.id) return;
-    if (Math.abs(event.clientX - drag.startX) > 4) drag.moved = true;
-    if (drag.moved) paint(ratio(event.clientX), false);
-  });
-  sw.addEventListener('pointerup', (event) => {
-    if (!drag || event.pointerId !== drag.id) return;
-    const moved = drag.moved;
-    const at = ratio(event.clientX);
-    drag = null;
-    root.classList.remove('is-dragging');
-    fromPointer = true;
-    if (typeof setTimeout === 'function') setTimeout(() => { fromPointer = false; }, 0);
-    if (!moved) commit(view === 'founder' ? 'researcher' : 'founder', true);
-    else commit(at >= 0.5 ? 'founder' : 'researcher', true, true);
-  });
-  sw.addEventListener('pointercancel', (event) => {
-    if (!drag || event.pointerId !== drag.id) return;
-    drag = null;
-    root.classList.remove('is-dragging');
-    commit(view, false);
-  });
-  sw.addEventListener('click', (event) => {
-    if (fromPointer) {
-      fromPointer = false;
+  track.addEventListener('pointermove', (event) => {
+    if (drag && event.pointerId === drag.id) {
+      if (Math.abs(event.clientX - drag.startX) > 4) drag.moved = true;
+      if (drag.moved) paint(hourFromX(event.clientX), false);
       return;
     }
-    commit(view === 'founder' ? 'researcher' : 'founder', true);
+    if (drag || event.pointerType !== 'mouse') return;
+    hovering = true;
+    paint(hourFromX(event.clientX), false);
+  });
+  function finishDrag(event) {
+    if (!drag || event.pointerId !== drag.id) return;
+    const moved = drag.moved;
+    const at = hourFromX(event.clientX);
+    const link = drag.link;
+    drag = null;
+    if (moved) {
+      suppressClick = true;
+      commit(at, true);
+      return;
+    }
+    if (link) {
+      holdScroll = Date.now() + 1500;
+      commit(links.indexOf(link) / Math.max(1, links.length - 1), true);
+    }
+    hovering = false;
+  }
+  track.addEventListener('pointerup', finishDrag);
+  addEventListener('pointerup', finishDrag);
+  track.addEventListener('pointercancel', (event) => {
+    if (!drag || event.pointerId !== drag.id) return;
+    const moved = drag.moved;
+    drag = null;
+    if (moved) {
+      suppressClick = true;
+      commit(hour, true);
+      return;
+    }
+    paint(committed, false);
+  });
+  track.addEventListener('pointerleave', () => {
+    if (drag || !hovering) return;
+    hovering = false;
+    paint(committed, true);
+  });
+  track.addEventListener('click', (event) => {
+    const target = event.target;
+    const link = target && target.closest ? target.closest('a') : null;
+    if (suppressClick) {
+      suppressClick = false;
+      if (link) event.preventDefault();
+      return;
+    }
+    if (!link || !links.includes(link)) return;
+    const index = links.indexOf(link);
+    holdScroll = Date.now() + 1500;
+    commit(index / Math.max(1, links.length - 1), true);
+    if (menu) {
+      menu.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('is-open');
+      menu.textContent = 'Menu';
+    }
   });
 
-  if (hero) {
-    hero.addEventListener('pointerdown', (event) => {
-      loadLater();
-      if (heroDrag) return;
-      if (event.target.closest && event.target.closest('#view-switch, a, button, summary')) return;
-      heroDrag = { x: event.clientX, y: event.clientY, id: event.pointerId };
-      hero.setPointerCapture?.(event.pointerId);
-    });
-    hero.addEventListener('pointerup', (event) => {
-      if (!heroDrag || event.pointerId !== heroDrag.id) return;
-      const dx = event.clientX - heroDrag.x;
-      const dy = event.clientY - heroDrag.y;
-      heroDrag = null;
-      if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy)) return;
-      commit(dx > 0 ? 'founder' : 'researcher', true);
-    });
-    hero.addEventListener('pointercancel', (event) => {
-      if (!heroDrag || event.pointerId !== heroDrag.id) return;
-      heroDrag = null;
-    });
-  }
-
-  if (menu && nav) {
+  if (menu) {
     menu.addEventListener('click', () => {
       const open = menu.getAttribute('aria-expanded') !== 'true';
       menu.setAttribute('aria-expanded', open ? 'true' : 'false');
       nav.classList.toggle('is-open', open);
       menu.textContent = open ? 'Close' : 'Menu';
     });
-    nav.addEventListener('click', (event) => {
-      const target = event.target;
-      if (!(target instanceof Element) || !target.closest('a')) return;
-      menu.setAttribute('aria-expanded', 'false');
-      nav.classList.remove('is-open');
-      menu.textContent = 'Menu';
-    });
   }
 
-  const bar = document.querySelector('.bar');
   function trackScroll() {
     const y = globalThis.scrollY || 0;
     const span = (hero && hero.offsetHeight) || globalThis.innerHeight || 1;
     const progress = Math.min(1, Math.max(0, y / Math.max(1, span)));
     root.style.setProperty('--scroll', progress.toFixed(4));
     bar?.classList.toggle('is-scrolled', y > 24);
+    if (y === startY || drag || hovering || Date.now() < holdScroll) return;
+    startY = -1;
+    const fromPage = hourFromScroll();
+    if (fromPage == null || Math.abs(fromPage - committed) < 0.004) return;
+    commit(fromPage, false);
   }
   addEventListener('scroll', trackScroll, { passive: true });
-  addEventListener('resize', () => { commit(view, false); trackScroll(); });
-  motion.addEventListener?.('change', () => commit(view, false));
-  commit(view, false);
+  addEventListener('resize', trackScroll);
+  motion.addEventListener?.('change', () => paint(committed, false));
+  paint(committed, false);
   trackScroll();
 })();
