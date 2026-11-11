@@ -72,6 +72,8 @@ for (const sentence of [
   'I’m designing Savvy around three steps: save the source, review the place match, and keep the confirmed place as a Map Stamp.',
 ]) assert.ok(html.includes(sentence), sentence);
 assert.ok(html.includes('class="founder-frame"') && html.includes('class="researcher-frame"'));
+assert.match(html, /savvy-web-20261028\.png"[^>]*loading="lazy"/);
+assert.match(html, /maiat\.png"[^>]*loading="lazy"/);
 checks.push('both views keep the problem, approach, result, and the project limits');
 
 function harness(reduced) {
