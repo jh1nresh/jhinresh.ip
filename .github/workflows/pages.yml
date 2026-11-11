@@ -26,6 +26,8 @@ jobs:
 
       - name: Validate site
         run: |
+          npm install --prefix /tmp/pw playwright-core
+          export NODE_PATH=/tmp/pw/node_modules
           python3 scripts/validate.py
           node --check script.js
           node --check view-switch.js
