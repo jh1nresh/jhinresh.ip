@@ -16,6 +16,9 @@ assert.match(html, /role="slider"/);
 assert.match(html, /aria-valuemin="0"/);
 assert.match(html, /aria-valuemax="100"/);
 assert.match(html, /aria-valuetext="Day"/);
+assert.match(html, /DOMContentLoaded/);
+assert.match(html, /setAttribute\('aria-hidden'/);
+assert.match(js, /event\.ctrlKey/);
 assert.equal(html.includes('label-researcher'), false);
 assert.equal(html.includes('>Researcher<'), false);
 assert.match(html, /id="menu-toggle"/);
@@ -242,6 +245,11 @@ ui.emit('#index', 'pointermove', { pointerType: 'mouse', clientX: 220, pointerId
 ui.emit('#index', 'pointercancel', { pointerType: 'mouse', clientX: 220, pointerId: 4 });
 assert.equal(ui.lens.attrs['aria-valuetext'], 'Night', 'a drag that ends in pointercancel keeps the scrubbed hour');
 assert.equal(ui.root.classList.contains('is-settling'), true);
+const modified = harness(false);
+modified.emit('#index', 'pointerdown', { button: 0, pointerType: 'mouse', clientX: 280, pointerId: 8, ctrlKey: true, target: modified.links[5] });
+modified.emit('#index', 'pointerup', { button: 0, pointerType: 'mouse', clientX: 280, pointerId: 8, ctrlKey: true });
+modified.emit('#index', 'click', { button: 0, ctrlKey: true, target: modified.links[5], preventDefault() {} });
+assert.equal(modified.lens.attrs['aria-valuetext'], 'Day', 'a modified click keeps this tab on its current hour');
 checks.push('the nav track scrubs day to night, and links still choose their hour');
 
 const hovered = harness(false);

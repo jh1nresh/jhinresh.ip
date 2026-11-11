@@ -199,6 +199,9 @@
     hovering = true;
     paint(hourFromX(event.clientX), false);
   });
+  function modifiedClick(event) {
+    return event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button > 0;
+  }
   function finishDrag(event) {
     if (!drag || event.pointerId !== drag.id) return;
     const moved = drag.moved;
@@ -215,7 +218,7 @@
       commit(at, true);
       return;
     }
-    if (link) {
+    if (link && !modifiedClick(event)) {
       holdScroll = Date.now() + 1500;
       commit(links.indexOf(link) / Math.max(1, links.length - 1), true);
     }
@@ -248,7 +251,7 @@
       if (link) event.preventDefault();
       return;
     }
-    if (!link || !links.includes(link)) return;
+    if (!link || !links.includes(link) || modifiedClick(event)) return;
     const index = links.indexOf(link);
     holdScroll = Date.now() + 1500;
     commit(index / Math.max(1, links.length - 1), true);

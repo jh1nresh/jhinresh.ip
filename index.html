@@ -33,7 +33,21 @@
       var root = document.documentElement;
       root.style.setProperty('--hour', hour.toFixed(4));
       root.style.setProperty('--t', (1 - hour).toFixed(4));
-      root.dataset.view = hour < 0.5 ? 'founder' : 'researcher';
+      var night = hour >= 0.5;
+      root.dataset.view = night ? 'researcher' : 'founder';
+      document.addEventListener('DOMContentLoaded', function () {
+        var nodes = document.querySelectorAll('.when-founder, .founder-frame, .when-researcher, .researcher-frame');
+        for (var i = 0; i < nodes.length; i++) {
+          var node = nodes[i];
+          var researcherCopy = node.classList.contains('when-researcher') || node.classList.contains('researcher-frame');
+          node.setAttribute('aria-hidden', researcherCopy === night ? 'false' : 'true');
+        }
+        var slider = document.getElementById('view-switch');
+        if (!slider) return;
+        var now = Math.round(hour * 100);
+        slider.setAttribute('aria-valuenow', String(now));
+        slider.setAttribute('aria-valuetext', now < 34 ? 'Day' : now > 66 ? 'Night' : 'Dusk');
+      });
     } catch (error) {}
   </script>
   <script src="./view-switch.js?v=20261111-stage" defer></script>
