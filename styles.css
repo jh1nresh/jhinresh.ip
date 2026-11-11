@@ -231,7 +231,7 @@ h1 span,h2 span{color:#b56a32}
 @media(max-width:1000px){.intro-portrait{width:58px;height:74px;border-width:2px}.proof-file{margin-top:0}.proof-file::after{width:12px;height:12px}}
 @media(max-width:760px){.sun{width:84px;height:84px;left:auto;right:-26px;top:-22px}.cloud{display:none}.masthead a[href="#contact"]{padding-inline:12px}.feature-link,.chapter-link,.contact-email{font-size:12px;padding-inline:16px}}
 @media(max-width:380px){.intro-portrait{width:46px;height:60px}.proof-file::after{width:10px;height:10px;top:2px;right:2px}}
-@media(prefers-reduced-motion:reduce){.drift,.sun,.layer{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.drift,.sun,.layer{animation:none!important}html[data-motion-opt-in]:not([data-motion-paused]) .far .drift{animation:cloud-drift 46s ease-in-out infinite alternate!important}html[data-motion-opt-in]:not([data-motion-paused]) .mid .drift{animation:cloud-drift 32s ease-in-out infinite alternate-reverse!important}}
 html[data-motion-paused] .drift{animation:none!important}
 .cabinet-stage,.savvy-stage,.scene-stage{overflow:visible}
 .cabinet-stage svg,.savvy-stage svg,.scene-stage svg{overflow:visible;transition:transform .35s ease,filter .35s ease}
