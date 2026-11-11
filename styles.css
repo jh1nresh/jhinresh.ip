@@ -1,7 +1,7 @@
 @property --hour { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --t { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --scroll { syntax: "<number>"; inherits: true; initial-value: 0; }
-@property --day-ready { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --day-ready { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --ink-light { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --dusk-mix { syntax: "<number>"; inherits: true; initial-value: 0; }
 
@@ -22,7 +22,7 @@
   --column-wash: color-mix(in srgb, rgba(246, 236, 214, .9) calc((1 - var(--ink-light)) * 100%), color-mix(in srgb, var(--dusk) 92%, transparent) calc(var(--ink-light) * 100%));
 }
 * { box-sizing: border-box; }
-html { --t: 1; --hour: 0; --scroll: 0; --day-ready: 0; scroll-behavior: smooth; scroll-padding-top: 96px; background: #0c121c; }
+html { --t: 1; --hour: 0; --scroll: 0; --day-ready: 1; scroll-behavior: smooth; scroll-padding-top: 96px; background: #0c121c; }
 body {
   margin: 0;
   color: var(--ink);

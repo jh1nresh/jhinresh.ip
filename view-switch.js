@@ -14,19 +14,32 @@
   const storeKey = 'jhinresh-hour';
 
   function loadLater() {
-    if (!laterBg || laterBg.getAttribute('src')) return;
-    const src = laterBg.getAttribute('data-src');
-    if (!src) return;
-    laterBg.addEventListener?.('load', () => {
+    if (!laterBg) return;
+    if (!laterBg.getAttribute('src')) {
+      const src = laterBg.getAttribute('data-src');
+      if (!src) return;
+      laterBg.setAttribute('src', src);
+    }
+    const markReady = () => {
       root.classList.remove('day-failed');
       root.style.setProperty('--day-ready', '1');
-    }, { once: true });
-    laterBg.addEventListener?.('error', () => {
+    };
+    const markFailed = () => {
       root.style.setProperty('--day-ready', '0');
       root.classList.add('day-failed');
       laterBg.removeAttribute('src');
-    }, { once: true });
-    laterBg.setAttribute('src', src);
+    };
+    if (laterBg.complete && laterBg.naturalWidth > 0) {
+      markReady();
+      return;
+    }
+    if (laterBg.complete) {
+      markFailed();
+      return;
+    }
+    root.style.setProperty('--day-ready', '0');
+    laterBg.addEventListener?.('load', markReady, { once: true });
+    laterBg.addEventListener?.('error', markFailed, { once: true });
   }
   loadLater();
 
