@@ -82,7 +82,8 @@
     drag = null;
     fromPointer = true;
     root.classList.remove('is-dragging');
-    commit(at >= 0.5 ? 'founder' : 'researcher', true, moved);
+    if (!moved) commit(view === 'founder' ? 'researcher' : 'founder', true);
+    else commit(at >= 0.5 ? 'founder' : 'researcher', true, true);
   });
   sw.addEventListener('pointercancel', (event) => {
     if (!drag || event.pointerId !== drag.id) return;
@@ -95,7 +96,6 @@
       fromPointer = false;
       return;
     }
-    if (event.detail > 0) return;
     commit(view === 'founder' ? 'researcher' : 'founder', true);
   });
 
