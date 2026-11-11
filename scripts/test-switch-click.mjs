@@ -103,6 +103,18 @@ const after = await cdp('Runtime.evaluate', {
   returnByValue: true,
 }, sessionId);
 assert.equal(after.result.value, 'true', 'a pointer click flips the switch before the day image loads');
+const drag = await cdp('Runtime.evaluate', {
+  expression: `(() => { const rect = document.querySelector('[role=switch]').getBoundingClientRect(); return { y: rect.top + rect.height / 2, left: rect.left + 8, right: rect.right - 8 }; })()`,
+  returnByValue: true,
+}, sessionId);
+await cdp('Input.dispatchMouseEvent', { type: 'mousePressed', x: drag.result.value.right, y: drag.result.value.y, button: 'left', clickCount: 1 }, sessionId);
+await cdp('Input.dispatchMouseEvent', { type: 'mouseMoved', x: drag.result.value.left, y: drag.result.value.y, button: 'left' }, sessionId);
+await cdp('Input.dispatchMouseEvent', { type: 'mouseReleased', x: drag.result.value.left, y: drag.result.value.y, button: 'left', clickCount: 1 }, sessionId);
+const dragged = await cdp('Runtime.evaluate', {
+  expression: `document.querySelector('[role=switch]').getAttribute('aria-checked')`,
+  returnByValue: true,
+}, sessionId);
+assert.equal(dragged.result.value, 'false', 'a drag back to Researcher stays there when its click arrives');
 
 await cdp('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true }, sessionId);
 await cdp('Page.navigate', { url: `http://127.0.0.1:${port}/?mobile=1` }, sessionId);

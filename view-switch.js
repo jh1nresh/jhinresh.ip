@@ -84,13 +84,10 @@
     const at = ratio(event.clientX);
     drag = null;
     root.classList.remove('is-dragging');
-    if (!moved) {
-      fromPointer = true;
-      commit(view === 'founder' ? 'researcher' : 'founder', true);
-    } else {
-      fromPointer = false;
-      commit(at >= 0.5 ? 'founder' : 'researcher', true, true);
-    }
+    fromPointer = true;
+    if (typeof setTimeout === 'function') setTimeout(() => { fromPointer = false; }, 0);
+    if (!moved) commit(view === 'founder' ? 'researcher' : 'founder', true);
+    else commit(at >= 0.5 ? 'founder' : 'researcher', true, true);
   });
   sw.addEventListener('pointercancel', (event) => {
     if (!drag || event.pointerId !== drag.id) return;
