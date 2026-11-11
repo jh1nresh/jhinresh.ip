@@ -174,6 +174,11 @@ ui.emit('pointerdown', { button: 0, pointerType: 'touch', clientX: 280, pointerI
 ui.emit('pointermove', { clientX: 30, pointerId: 2 });
 ui.emit('pointerup', { clientX: 30, pointerId: 2 });
 assert.equal(ui.root.dataset.view, 'researcher');
+ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 20, pointerId: 6 });
+ui.emit('pointermove', { clientX: 100, pointerId: 6 });
+ui.emit('pointerup', { clientX: 100, pointerId: 6 });
+assert.equal(ui.root.dataset.view, 'researcher', 'a short drag snaps back to Researcher');
+assert.equal(ui.root.classList.contains('is-settling'), true);
 ui.emit('pointerdown', { button: 0, pointerType: 'mouse', clientX: 40, pointerId: 3 });
 ui.emit('pointerup', { clientX: 41, pointerId: 3 });
 assert.equal(ui.root.dataset.view, 'researcher', 'a click on Researcher keeps Researcher');

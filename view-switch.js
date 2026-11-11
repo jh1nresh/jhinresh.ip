@@ -25,12 +25,12 @@
     }
   }
 
-  function commit(next, settle) {
+  function commit(next, settle, animateSnap) {
     const changed = view !== next;
     view = next;
     root.dataset.view = next;
     sw.setAttribute('aria-checked', next === 'founder' ? 'true' : 'false');
-    paint(next === 'founder' ? 1 : 0, settle && changed);
+    paint(next === 'founder' ? 1 : 0, settle && (changed || animateSnap));
   }
 
   function ratio(clientX) {
@@ -70,7 +70,7 @@
     const at = ratio(event.clientX);
     drag = null;
     root.classList.remove('is-dragging');
-    commit(at >= 0.5 ? 'founder' : 'researcher', true);
+    commit(at >= 0.5 ? 'founder' : 'researcher', true, moved);
   });
   sw.addEventListener('pointercancel', (event) => {
     if (!drag || event.pointerId !== drag.id) return;
@@ -84,6 +84,7 @@
       if (heroDrag) return;
       if (event.target.closest && event.target.closest('#view-switch, a, button, summary')) return;
       heroDrag = { x: event.clientX, y: event.clientY, id: event.pointerId };
+      hero.setPointerCapture?.(event.pointerId);
     });
     hero.addEventListener('pointerup', (event) => {
       if (!heroDrag || event.pointerId !== heroDrag.id) return;
