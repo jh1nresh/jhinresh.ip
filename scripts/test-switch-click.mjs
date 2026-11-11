@@ -155,19 +155,33 @@ const blend = await readHour();
 assert.equal(blend.text, 'Dusk', 'dragging to the middle gives a blend');
 const blendAmount = Number(blend.day);
 assert.ok(blendAmount > 0.35 && blendAmount < 0.65, `middle blend was ${blend.day}`);
-await cdp('Runtime.evaluate', {
-  expression: `document.querySelector('.selected a[href="#research"]').click()`,
+const jumped = await cdp('Runtime.evaluate', {
+  expression: `(() => {
+    function activate(selector) {
+      const link = document.querySelector(selector);
+      document.body.setAttribute('tabindex', '-1');
+      document.body.focus();
+      link.click();
+      return { id: document.activeElement && document.activeElement.id, hash: location.hash, text: link.textContent };
+    }
+    return { all: activate('.selected a[href="#research"]'), record: activate('a[href="#research"]:not(.selected a)') };
+  })()`,
+  returnByValue: true,
 }, sessionId);
-let focused = '';
-for (let attempt = 0; attempt < 25 && focused !== 'awards-title'; attempt += 1) {
-  await delay(80);
-  const { result } = await cdp('Runtime.evaluate', {
-    expression: `document.activeElement && document.activeElement.id`,
-    returnByValue: true,
-  }, sessionId);
-  focused = result?.value || '';
-}
-assert.equal(focused, 'awards-title', 'All 12 moves focus to the awards heading');
+assert.equal(jumped.result.value.all.hash, '#research', 'All 12 opens the awards section');
+assert.equal(jumped.result.value.all.id, 'awards-title', 'All 12 moves focus to the awards heading');
+assert.equal(jumped.result.value.record.hash, '#research', 'Read the full record opens the awards section');
+assert.equal(jumped.result.value.record.id, 'awards-title', 'Read the full record moves focus to the awards heading');
+await cdp('Runtime.evaluate', {
+  expression: `document.querySelector('a[href="#research"]:not(.selected a)').focus()`,
+}, sessionId);
+await cdp('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 }, sessionId);
+await cdp('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 }, sessionId);
+const keyed = await cdp('Runtime.evaluate', {
+  expression: `document.activeElement && document.activeElement.id`,
+  returnByValue: true,
+}, sessionId);
+assert.equal(keyed.result.value, 'awards-title', 'Enter on the awards link moves focus to the heading');
 
 await cdp('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true }, sessionId);
 const mobileUrl = `http://127.0.0.1:${port}/?mobile=1`;

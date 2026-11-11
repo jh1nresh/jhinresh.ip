@@ -272,33 +272,19 @@
     if (target.matches?.('h1, h2, h3')) return target;
     return target.querySelector?.('h1, h2, h3') || null;
   }
-  function focusHeading(id) {
-    const heading = headingFor(id);
-    if (!heading) return;
-    const apply = () => heading.focus({ preventScroll: true });
-    if (motion.matches) {
-      if (typeof requestAnimationFrame === 'function') requestAnimationFrame(apply);
-      else apply();
-      return;
-    }
-    let settled = false;
-    const finish = () => {
-      if (settled) return;
-      settled = true;
-      removeEventListener('scrollend', finish);
-      apply();
-    };
-    addEventListener('scrollend', finish);
-    setTimeout(finish, 800);
-  }
   addEventListener('click', (event) => {
-    if (modifiedClick(event)) return;
+    if (event.defaultPrevented || modifiedClick(event)) return;
     const target = event.target;
     const link = target && target.closest ? target.closest('a[href^="#"]') : null;
     if (!link) return;
     const id = (link.getAttribute('href') || '').slice(1);
-    if (!headingFor(id)) return;
-    focusHeading(id);
+    const destination = id && document.getElementById(id);
+    const heading = headingFor(id);
+    if (!destination || !heading) return;
+    event.preventDefault();
+    destination.scrollIntoView({ behavior: motion.matches ? 'auto' : 'smooth', block: 'start' });
+    if (location.hash !== `#${id}`) history.pushState(null, '', `#${id}`);
+    heading.focus({ preventScroll: true });
   });
   track.addEventListener('click', (event) => {
     const target = event.target;
