@@ -3,8 +3,9 @@
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
-import { createReadStream, existsSync } from 'node:fs';
+import { createReadStream, existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { createServer } from 'node:http';
+import { tmpdir } from 'node:os';
 import { extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -33,8 +34,10 @@ const { port } = server.address();
 const chromeBin = ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'].find((bin) => spawnSync(bin, ['--version'], { stdio: 'ignore' }).status === 0);
 assert.ok(chromeBin, 'a Chrome or Chromium binary is required for the real click test');
 const debugPort = 9222 + (port % 1000);
+const profile = mkdtempSync(join(tmpdir(), 'switch-click-'));
 const chrome = spawn(chromeBin, [
   '--headless=new', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage',
+  `--user-data-dir=${profile}`,
   `--remote-debugging-port=${debugPort}`, 'about:blank',
 ], { stdio: 'ignore' });
 
@@ -78,6 +81,7 @@ for (let attempt = 0; attempt < 40; attempt += 1) {
 }
 assert.ok(cdp, 'Chrome did not open a debugging port');
 
+try {
 const { targetId } = await cdp('Target.createTarget', { url: 'about:blank' });
 const { sessionId } = await cdp('Target.attachToTarget', { targetId, flatten: true });
 await cdp('Page.enable', {}, sessionId);
@@ -130,7 +134,9 @@ const mobileAfter = await cdp('Runtime.evaluate', {
   returnByValue: true,
 }, sessionId);
 assert.equal(mobileAfter.result.value, 'true', 'a pointer click flips the switch on a phone before the day image loads');
-
-chrome.kill('SIGKILL');
-server.close();
 console.log(JSON.stringify({ passed: 1, checks: ['a real pointer click toggles while the day image is still unloaded'] }, null, 2));
+} finally {
+  chrome.kill('SIGKILL');
+  server.close();
+  rmSync(profile, { recursive: true, force: true });
+}
