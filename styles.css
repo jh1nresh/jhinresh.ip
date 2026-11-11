@@ -9,7 +9,7 @@
   --line: color-mix(in srgb, rgba(244, 239, 230, .28) calc((1 - var(--t)) * 100%), rgba(26, 24, 20, .18) calc(var(--t) * 100%));
 }
 * { box-sizing: border-box; }
-html { --t: 0; --scroll: 0; scroll-behavior: smooth; scroll-padding-top: 72px; background: #0c121c; }
+html { --t: 0; --scroll: 0; --day-ready: 0; scroll-behavior: smooth; scroll-padding-top: 72px; background: #0c121c; }
 body {
   margin: 0;
   color: var(--ink);
@@ -61,8 +61,8 @@ ul { padding: 0; list-style: none; }
   transform-origin: center;
 }
 .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.bg-night { opacity: calc(1 - var(--t)); }
-.bg-day { opacity: var(--t); }
+.bg-night { opacity: calc(1 - var(--t) * var(--day-ready)); }
+.bg-day { opacity: calc(var(--t) * var(--day-ready)); }
 .tone { position: absolute; inset: 0; }
 .tone-night { background: #0c121c; opacity: calc(var(--scroll) * (1 - var(--t))); }
 .tone-day { background: #f3ecdf; opacity: calc(var(--scroll) * var(--t)); }

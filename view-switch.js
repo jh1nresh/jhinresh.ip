@@ -11,7 +11,10 @@
   function loadLater() {
     if (!laterBg || laterBg.getAttribute('src')) return;
     const src = laterBg.getAttribute('data-src');
-    if (src) laterBg.setAttribute('src', src);
+    if (!src) return;
+    laterBg.addEventListener?.('load', () => root.style.setProperty('--day-ready', '1'), { once: true });
+    laterBg.addEventListener?.('error', () => root.style.setProperty('--day-ready', '0'), { once: true });
+    laterBg.setAttribute('src', src);
   }
   if (typeof requestIdleCallback === 'function') requestIdleCallback(loadLater, { timeout: 1500 });
   else addEventListener('load', () => setTimeout(loadLater, 200));
@@ -80,10 +83,15 @@
     const moved = drag.moved;
     const at = ratio(event.clientX);
     drag = null;
-    fromPointer = true;
     root.classList.remove('is-dragging');
-    if (!moved) commit(view === 'founder' ? 'researcher' : 'founder', true);
-    else commit(at >= 0.5 ? 'founder' : 'researcher', true, true);
+    if (!moved) {
+      fromPointer = true;
+      if (typeof queueMicrotask === 'function') queueMicrotask(() => { fromPointer = false; });
+      commit(view === 'founder' ? 'researcher' : 'founder', true);
+    } else {
+      fromPointer = false;
+      commit(at >= 0.5 ? 'founder' : 'researcher', true, true);
+    }
   });
   sw.addEventListener('pointercancel', (event) => {
     if (!drag || event.pointerId !== drag.id) return;
