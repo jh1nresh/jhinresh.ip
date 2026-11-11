@@ -64,9 +64,13 @@ function fixture({reduced=false,hash='',main=true,animate=false,mobile=false}={}
 }
 const checks=[];
 const markup=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
-const folios=[...markup.matchAll(/<div class="folio-foot"><span>.*?<\/span><span>(\d{2})<\/span><\/div>/g)].map(match=>match[1]);
-assert.deepEqual(folios,Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0')));
-checks.push('actual HTML folios are unique and consecutive from 01 through 12');
+assert.equal(markup.includes('folio-foot'), false);
+assert.match(markup, /role="slider"/);
+assert.match(markup, /id="view-switch"/);
+for (const fact of ['Base Batches 003 Student Track','Jito Grid Hackathon','does not offer production printing or production escrow','No real approval, signature, or payment is performed']) {
+  assert.ok(markup.includes(fact), fact);
+}
+checks.push('the live page is the academic column: a view slider, the recognition record, and no book folios');
 let f=fixture();assert.equal(f.active(),0);assert.equal(f.previous.disabled,true);assert.equal(f.controls.hidden,false);assert.equal(f.frames.size,0);checks.push('cover initializes without autoplay; chapter controls have correct boundaries');
 f.next.click();f.advance();assert.equal(f.active(),1);assert.equal(f.spreads[1].heading.focused,true);assert.equal(f.position('savvy'),28);f.next.click();f.advance();assert.equal(f.active(),2);assert.equal(f.position('output'),28);assert.equal(f.chapterReadout.textContent,'05–06 / 12 — OUTPUT');checks.push('next chapter aligns visible spread, URL, focus, drawer and page count');
 f.linkClick(f.links[5]);assert.equal(f.next.disabled,true);f.next.click();assert.equal(f.active(),5);f.previous.click();assert.equal(f.active(),4);checks.push('chapter links and previous/next respect first and final chapters');
