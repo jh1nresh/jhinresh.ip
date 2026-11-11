@@ -215,7 +215,7 @@ function harness(reduced) {
     root, lens, links, emit,
     flush() { while (timers.length) timers.shift()(); },
     scrollTo(y) { context.scrollY = y; },
-    emitWindow(type) { for (const fn of windowListeners[type] || []) fn({}); },
+    emitWindow(type, event = {}) { for (const fn of windowListeners[type] || []) fn(event); },
   };
 }
 
@@ -246,6 +246,13 @@ assert.equal(ui.lens.attrs['aria-valuetext'], 'Dusk', 'dragging to the middle gi
 assert.equal(ui.root.style.props['--t'], '0.5000');
 ui.emit('#index', 'click', { target: ui.links[0], preventDefault() {} });
 assert.equal(ui.lens.attrs['aria-valuetext'], 'Dusk', 'the click after a drag does not jump to the link');
+ui.emitWindow('pointerup', { pointerId: 12, clientX: 40, button: 0 });
+ui.emit('#index', 'pointerdown', { button: 0, pointerType: 'mouse', clientX: 12, pointerId: 12, target: ui.links[0] });
+ui.emit('#index', 'pointermove', { pointerType: 'mouse', clientX: 80, pointerId: 12 });
+ui.emitWindow('pointerup', { pointerId: 12, clientX: 400, button: 0 });
+ui.emitWindow('click', { target: { closest() { return null; } }, preventDefault() {} });
+ui.emit('#index', 'click', { target: ui.links[0], preventDefault() {} });
+assert.equal(ui.lens.attrs['aria-valuetext'], 'Day', 'a click after an outside drag release still navigates');
 ui.emit('#index', 'pointerdown', { button: 0, pointerType: 'mouse', clientX: 20, pointerId: 4 });
 ui.emit('#index', 'pointermove', { pointerType: 'mouse', clientX: 220, pointerId: 4 });
 ui.emit('#index', 'pointercancel', { pointerType: 'mouse', clientX: 220, pointerId: 4 });

@@ -200,6 +200,7 @@
       link: links.includes(link) ? link : null,
     };
     hovering = false;
+    if (!drag.touchScroll) track.setPointerCapture?.(event.pointerId);
   });
   track.addEventListener('pointermove', (event) => {
     if (drag && event.pointerId === drag.id) {
@@ -255,6 +256,12 @@
     if (drag || !hovering) return;
     hovering = false;
     paint(committed, true);
+  });
+  addEventListener('click', (event) => {
+    if (!suppressClick) return;
+    const target = event.target;
+    if (target && track.contains?.(target)) return;
+    suppressClick = false;
   });
   track.addEventListener('click', (event) => {
     const target = event.target;
