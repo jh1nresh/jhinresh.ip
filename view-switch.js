@@ -7,6 +7,14 @@
   const menu = document.querySelector('#menu-toggle');
   const nav = document.querySelector('#index');
   const hero = document.querySelector('#home');
+  const laterBg = document.querySelector('.bg-day');
+  function loadLater() {
+    if (!laterBg || laterBg.getAttribute('src')) return;
+    const src = laterBg.getAttribute('data-src');
+    if (src) laterBg.setAttribute('src', src);
+  }
+  if (typeof requestIdleCallback === 'function') requestIdleCallback(loadLater, { timeout: 1500 });
+  else addEventListener('load', () => setTimeout(loadLater, 200));
   let view = root.dataset.view === 'founder' ? 'founder' : 'researcher';
   let drag = null;
   let heroDrag = null;
@@ -39,6 +47,7 @@
   }
 
   sw.addEventListener('keydown', (event) => {
+    loadLater();
     if (event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'End') {
       event.preventDefault();
       commit('founder', true);
@@ -54,6 +63,7 @@
   sw.addEventListener('pointerdown', (event) => {
     if (drag) return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
+    loadLater();
     drag = { startX: event.clientX, moved: false, id: event.pointerId };
     root.classList.add('is-dragging');
     root.classList.remove('is-settling');
@@ -81,6 +91,7 @@
 
   if (hero) {
     hero.addEventListener('pointerdown', (event) => {
+      loadLater();
       if (heroDrag) return;
       if (event.target.closest && event.target.closest('#view-switch, a, button, summary')) return;
       heroDrag = { x: event.clientX, y: event.clientY, id: event.pointerId };

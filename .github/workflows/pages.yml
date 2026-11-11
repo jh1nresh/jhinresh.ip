@@ -44,7 +44,8 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html styles.css script.js view-switch.js fit-reader.js page-curl.js cabinet.js workflows.js LICENSES.txt _site/
-          mkdir -p _site/assets/projects _site/assets/portrait _site/assets/fonts _site/assets/figures
+          mkdir -p _site/assets/projects _site/assets/portrait _site/assets/fonts _site/assets/figures _site/assets/bg
+          cp assets/bg/bg-night.webp assets/bg/bg-day.webp _site/assets/bg/
           cp assets/projects/savvy-web-20261028.png assets/projects/maiat.png _site/assets/projects/
           cp assets/portrait/jerry-chen.jpg _site/assets/portrait/
           cp assets/fonts/Archivo.ttf assets/fonts/OFL.txt _site/assets/fonts/
