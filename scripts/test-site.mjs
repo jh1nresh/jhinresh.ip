@@ -38,6 +38,7 @@ assert.match(css, /\.skip-link \{[\s\S]*?z-index:\s*6/);
 assert.match(css, /prefers-reduced-motion/);
 assert.match(css, /animation:\s*none/);
 assert.match(css, /\.7s cubic-bezier\(\.22, \.7, \.2, 1\)/);
+assert.match(css, /#index, \.nav-track \{ touch-action: pan-x pan-y; \}/);
 const bar = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
 const nav = bar.slice(bar.indexOf('<nav'), bar.indexOf('</nav>'));
 assert.match(nav, /id="view-switch"/);
@@ -147,6 +148,7 @@ function harness(reduced) {
   const nav = el('#index', { left: 0, top: 0, width: 300, height: 36 });
   nav.scrollLeft = 0;
   nav.scrollWidth = 300;
+  nav.clientWidth = 300;
   nav.querySelector = () => null;
   nav.querySelectorAll = (query) => (query === 'a[href^="#"]' ? links : []);
   nav.contains = (node) => links.includes(node);
@@ -179,14 +181,20 @@ function harness(reduced) {
   };
   const motion = { matches: reduced, addEventListener() {} };
   const timers = [];
+  const windowListeners = {};
+  const sectionTops = { home: 0, news: 200, work: 400, research: 600, blog: 800, contact: 1000 };
   const context = {
+    scrollY: 0,
+    innerHeight: 900,
     document: {
       documentElement: root,
+      scrollingElement: { scrollHeight: 1900, clientHeight: 900 },
       querySelector: (query) => (query === '#view-switch' ? lens : query === '#index' ? nav : null),
       querySelectorAll: () => [],
+      getElementById: (id) => (sectionTops[id] == null ? null : { getBoundingClientRect: () => ({ top: sectionTops[id] - context.scrollY }) }),
     },
     matchMedia: () => motion,
-    addEventListener() {},
+    addEventListener(type, fn) { (windowListeners[type] ||= []).push(fn); },
     setTimeout(fn) { timers.push(fn); return timers.length; },
   };
   vm.createContext(context);
@@ -194,7 +202,12 @@ function harness(reduced) {
   function emit(selector, type, event) {
     for (const fn of listeners[`${selector}:${type}`] || []) fn(event);
   }
-  return { root, lens, links, emit, flush() { while (timers.length) timers.shift()(); } };
+  return {
+    root, lens, links, emit,
+    flush() { while (timers.length) timers.shift()(); },
+    scrollTo(y) { context.scrollY = y; },
+    emitWindow(type) { for (const fn of windowListeners[type] || []) fn({}); },
+  };
 }
 
 let ui = harness(false);
@@ -230,6 +243,14 @@ ui.emit('#index', 'pointercancel', { pointerType: 'mouse', clientX: 220, pointer
 assert.equal(ui.lens.attrs['aria-valuetext'], 'Night', 'a drag that ends in pointercancel keeps the scrubbed hour');
 assert.equal(ui.root.classList.contains('is-settling'), true);
 checks.push('the nav track scrubs day to night, and links still choose their hour');
+
+const hovered = harness(false);
+hovered.emit('#index', 'pointermove', { pointerType: 'mouse', clientX: 20 });
+hovered.scrollTo(1000);
+hovered.emitWindow('scroll');
+hovered.emit('#index', 'pointerleave', {});
+assert.equal(hovered.lens.attrs['aria-valuetext'], 'Night', 'leaving the nav after a scroll follows the page');
+checks.push('a scroll under the pointer is kept when the pointer leaves');
 
 ui = harness(true);
 ui.emit('#view-switch', 'keydown', { key: 'End', preventDefault() {} });

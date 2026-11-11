@@ -101,12 +101,24 @@
     try { globalThis.localStorage?.setItem(storeKey, clamp(value).toFixed(4)); } catch { /* ignore */ }
   }
 
-  function commit(value, settle) {
+  function remember(value) {
     committed = clamp(value);
+    if (typeof clearTimeout === 'function' && persistTimer) clearTimeout(persistTimer);
+    persistTimer = setTimeout(() => persist(committed), 150);
+  }
+
+  function commit(value, settle) {
+    remember(value);
     hovering = false;
     paint(committed, settle);
-    if (typeof clearTimeout === 'function' && persistTimer) clearTimeout(persistTimer);
-    persistTimer = setTimeout(() => persist(committed), settle ? 0 : 150);
+    if (settle && typeof clearTimeout === 'function' && persistTimer) {
+      clearTimeout(persistTimer);
+      persist(committed);
+    }
+  }
+
+  function overflows() {
+    return (nav.scrollWidth || 0) > (nav.clientWidth || 0) + 1;
   }
 
   function hourFromX(clientX) {
@@ -166,12 +178,20 @@
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     loadLater();
     const link = event.target && event.target.closest ? event.target.closest('a') : null;
-    drag = { startX: event.clientX, moved: false, id: event.pointerId, link: links.includes(link) ? link : null };
+    drag = {
+      startX: event.clientX,
+      moved: false,
+      id: event.pointerId,
+      pointerType: event.pointerType,
+      touchScroll: event.pointerType === 'touch' && overflows(),
+      link: links.includes(link) ? link : null,
+    };
     hovering = false;
   });
   track.addEventListener('pointermove', (event) => {
     if (drag && event.pointerId === drag.id) {
       if (Math.abs(event.clientX - drag.startX) > 4) drag.moved = true;
+      if (drag.touchScroll) return;
       if (drag.moved) paint(hourFromX(event.clientX), false);
       return;
     }
@@ -184,7 +204,12 @@
     const moved = drag.moved;
     const at = hourFromX(event.clientX);
     const link = drag.link;
+    const touchScroll = drag.touchScroll;
     drag = null;
+    if (moved && touchScroll) {
+      hovering = false;
+      return;
+    }
     if (moved) {
       suppressClick = true;
       commit(at, true);
@@ -201,8 +226,9 @@
   track.addEventListener('pointercancel', (event) => {
     if (!drag || event.pointerId !== drag.id) return;
     const moved = drag.moved;
+    const touch = drag.pointerType === 'touch';
     drag = null;
-    if (moved) {
+    if (moved && !touch) {
       suppressClick = true;
       commit(hour, true);
       return;
@@ -248,10 +274,14 @@
     const progress = Math.min(1, Math.max(0, y / Math.max(1, span)));
     root.style.setProperty('--scroll', progress.toFixed(4));
     bar?.classList.toggle('is-scrolled', y > 24);
-    if (y === startY || drag || hovering || Date.now() < holdScroll) return;
+    if (y === startY || drag || Date.now() < holdScroll) return;
     startY = -1;
     const fromPage = hourFromScroll();
     if (fromPage == null || Math.abs(fromPage - committed) < 0.004) return;
+    if (hovering) {
+      remember(fromPage);
+      return;
+    }
     commit(fromPage, false);
   }
   addEventListener('scroll', trackScroll, { passive: true });

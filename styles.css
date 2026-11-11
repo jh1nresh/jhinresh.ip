@@ -315,6 +315,7 @@ footer {
     scrollbar-width: none;
   }
   #index::-webkit-scrollbar { display: none; }
+  #index, .nav-track { touch-action: pan-x pan-y; }
   .nav-track { width: max-content; min-width: 100%; }
   #index a { flex: 0 0 auto; font-size: 15px; padding: 6px 8px; }
   .hero { align-items: flex-end; padding: 22vh 18px 8vh; }
