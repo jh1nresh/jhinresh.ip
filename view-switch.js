@@ -51,19 +51,20 @@
   });
 
   sw.addEventListener('pointerdown', (event) => {
+    if (drag) return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
-    drag = { startX: event.clientX, moved: false };
+    drag = { startX: event.clientX, moved: false, id: event.pointerId };
     root.classList.add('is-dragging');
     root.classList.remove('is-settling');
     sw.setPointerCapture?.(event.pointerId);
   });
   sw.addEventListener('pointermove', (event) => {
-    if (!drag) return;
+    if (!drag || event.pointerId !== drag.id) return;
     if (Math.abs(event.clientX - drag.startX) > 4) drag.moved = true;
     if (drag.moved) paint(ratio(event.clientX), false);
   });
   sw.addEventListener('pointerup', (event) => {
-    if (!drag) return;
+    if (!drag || event.pointerId !== drag.id) return;
     const moved = drag.moved;
     const at = ratio(event.clientX);
     drag = null;
@@ -71,8 +72,8 @@
     if (!moved) commit(view === 'founder' ? 'researcher' : 'founder', true);
     else commit(at >= 0.5 ? 'founder' : 'researcher', true);
   });
-  sw.addEventListener('pointercancel', () => {
-    if (!drag) return;
+  sw.addEventListener('pointercancel', (event) => {
+    if (!drag || event.pointerId !== drag.id) return;
     drag = null;
     root.classList.remove('is-dragging');
     commit(view, false);
