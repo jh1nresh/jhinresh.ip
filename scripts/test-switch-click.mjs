@@ -155,6 +155,19 @@ const blend = await readHour();
 assert.equal(blend.text, 'Dusk', 'dragging to the middle gives a blend');
 const blendAmount = Number(blend.day);
 assert.ok(blendAmount > 0.35 && blendAmount < 0.65, `middle blend was ${blend.day}`);
+await cdp('Runtime.evaluate', {
+  expression: `document.querySelector('.selected a[href="#research"]').click()`,
+}, sessionId);
+let focused = '';
+for (let attempt = 0; attempt < 25 && focused !== 'awards-title'; attempt += 1) {
+  await delay(80);
+  const { result } = await cdp('Runtime.evaluate', {
+    expression: `document.activeElement && document.activeElement.id`,
+    returnByValue: true,
+  }, sessionId);
+  focused = result?.value || '';
+}
+assert.equal(focused, 'awards-title', 'All 12 moves focus to the awards heading');
 
 await cdp('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: true }, sessionId);
 const mobileUrl = `http://127.0.0.1:${port}/?mobile=1`;

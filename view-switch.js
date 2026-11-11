@@ -263,6 +263,43 @@
     if (target && track.contains?.(target)) return;
     suppressClick = false;
   });
+  function headingFor(id) {
+    const target = id && document.getElementById(id);
+    if (!target) return null;
+    const label = target.getAttribute?.('aria-labelledby');
+    const named = label && document.getElementById(label);
+    if (named) return named;
+    if (target.matches?.('h1, h2, h3')) return target;
+    return target.querySelector?.('h1, h2, h3') || null;
+  }
+  function focusHeading(id) {
+    const heading = headingFor(id);
+    if (!heading) return;
+    const apply = () => heading.focus({ preventScroll: true });
+    if (motion.matches) {
+      if (typeof requestAnimationFrame === 'function') requestAnimationFrame(apply);
+      else apply();
+      return;
+    }
+    let settled = false;
+    const finish = () => {
+      if (settled) return;
+      settled = true;
+      removeEventListener('scrollend', finish);
+      apply();
+    };
+    addEventListener('scrollend', finish);
+    setTimeout(finish, 800);
+  }
+  addEventListener('click', (event) => {
+    if (modifiedClick(event)) return;
+    const target = event.target;
+    const link = target && target.closest ? target.closest('a[href^="#"]') : null;
+    if (!link) return;
+    const id = (link.getAttribute('href') || '').slice(1);
+    if (!headingFor(id)) return;
+    focusHeading(id);
+  });
   track.addEventListener('click', (event) => {
     const target = event.target;
     const link = target && target.closest ? target.closest('a') : null;
