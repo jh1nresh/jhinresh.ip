@@ -39,6 +39,7 @@ jobs:
           node scripts/test-fit-reader.mjs
           node scripts/test-page-curl.mjs
           node scripts/test-workflows.mjs
+          node scripts/test-switch-click.mjs
 
       - name: Prepare site artifact
         run: |

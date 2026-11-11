@@ -86,7 +86,6 @@
     root.classList.remove('is-dragging');
     if (!moved) {
       fromPointer = true;
-      if (typeof queueMicrotask === 'function') queueMicrotask(() => { fromPointer = false; });
       commit(view === 'founder' ? 'researcher' : 'founder', true);
     } else {
       fromPointer = false;
