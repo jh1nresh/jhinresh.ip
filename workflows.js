@@ -37,9 +37,19 @@
     if(lastDraw===null||now-lastDraw>=32){draw(active);lastDraw=now;}
     frame=requestAnimationFrame(tick);
   }
+  function publishMotion(){
+    const root=document.documentElement;
+    if(!root||!root.setAttribute)return;
+    if(enabled())root.removeAttribute('data-motion-paused');
+    else root.setAttribute('data-motion-paused','');
+    if(motionOptIn)root.setAttribute('data-motion-opt-in','');
+    else root.removeAttribute('data-motion-opt-in');
+  }
   function sync(){
     stop();active=entries.find(entry=>!entry.chapter.hidden)||null;
-    if(toggle){toggle.hidden=!active;toggle.textContent=enabled()?'Pause illustrations':'Play illustrations';}
+    publishMotion();
+    // The sky keeps moving on chapters without a diagram, so the same control stays available.
+    if(toggle){toggle.hidden=!active&&!document.querySelector('.world');toggle.textContent=enabled()?'Pause illustrations':'Play illustrations';}
     if(!active)return;
     if(!enabled()){
       // Reduced motion receives a complete, meaningful still; an explicit pause retains its pose.

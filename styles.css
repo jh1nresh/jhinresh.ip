@@ -232,3 +232,4 @@ h1 span,h2 span{color:#b56a32}
 @media(max-width:760px){.sun{width:84px;height:84px;left:auto;right:-26px;top:-22px}.cloud{display:none}.masthead a[href="#contact"]{padding-inline:12px}.feature-link,.chapter-link,.contact-email{font-size:12px;padding-inline:16px}}
 @media(max-width:380px){.intro-portrait{width:46px;height:60px}.proof-file::after{width:10px;height:10px;top:2px;right:2px}}
 @media(prefers-reduced-motion:reduce){.drift,.sun,.layer{animation:none!important}}
+html[data-motion-paused] .drift{animation:none!important}

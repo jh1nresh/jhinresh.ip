@@ -261,15 +261,17 @@ SOFTWARE.
 <script>
 (() => {
   const world = document.querySelector('.world');
+  if (!world) return;
+  const root = document.documentElement;
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  if (!world || !fine.matches) return;
   let frame = 0;
   let px = 0;
   let py = 0;
+  const allowed = () => !root.hasAttribute('data-motion-paused') && (!motion.matches || root.hasAttribute('data-motion-opt-in'));
   const apply = () => {
     frame = 0;
-    if (motion.matches) {
+    if (!allowed()) {
       world.style.removeProperty('--px');
       world.style.removeProperty('--py');
       return;
@@ -277,12 +279,16 @@ SOFTWARE.
     world.style.setProperty('--px', px.toFixed(3));
     world.style.setProperty('--py', py.toFixed(3));
   };
-  addEventListener('pointermove', (event) => {
-    px = event.clientX / innerWidth - 0.5;
-    py = event.clientY / innerHeight - 0.5;
-    if (!frame) frame = requestAnimationFrame(apply);
-  }, { passive: true });
+  if (fine.matches) {
+    addEventListener('pointermove', (event) => {
+      if (!allowed()) return;
+      px = event.clientX / innerWidth - 0.5;
+      py = event.clientY / innerHeight - 0.5;
+      if (!frame) frame = requestAnimationFrame(apply);
+    }, { passive: true });
+  }
   motion.addEventListener('change', apply);
+  new MutationObserver(apply).observe(root, { attributes: true, attributeFilter: ['data-motion-paused', 'data-motion-opt-in'] });
 })();
 </script>
 </body>
