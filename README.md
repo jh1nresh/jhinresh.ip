@@ -9,7 +9,8 @@ project content is static HTML; no accounts, forms, analytics, or payment
 actions exist.
 
 The field-book scripts are still in the repo and still have their tests. They
-are not loaded by the page.
+are not loaded by the page. The rest of this section describes those scripts,
+not the live page.
 
 Chapters: Hello → Savvy → OUTPUT → EZNest → Agents → Awards & blog/contact.
 Savvy’s TestFlight status, OUTPUT’s devnet/no-production limits and EZNest’s
