@@ -51,6 +51,8 @@ jobs:
 
       - name: Check navigation and cabinet lifecycle
         run: |
+          npm install --prefix /tmp/pw playwright-core
+          export NODE_PATH=/tmp/pw/node_modules
           node scripts/test-site.mjs
           node scripts/test-runtime.mjs
           node scripts/test-fit-reader.mjs

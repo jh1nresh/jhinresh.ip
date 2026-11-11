@@ -2,6 +2,7 @@
 // photograph is still unloaded. The crossfade may wait; aria-checked may not.
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { setTimeout as delay } from 'node:timers/promises';
 import { createReadStream, existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { createServer } from 'node:http';
@@ -36,6 +37,7 @@ assert.ok(chromeBin, 'a Chrome or Chromium binary is required for the real click
 const debugPort = 9222 + (port % 1000);
 const profile = mkdtempSync(join(tmpdir(), 'switch-click-'));
 let chrome;
+let playwrightBrowser;
 
 function cdpFactory(ws) {
   let next = 1;
@@ -193,8 +195,50 @@ assert.equal(mobileNight.text, 'Night', 'clicking Contact puts a phone in night'
 await clickLink('#home');
 const mobileDay = await readHour();
 assert.equal(mobileDay.text, 'Day', 'clicking About puts a phone in day');
-console.log(JSON.stringify({ passed: 1, checks: ['About is day, Contact is night, and the middle of the nav is a blend'] }, null, 2));
+
+const { chromium } = createRequire(import.meta.url)('playwright-core');
+const chromePath = spawnSync('which', [chromeBin], { encoding: 'utf8' }).stdout.trim();
+assert.ok(chromePath, 'Chrome must resolve to a path Playwright can launch');
+playwrightBrowser = await chromium.launch({
+  executablePath: chromePath,
+  headless: true,
+  args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'],
+});
+const page = await playwrightBrowser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto(`http://127.0.0.1:${port}/?mouse=1`, { waitUntil: 'domcontentloaded' });
+await page.waitForSelector('#view-switch');
+async function center(selector) {
+  const box = await page.locator(selector).boundingBox();
+  assert.ok(box && box.width > 0, `${selector} is not visible`);
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+}
+const awards = await center('#index a[href="#research"]');
+await page.mouse.click(awards.x, awards.y);
+await page.waitForFunction(() => location.hash === '#research' && window.scrollY > 0 && document.activeElement && document.activeElement.id === 'awards-title');
+const trackBox = await page.locator('.nav-track').boundingBox();
+assert.ok(trackBox, 'the nav track is visible');
+const dragY = trackBox.y + trackBox.height / 2;
+async function dragOutside() {
+  await page.mouse.move(trackBox.x + 8, dragY);
+  await page.mouse.down();
+  await page.mouse.move(trackBox.x + trackBox.width * 0.62, dragY, { steps: 12 });
+  await page.mouse.move(10, trackBox.y + trackBox.height + 240, { steps: 8 });
+  await page.mouse.up();
+}
+await dragOutside();
+const contact = await center('#index a[href="#contact"]');
+await page.mouse.click(contact.x, contact.y);
+await page.waitForFunction(() => location.hash === '#contact' && window.scrollY > 0 && document.activeElement && document.activeElement.id === 'contact-title');
+await dragOutside();
+await page.waitForTimeout(700);
+await page.evaluate(() => document.querySelector('#index a[href="#blog"]').click());
+const blog = await page.evaluate(() => ({ hash: location.hash, y: window.scrollY, id: document.activeElement && document.activeElement.id }));
+assert.equal(blog.hash, '#blog', 'a programmatic click after an outside drag still changes the hash');
+assert.equal(blog.id, 'blog-title', 'a programmatic click after an outside drag still focuses the heading');
+assert.ok(blog.y > 0, `blog scrollY was ${blog.y}`);
+console.log(JSON.stringify({ passed: 1, checks: ['About is day, Contact is night, and a real mouse click on Awards scrolls, focuses, and still navigates after an outside drag'] }, null, 2));
 } finally {
+  await playwrightBrowser?.close().catch(() => {});
   if (chrome?.pid) {
     try { process.kill(-chrome.pid, 'SIGKILL'); } catch { chrome.kill('SIGKILL'); }
   }

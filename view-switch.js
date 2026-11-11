@@ -62,6 +62,9 @@
   let drag = null;
   let hovering = false;
   let suppressClick = false;
+  let suppressStamp = 0;
+  const dragSlop = 4;
+  const suppressMs = 500;
   let holdScroll = 0;
   let startY = globalThis.scrollY || 0;
   let persistTimer = 0;
@@ -130,6 +133,17 @@
     }
   }
 
+  function clearSuppressClick() {
+    suppressClick = false;
+    suppressStamp += 1;
+  }
+  function armSuppressClick() {
+    suppressClick = true;
+    const stamp = ++suppressStamp;
+    setTimeout(() => {
+      if (stamp === suppressStamp) suppressClick = false;
+    }, suppressMs);
+  }
   function overflows() {
     return (nav.scrollWidth || 0) > (nav.clientWidth || 0) + 1;
   }
@@ -187,6 +201,7 @@
   });
 
   track.addEventListener('pointerdown', (event) => {
+    clearSuppressClick();
     if (drag) return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     loadLater();
@@ -200,11 +215,13 @@
       link: links.includes(link) ? link : null,
     };
     hovering = false;
-    if (!drag.touchScroll) track.setPointerCapture?.(event.pointerId);
   });
   track.addEventListener('pointermove', (event) => {
     if (drag && event.pointerId === drag.id) {
-      if (Math.abs(event.clientX - drag.startX) > 4) drag.moved = true;
+      if (!drag.moved && Math.abs(event.clientX - drag.startX) > dragSlop) {
+        drag.moved = true;
+        if (!drag.touchScroll) track.setPointerCapture?.(event.pointerId);
+      }
       if (drag.touchScroll) return;
       if (drag.moved) paint(hourFromX(event.clientX), false);
       return;
@@ -228,7 +245,7 @@
       return;
     }
     if (moved) {
-      suppressClick = true;
+      armSuppressClick();
       commit(at, true);
       return;
     }
@@ -246,7 +263,7 @@
     const touch = drag.pointerType === 'touch';
     drag = null;
     if (moved && !touch) {
-      suppressClick = true;
+      armSuppressClick();
       commit(hour, true);
       return;
     }
@@ -261,7 +278,7 @@
     if (!suppressClick) return;
     const target = event.target;
     if (target && track.contains?.(target)) return;
-    suppressClick = false;
+    clearSuppressClick();
   });
   function headingFor(id) {
     const target = id && document.getElementById(id);
@@ -290,7 +307,7 @@
     const target = event.target;
     const link = target && target.closest ? target.closest('a') : null;
     if (suppressClick) {
-      suppressClick = false;
+      clearSuppressClick();
       if (link) event.preventDefault();
       return;
     }
