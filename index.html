@@ -39,7 +39,6 @@
 <a class="skip-link" href="#work">Skip to the work</a>
 <header class="bar">
   <a class="brand" href="#home">JhiNResH</a>
-  <button class="menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="index">Menu</button>
   <nav id="index" aria-label="Sections">
     <a href="#home">About</a>
     <a href="#news">News</a>
@@ -48,6 +47,12 @@
     <a href="#blog">Writing</a>
     <a href="#contact">Contact</a>
   </nav>
+  <div class="mode" id="view-switch" role="switch" tabindex="0" aria-checked="false" aria-label="Researcher or Founder view" aria-describedby="view-switch-state">
+    <span id="view-switch-state" class="sr-only">Off is the Researcher view. On is the Founder view.</span>
+    <span class="mode-label label-researcher">Researcher</span>
+    <span class="mode-label label-founder">Founder</span>
+  </div>
+  <button class="menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="index">Menu</button>
 </header>
 <main id="top">
   <section class="hero intro" id="home" aria-labelledby="hero-title">
@@ -60,16 +65,12 @@
       <p class="kicker">Selected work / 2026</p>
       <h1 id="hero-title">Jerry Chen</h1>
       <p class="role">JhiNResH · founder &amp; engineer</p>
-      <div class="mode" id="view-switch" role="switch" tabindex="0" aria-checked="false" aria-label="Researcher or Founder view" aria-describedby="view-switch-state">
-        <span id="view-switch-state" class="sr-only">Off is the Researcher view. On is the Founder view.</span>
-        <span class="mode-thumb" aria-hidden="true"><span class="mode-sheen"></span></span>
-        <span class="mode-label label-researcher">Researcher</span>
-        <span class="mode-label label-founder">Founder</span>
-      </div>
     </div>
     <div class="intro-rest">
-      <p class="focus when-founder">I build the interface and the code behind it. Currently: Savvy, OUTPUT, EZNest, and agent systems.</p>
-      <p class="focus when-researcher">The same work, read as research: how a saved place becomes a Map Stamp, how a job moves between two shops, how parts fit a material, and how an agent action stays a quote, an approval, and a receipt.</p>
+      <div class="pair">
+        <p class="focus when-founder" aria-hidden="true">I build the interface and the code behind it. Currently: Savvy, OUTPUT, EZNest, and agent systems.</p>
+        <p class="focus when-researcher">The same work, read as research: how a saved place becomes a Map Stamp, how a job moves between two shops, how parts fit a material, and how an agent action stays a quote, an approval, and a receipt.</p>
+      </div>
       <p class="links">
         <a href="mailto:jhinresh@gmail.com">jhinresh@gmail.com</a>
         <a href="https://github.com/jh1nresh" target="_blank" rel="noreferrer">GitHub</a>
@@ -101,14 +102,16 @@
   </section>
 
   <section class="section" id="work" aria-labelledby="work-title">
-    <h2 id="work-title"><span class="when-founder">Selected work</span><span class="when-researcher">Research</span></h2>
-    <p class="lede when-founder">Current products, with the limits kept visible.</p>
-    <p class="lede when-researcher">Problem, approach, and what is actually true so far.</p>
+    <h2 id="work-title"><span class="swap"><span class="when-founder" aria-hidden="true">Selected work</span><span class="when-researcher">Research</span></span></h2>
+    <div class="pair">
+      <p class="lede when-founder" aria-hidden="true">Current products, with the limits kept visible.</p>
+      <p class="lede when-researcher">Problem, approach, and what is actually true so far.</p>
+    </div>
 
     <article id="project-savvy" aria-labelledby="title-savvy">
-      <p class="kicker"><span class="when-founder">Product</span><span class="when-researcher">Note</span> · Savvy · personal place memory</p>
+      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · Savvy · personal place memory</p>
       <h3 id="title-savvy">The places worth keeping.</h3>
-      <div class="founder-frame">
+      <div class="founder-frame" aria-hidden="true">
         <p>Food posts and travel links are easy to save and hard to find again.</p>
         <p>I’m designing Savvy around three steps: save the source, review the place match, and keep the confirmed place as a Map Stamp.</p>
         <p>iOS beta on TestFlight. The public food map and the iOS app are separate surfaces.</p>
@@ -137,9 +140,9 @@
     </article>
 
     <article id="project-output" aria-labelledby="title-output">
-      <p class="kicker"><span class="when-founder">Product</span><span class="when-researcher">Note</span> · OUTPUT · print-shop collaboration</p>
+      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · OUTPUT · print-shop collaboration</p>
       <h3 id="title-output">A job needs another shop.</h3>
-      <div class="founder-frame">
+      <div class="founder-frame" aria-hidden="true">
         <p>One shop can have more work than it can make. Another can have room on its machines. OUTPUT is my prototype for connecting the two.</p>
         <p>I’m prototyping the hand-off around job terms, a production partner, evidence, and explicit approval before payment release.</p>
         <p>Devnet sandbox. The website does not offer production printing or production escrow.</p>
@@ -160,9 +163,9 @@
     </article>
 
     <article id="project-eznest" aria-labelledby="title-eznest">
-      <p class="kicker"><span class="when-founder">Product</span><span class="when-researcher">Note</span> · EZNest · artwork nesting</p>
+      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · EZNest · artwork nesting</p>
       <h3 id="title-eznest">Make room for the parts.</h3>
-      <div class="founder-frame">
+      <div class="founder-frame" aria-hidden="true">
         <p>Before a design reaches a cutting machine, the artwork has to fit the material.</p>
         <p>I’m exploring how to arrange parts, add cut lines, and hand a file to a Hot folder.</p>
         <p>Workflow preview. Synthetic shapes, not a measurement. Final settings and RIP compatibility are still being confirmed.</p>
@@ -183,9 +186,9 @@
     </article>
 
     <article id="project-maiat" aria-labelledby="title-maiat">
-      <p class="kicker"><span class="when-founder">Product</span><span class="when-researcher">Note</span> · Maiat + Dojo · agent trust</p>
+      <p class="kicker"><span class="swap"><span class="when-founder" aria-hidden="true">Product</span><span class="when-researcher">Note</span></span> · Maiat + Dojo · agent trust</p>
       <h3 id="title-maiat">Before an agent takes action.</h3>
-      <div class="founder-frame">
+      <div class="founder-frame" aria-hidden="true">
         <p>An agent can propose an action. The quote, consent, and final result still need to be clear.</p>
         <p>In Maiat and Dojo, I’m connecting agent reputation with explicit approval and receipts people can inspect.</p>
         <p>Public protocol and application artifacts. Individual deployments have their own scope.</p>

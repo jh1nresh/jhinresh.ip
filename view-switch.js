@@ -37,11 +37,21 @@
     }
   }
 
+  function markCopy() {
+    document.querySelectorAll?.('.when-founder, .founder-frame').forEach((node) => {
+      node.setAttribute?.('aria-hidden', view === 'founder' ? 'false' : 'true');
+    });
+    document.querySelectorAll?.('.when-researcher, .researcher-frame').forEach((node) => {
+      node.setAttribute?.('aria-hidden', view === 'researcher' ? 'false' : 'true');
+    });
+  }
+
   function commit(next, settle, animateSnap) {
     const changed = view !== next;
     view = next;
     root.dataset.view = next;
     sw.setAttribute('aria-checked', next === 'founder' ? 'true' : 'false');
+    markCopy();
     paint(next === 'founder' ? 1 : 0, settle && (changed || animateSnap));
   }
 

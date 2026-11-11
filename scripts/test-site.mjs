@@ -32,6 +32,15 @@ assert.match(css, /span\.when-researcher \{ display: inline; \}/);
 assert.match(css, /\.skip-link \{[\s\S]*?z-index:\s*6/);
 assert.match(css, /prefers-reduced-motion/);
 assert.match(css, /animation:\s*none/);
+assert.match(css, /1\.4s cubic-bezier\(\.22, \.7, \.2, 1\)/);
+const bar = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
+const nav = bar.slice(bar.indexOf('<nav'), bar.indexOf('</nav>'));
+assert.match(bar, /id="view-switch"/);
+assert.equal(nav.includes('view-switch'), false);
+assert.ok(bar.indexOf('id="view-switch"') < bar.indexOf('id="menu-toggle"'));
+const hero = html.slice(html.indexOf('id="home"'), html.indexOf('id="news"'));
+assert.equal(hero.includes('view-switch'), false);
+assert.equal(html.includes('mode-thumb'), false);
 checks.push('the switch is keyboard accessible and reduced motion drops the sweep');
 
 for (const fact of [

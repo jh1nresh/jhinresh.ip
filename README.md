@@ -2,8 +2,8 @@
 
 The live page is a single academic column: portrait, a short focus, news,
 selected work, awards, a blank blog, and contact. Two photographs of the same
-desk, night and morning, are the page background. A compact Researcher /
-Founder pill cross-fades them and swaps the framing of the same facts. There is no
+desk, night and morning, are the page background. A Researcher /
+Founder control in the top navigation cross-fades them and swaps the framing of the same facts. There is no
 Scholar profile or CV on the site, so neither is linked. All personal and
 project content is static HTML; no accounts, forms, analytics, or payment
 actions exist.

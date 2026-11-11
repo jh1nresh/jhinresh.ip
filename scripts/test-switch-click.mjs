@@ -37,9 +37,10 @@ const debugPort = 9222 + (port % 1000);
 const profile = mkdtempSync(join(tmpdir(), 'switch-click-'));
 const chrome = spawn(chromeBin, [
   '--headless=new', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage',
+  '--disable-breakpad', '--no-first-run',
   `--user-data-dir=${profile}`,
   `--remote-debugging-port=${debugPort}`, 'about:blank',
-], { stdio: 'ignore' });
+], { stdio: 'ignore', detached: true });
 
 function cdpFactory(ws) {
   let next = 1;
@@ -136,7 +137,14 @@ const mobileAfter = await cdp('Runtime.evaluate', {
 assert.equal(mobileAfter.result.value, 'true', 'a pointer click flips the switch on a phone before the day image loads');
 console.log(JSON.stringify({ passed: 1, checks: ['a real pointer click toggles while the day image is still unloaded'] }, null, 2));
 } finally {
-  chrome.kill('SIGKILL');
+  try { process.kill(-chrome.pid, 'SIGKILL'); } catch { chrome.kill('SIGKILL'); }
   server.close();
-  rmSync(profile, { recursive: true, force: true });
+  await Promise.race([
+    new Promise((resolve) => {
+      if (chrome.exitCode !== null || chrome.signalCode) resolve();
+      else chrome.once('exit', resolve);
+    }),
+    delay(1000),
+  ]);
+  rmSync(profile, { recursive: true, force: true, maxRetries: 20, retryDelay: 100 });
 }
