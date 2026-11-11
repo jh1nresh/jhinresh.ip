@@ -33,24 +33,7 @@ jobs:
         run: python3 scripts/validate.py
 
       - name: Check JavaScript syntax
-        run: |
-          node --check script.js
-          node --check fit-reader.js
-          node --check page-curl.js
-          node --check cabinet.js
-          node --check workflows.js
-          node --check assets/figures/project-scenes.js
+        run: node --check script.js
 
-      - name: Check figure build
-        run: |
-          node scripts/build-cabinet.mjs
-          node scripts/build-savvy.mjs
-          node scripts/build-project-scenes.mjs
-          git diff --exit-code -- index.html assets/figures/
-
-      - name: Check navigation and cabinet lifecycle
-        run: |
-          node scripts/test-runtime.mjs
-          node scripts/test-fit-reader.mjs
-          node scripts/test-page-curl.mjs
-          node scripts/test-workflows.mjs
+      - name: Check the scrolling site
+        run: node scripts/test-site.mjs

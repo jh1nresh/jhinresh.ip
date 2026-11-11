@@ -14,6 +14,8 @@ to Vercel, GitHub Pages, Netlify, or any static host.
   they can affect the requested edit; do not require all four for a text fix.
 - Preserve the current one-page narrative: founder-engineer, verifiable agents,
   crypto rails, receipts, reputation, and proof-driven shipping.
+- The site is one scrolling page. Do not reintroduce a book, page curl, folios,
+  or chapter pager.
 - Do not expose private phone numbers or sensitive personal data unless the user
   explicitly asks for that exact change.
 
