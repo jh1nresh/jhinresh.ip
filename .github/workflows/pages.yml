@@ -40,6 +40,7 @@ jobs:
           node scripts/test-page-curl.mjs
           node scripts/test-workflows.mjs
           node scripts/test-switch-click.mjs
+          node scripts/test-contrast.mjs
 
       - name: Prepare site artifact
         run: |

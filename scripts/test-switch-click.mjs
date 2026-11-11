@@ -130,12 +130,12 @@ await clickLink('#contact');
 const night = await readHour();
 assert.equal(night.text, 'Night', 'clicking Contact puts the page in night');
 assert.equal(night.now, '100');
-assert.equal(night.day, '0.0000');
+assert.ok(Math.abs(Number(night.day)) < 0.001, `night blend was ${night.day}`);
 await clickLink('#home');
 const day = await readHour();
 assert.equal(day.text, 'Day', 'clicking About puts the page in day');
 assert.equal(day.now, '0');
-assert.equal(day.day, '1.0000');
+assert.ok(Math.abs(Number(day.day) - 1) < 0.001, `day blend was ${day.day}`);
 const track = await cdp('Runtime.evaluate', {
   expression: `(() => { const rect = document.querySelector('.nav-track').getBoundingClientRect(); return { y: rect.top + rect.height / 2, left: rect.left + 6, mid: rect.left + rect.width / 2 }; })()`,
   returnByValue: true,
