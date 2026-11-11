@@ -24,6 +24,7 @@ assert.match(js, /ArrowLeft/);
 assert.match(js, /event\.key === ' '/);
 assert.match(js, /prefers-reduced-motion/);
 assert.match(css, /span\.when-researcher \{ display: inline; \}/);
+assert.match(css, /\.skip-link \{[\s\S]*?z-index:\s*6/);
 assert.match(css, /prefers-reduced-motion/);
 assert.match(css, /animation:\s*none/);
 checks.push('the switch is keyboard accessible and reduced motion drops the sweep');
