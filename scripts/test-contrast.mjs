@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { inflateSync } from 'node:zlib';
 import { setTimeout as delay } from 'node:timers/promises';
-import { createReadStream, existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { createReadStream, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { extname, join, normalize } from 'node:path';
@@ -136,14 +136,22 @@ function median(values) {
 }
 
 try {
+  const chromeErrors = [];
   chrome = spawn(chromeBin, [
     '--headless=new', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage',
-    '--disable-breakpad', '--no-first-run', `--user-data-dir=${profile}`,
-    `--remote-debugging-port=${debugPort}`, 'about:blank',
-  ], { stdio: 'ignore', detached: true });
-  for (let attempt = 0; attempt < 40 && !cdp; attempt += 1) {
+    '--disable-breakpad', '--no-first-run', '--no-default-browser-check',
+    `--user-data-dir=${profile}`, `--remote-debugging-port=${debugPort}`, 'about:blank',
+  ], { stdio: ['ignore', 'ignore', 'pipe'], detached: true });
+  chrome.stderr?.on('data', (chunk) => chromeErrors.push(String(chunk)));
+  const readyBy = Date.now() + 20000;
+  while (Date.now() < readyBy && !cdp && chrome.exitCode === null) {
+    let browserPort = debugPort;
     try {
-      const version = await (await fetch(`http://127.0.0.1:${debugPort}/json/version`)).json();
+      const opened = Number(readFileSync(join(profile, 'DevToolsActivePort'), 'utf8').split('\n')[0]);
+      if (opened) browserPort = opened;
+    } catch { /* Chrome has not written its port yet */ }
+    try {
+      const version = await (await fetch(`http://127.0.0.1:${browserPort}/json/version`)).json();
       const ws = new WebSocket(version.webSocketDebuggerUrl);
       await new Promise((resolve, reject) => {
         ws.addEventListener('open', resolve);
@@ -151,10 +159,10 @@ try {
       });
       cdp = cdpFactory(ws);
     } catch {
-      await delay(150);
+      await delay(200);
     }
   }
-  assert.ok(cdp, 'Chrome did not open a debugging port');
+  assert.ok(cdp, `Chrome did not open a debugging port${chromeErrors.length ? `: ${chromeErrors.join('').slice(-500)}` : ''}`);
   const { targetId } = await cdp('Target.createTarget', { url: 'about:blank' });
   const { sessionId } = await cdp('Target.attachToTarget', { targetId, flatten: true });
   await cdp('Page.enable', {}, sessionId);
