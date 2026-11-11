@@ -21,7 +21,7 @@ assert.match(html, /aria-controls="index"/);
 assert.match(html, /class="world"/);
 assert.ok(html.includes('./assets/bg/bg-night.webp'));
 assert.ok(html.includes('data-src="./assets/bg/bg-day.webp"'));
-assert.match(css, /scale\(calc\(1 \+ var\(--t\) \* 0\.04\)\)/);
+assert.match(css, /scale\(calc\(1 \+ var\(--t\) \* 0\.04 \+ var\(--scroll\) \* 0\.025\)\)/);
 assert.match(css, /\.bg-stack \{ transform: none; \}/);
 assert.match(js, /ArrowRight/);
 assert.match(js, /ArrowLeft/);

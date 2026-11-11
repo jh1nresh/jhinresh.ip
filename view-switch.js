@@ -137,7 +137,17 @@
     });
   }
 
-  addEventListener('resize', () => commit(view, false));
+  const bar = document.querySelector('.bar');
+  function trackScroll() {
+    const y = globalThis.scrollY || 0;
+    const span = (hero && hero.offsetHeight) || globalThis.innerHeight || 1;
+    const progress = Math.min(1, Math.max(0, y / Math.max(1, span)));
+    root.style.setProperty('--scroll', progress.toFixed(4));
+    bar?.classList.toggle('is-scrolled', y > 24);
+  }
+  addEventListener('scroll', trackScroll, { passive: true });
+  addEventListener('resize', () => { commit(view, false); trackScroll(); });
   motion.addEventListener?.('change', () => commit(view, false));
   commit(view, false);
+  trackScroll();
 })();

@@ -24,8 +24,8 @@
   <title>Jerry Chen — Founder &amp; Engineer</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23fbfbf9'/%3E%3Ctext x='18' y='46' font-size='40' font-family='Georgia,serif' fill='%231c1c1c'%3Ej%3C/text%3E%3C/svg%3E" />
   <link rel="preload" as="image" href="./assets/bg/bg-night.webp" fetchpriority="high" />
-  <link rel="stylesheet" href="./styles.css?v=20261111-photo" />
-  <script src="./view-switch.js?v=20261111-photo" defer></script>
+  <link rel="stylesheet" href="./styles.css?v=20261111-stage" />
+  <script src="./view-switch.js?v=20261111-stage" defer></script>
 </head>
 <body>
 <div class="world" aria-hidden="true">
@@ -33,8 +33,8 @@
     <img class="bg bg-night" src="./assets/bg/bg-night.webp" alt="City desk at night" width="1280" height="720" fetchpriority="high" decoding="async" />
     <img class="bg bg-day" alt="City desk in daylight" width="1280" height="720" decoding="async" data-src="./assets/bg/bg-day.webp" />
   </div>
-  <div class="scrim scrim-night"></div>
-  <div class="scrim scrim-day"></div>
+  <div class="tone tone-night"></div>
+  <div class="tone tone-day"></div>
 </div>
 <a class="skip-link" href="#work">Skip to the work</a>
 <header class="bar">
@@ -50,8 +50,12 @@
   </nav>
 </header>
 <main id="top">
-  <section class="intro" id="home" aria-labelledby="hero-title">
-    <img class="portrait" src="./assets/portrait/jerry-chen.jpg" width="1280" height="1280" alt="Jerry Chen" />
+  <section class="hero intro" id="home" aria-labelledby="hero-title">
+    <div class="hero-wash" aria-hidden="true"><span class="wash-night"></span><span class="wash-day"></span></div>
+    <div class="hero-stage">
+    <figure class="portrait-frame">
+      <img class="portrait" src="./assets/portrait/jerry-chen.jpg" width="1280" height="1280" alt="Jerry Chen" />
+    </figure>
     <div class="intro-copy">
       <p class="kicker">Selected work / 2026</p>
       <h1 id="hero-title">Jerry Chen</h1>
@@ -72,8 +76,10 @@
       </p>
       <p class="selected">Selected recognition: Top 3, Base Batches 003 Student Track, 2026 · Maiat. 1st, Jito Grid Hackathon, 2025 · Sponge. <a href="#research">All 12 ↗</a></p>
     </div>
+    </div>
   </section>
 
+  <div class="sheet">
   <section class="section" id="news" aria-labelledby="news-title">
     <h2 id="news-title">News</h2>
     <p class="lede">Dated notes from the work already on this site.</p>
@@ -255,6 +261,7 @@
       <a href="#home">Back to the start ↶</a>
     </p>
   </section>
+  </div>
 </main>
 <footer>
   <span>© 2026 Jerry Chen</span>
