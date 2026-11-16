@@ -35,22 +35,19 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check script.js
-          node --check fit-reader.js
-          node --check page-curl.js
-          node --check cabinet.js
-          node --check workflows.js
-          node --check assets/figures/project-scenes.js
+          node --check assets/earth.js
+          node --check assets/wish.js
+          node --check assets/bookshelf/bookshelf.js
 
-      - name: Check figure build
+      - name: Verify bookshelf build
+        working-directory: site-components
         run: |
-          node scripts/build-cabinet.mjs
-          node scripts/build-savvy.mjs
-          node scripts/build-project-scenes.mjs
-          git diff --exit-code -- index.html assets/figures/
+          npm ci --ignore-scripts
+          npm run typecheck
+          npm run build
+          git diff --exit-code -- ../assets/bookshelf/
 
-      - name: Check navigation and cabinet lifecycle
+      - name: Verify deployable artifact
         run: |
-          node scripts/test-runtime.mjs
-          node scripts/test-fit-reader.mjs
-          node scripts/test-page-curl.mjs
-          node scripts/test-workflows.mjs
+          python3 scripts/build-site.py
+          python3 scripts/validate.py _site

@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 import sys
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(__file__).resolve().parents[1]
 
 
 class PortfolioParser(HTMLParser):
@@ -25,10 +25,11 @@ class PortfolioParser(HTMLParser):
         values = dict(attrs)
         if element_id := values.get("id"):
             self.ids.append(element_id)
-        if controls := values.get("aria-controls"):
-            self.control_targets.extend(controls.split())
+        for relation in ("aria-controls", "aria-labelledby", "aria-describedby"):
+            if targets := values.get(relation):
+                self.control_targets.extend(targets.split())
         if tag == "img":
-            if not values.get("alt"):
+            if "alt" not in values:
                 self.images_without_alt += 1
             if src := values.get("src"):
                 self._record_asset(src)
@@ -37,7 +38,7 @@ class PortfolioParser(HTMLParser):
         if tag == "script" and (src := values.get("src")):
             self._record_asset(src)
         if tag == "a" and (href := values.get("href")):
-            if href.startswith("#"):
+            if href.startswith("#") and len(href) > 1:
                 self.fragment_targets.append(href[1:])
             if href.startswith(("http://", "https://")):
                 self.external_links.append((href, values.get("rel")))
@@ -77,7 +78,7 @@ def main() -> int:
     if unsafe_external:
         errors.append("external links missing rel=noreferrer: " + ", ".join(unsafe_external))
 
-    required_sections = {"top", "work", "index", "research", "contact"}
+    required_sections = {"top", "about", "work", "writing", "contact"}
     missing_sections = required_sections.difference(parser.ids)
     if missing_sections:
         errors.append("missing sections: " + ", ".join(sorted(missing_sections)))

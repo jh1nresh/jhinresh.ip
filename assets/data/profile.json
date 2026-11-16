@@ -1,0 +1,51 @@
+{
+  "source": "https://github.com/jh1nresh/jh1nresh/blob/bd191d339a45546d9f29f236dab552eea03f554f/README.md",
+  "blob": "aaeea1501e6849f559a22e264cc0c896923cfd96",
+  "fetchedAt": "2026-11-16",
+  "name": "Jerry Chen",
+  "location": "Irvine, California",
+  "origin": "Taiwan",
+  "focus": "Building verifiable agent products across consumer AI, commerce, and onchain settlement.",
+  "groups": [
+    {
+      "label": "Native iOS",
+      "items": [
+        "Swift",
+        "SwiftUI",
+        "MapKit",
+        "App Intents",
+        "App Clip"
+      ]
+    },
+    {
+      "label": "Web & APIs",
+      "items": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Node.js",
+        "PostgreSQL",
+        "Python"
+      ]
+    },
+    {
+      "label": "Onchain",
+      "items": [
+        "Solidity",
+        "Foundry",
+        "EAS",
+        "Base",
+        "Rust",
+        "Anchor",
+        "Solana"
+      ]
+    },
+    {
+      "label": "Engineering",
+      "items": [
+        "GitHub Actions",
+        "Git"
+      ]
+    }
+  ]
+}
