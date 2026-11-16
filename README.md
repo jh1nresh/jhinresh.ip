@@ -1,86 +1,25 @@
-# JhiNResH / Jerry Chen
+# JhiNResH personal website
 
-A personal website presented as a six-chapter illustrated field book. The user’s
-Every Joule reference guides the reading experience, with Colorfigures/Anatomy
-objects, colored bookmarks, warm paper and a cloth binding. All personal/project
-content is static HTML; no accounts, forms, analytics or payment actions exist.
+English personal homepage for Jerry Chen. The accepted narrow notebook layout remains: 766px white page, dotted side margins, original sticker banner and portrait, DM Sans and Instrument Serif, compact project rows and dashed section bands.
 
-Chapters: Hello → Savvy → OUTPUT → EZNest → Agents → Awards & blog/contact.
-Savvy’s TestFlight status, OUTPUT’s devnet/no-production limits and EZNest’s
-workflow-preview/synthetic-shape limits remain visible with their illustrations.
-The withdrawn desktop-pet article and SLL-R are excluded.
+## Local preview
 
-The opening page pairs Jerry’s owned portrait and a short first-person introduction
-with two inherited recognition highlights. Maiat/Dojo includes project-specific
-recognition; the final spread gives awards and writing one page each. The left
-page openly lists all12 inherited awards, grants and cohort entries by year; the
-right page reserves a blank Blog area. Article links await the owner’s selection. Recognition links focus the full record heading.
-
-## Run locally
-
-```bash
-python3 -m http.server 4174 --bind 127.0.0.1
-```
-
-Open `http://127.0.0.1:4174/`.
-
-## Build and verify
-
-```bash
-node scripts/build-cabinet.mjs
-node scripts/build-savvy.mjs
-node scripts/build-project-scenes.mjs
+```sh
+python3 -m http.server 4186 --bind 127.0.0.1
 node --check script.js
-node --check fit-reader.js
-node --check page-curl.js
-node --check cabinet.js
-node --check workflows.js
-node scripts/test-runtime.mjs
-node scripts/test-fit-reader.mjs
-node scripts/test-page-curl.mjs
-node scripts/test-workflows.mjs
+node --check assets/earth.js
+node --check assets/wish.js
 python3 scripts/validate.py
 ```
 
-The builders update standalone SVGs, inventories and inline fallbacks. The cabinet
-has70 solids; Savvy has48; the new Maiat approval/receipt mechanism has47.
-OUTPUT/EZNest reuse the pure scene models from the canonical EZNest landing.
-Source provenance and MIT notices live in `scripts/figure-sources/README.md`,
-`LICENSES.txt` and the generated bundle. Archivo/OFL stays local.
+Stack and the short introduction are sourced from the authenticated user’s public profile README. The pinned source and extracted tool groups are in assets/data/profile.json. The greeting uses the visitor’s local hour. Three projects, accurate status limitations, TestFlight, twelve public recognition records and the original licensed inline workbench remain.
 
-## Reading and animation
+## Books and motion
 
-All six chapters share a viewport-sized book frame and twelve consecutive folios.
-Desktop shows two facing pages; mobile shows one physical page at a time, with
-matching page URLs and next/previous controls. Text that exceeds the available
-page height uses readable sections with Continue reading controls, without
-scrolling or reducing the whole book to a miniature. Resize and font/image loads
-recompute section boundaries. Extremely short screens use compact spacing; any
-unbreakable unit still taller than the remaining area retains native scrolling
-so its content stays accessible. Without the reader enhancement, native content
-remains fully readable.
-A retained sheet has the old page on its front and the incoming page on its back;
-the sheet bends across18 connected material strips, with the outer edge leading
-the spine and a soft, flat landing. Its front/back crops keep the original page
-layout and scroll gutters. The cover, page boxes and navigation keep their size.
-Rapid input queues the latest destination; completion removes the overlay before
-starting another turn. Chapter navigation does not scroll the desktop viewport.
-Contact opens the correct physical page without moving the viewport.
-History restores chapter/leaf URLs. Without scripts all chapters and
-native anchors remain readable.
+Three English books are presented through a focused bookshelf island. Buffett’s Essays uses the eighth edition; game theory uses The Art of Strategy by Dixit and Nalebuff. Cover/edition provenance is in assets/books/SOURCES.md. Spines are interface typography, not publisher scans.
 
-The four Look Inside diagrams autoplay on chapter entry and loop while visible.
-One host RAF clock renders only the active project at up to30fps. It pauses during
-paper turns, when offscreen/hidden, and on the global Pause illustrations button.
-Reduced-motion preferences default to meaningful stills and instant page changes;
-readers can explicitly opt into diagram motion. No GIF/video player is involved.
-The real Savvy/Maiat interfaces remain separately expandable. All diagrams are
-illustrative: no real search, approval, printing, signature or payment occurs.
+Build the isolated bookshelf with `npm run typecheck` and `node build-bookshelf.mjs` under site-components. Only assets/bookshelf is loaded; the former 23-demo gallery bundle, its section and demo/search routes are absent from the live page. Preserved historical files are not linked.
 
-Runtime checks exercise actual reader and motion handlers with deterministic
-DOM/frame/media-query/animation adapters. Browser verification must additionally
-inspect the turning faces, frame geometry, scrolling and autonomous SVG states.
-These checks do not establish physical-device/Safari acceptance.
+GitHub retains only the dated contribution calendar; no Insights charts, visitor analytics, Bookmarks or Certificates section. The latest footer is a green Earth with no buildings or trees. It starts automatically when visible, with only the green globe. The person, satellite and separate animation button are removed; clicking the illustration or using Enter/Space pauses/resumes the globe. Offscreen/background/reduced-motion handling remains in place. The globe retains its responsive aspect ratio on desktop and phones. Make a wish runs a short, non-looping meteor effect; it is optional and respects reduced motion. Stack includes an icon for every entry, and About/margins contain restrained decorative artwork and handwritten notes. The latest Work changes remove Maiat + Dojo, use the confirmed Savvy domain, and add hover/focus previews from actual website screenshots. Side notes are anchored to the document rather than the viewport. There are no provider calls, telemetry or external runtime font/media requests.
 
-GitHub Pages packages the actual HTML/CSS/JS, font, portrait, media and licenses.
-Current delivery is local preview plus PR; merge/deployment are separate actions.
+GitHub Pages publishes the static artifact to https://jhinresh.com after a reviewed merge to main. Run `python3 scripts/build-site.py` in a fresh checkout and `python3 scripts/validate.py _site` to verify the exact deployable file set. Only referenced runtime assets and attribution are packaged; build tooling and cancelled demos are excluded. The original dirty checkout is preserved.

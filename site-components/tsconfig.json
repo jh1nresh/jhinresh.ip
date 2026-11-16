@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@/*": [
+        "./upstream/*"
+      ]
+    }
+  },
+  "include": [
+    "bookshelf-entry.tsx",
+    "upstream/**/*",
+    "css.d.ts"
+  ]
+}

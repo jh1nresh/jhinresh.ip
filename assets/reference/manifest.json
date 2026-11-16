@@ -1,0 +1,320 @@
+{
+  "upstream": "https://github.com/AdityaKodez/adityaojha",
+  "palette": "source light theme",
+  "files": [
+    {
+      "path": "mascots/cube.svg",
+      "width": 64,
+      "height": 56,
+      "bytes": 3615
+    },
+    {
+      "path": "mascots/star.svg",
+      "width": 64,
+      "height": 56,
+      "bytes": 3344
+    },
+    {
+      "path": "mascots/cloud.svg",
+      "width": 64,
+      "height": 56,
+      "bytes": 3631
+    },
+    {
+      "path": "mascots/blob.svg",
+      "width": 64,
+      "height": 56,
+      "bytes": 3577
+    },
+    {
+      "path": "mascots/flower.svg",
+      "width": 64,
+      "height": 56,
+      "bytes": 4557
+    },
+    {
+      "path": "mascots/claude.svg",
+      "width": 64,
+      "height": 56,
+      "bytes": 4731
+    },
+    {
+      "path": "icons/home.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1093
+    },
+    {
+      "path": "icons/testimonial.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1141
+    },
+    {
+      "path": "icons/bookshelf.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1204
+    },
+    {
+      "path": "icons/reactions.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1188
+    },
+    {
+      "path": "icons/todo.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1144
+    },
+    {
+      "path": "icons/dotted-world-map.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1245
+    },
+    {
+      "path": "icons/copy-command-block.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 869
+    },
+    {
+      "path": "icons/git-hub-map.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 915
+    },
+    {
+      "path": "icons/project-explorer.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1300
+    },
+    {
+      "path": "icons/progressive-blur.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1352
+    },
+    {
+      "path": "icons/infinite-slider.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 806
+    },
+    {
+      "path": "icons/carousel.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 910
+    },
+    {
+      "path": "icons/mode-toggler.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 955
+    },
+    {
+      "path": "icons/theme-switcher.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1211
+    },
+    {
+      "path": "icons/stack-pills.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 937
+    },
+    {
+      "path": "icons/contact-channels.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1125
+    },
+    {
+      "path": "icons/progress-bars.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 786
+    },
+    {
+      "path": "icons/glyph-card.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1106
+    },
+    {
+      "path": "icons/section-rail.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 847
+    },
+    {
+      "path": "icons/command-palette.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1170
+    },
+    {
+      "path": "icons/model-picker.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1250
+    },
+    {
+      "path": "icons/workflow-status.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 929
+    },
+    {
+      "path": "icons/snake.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1104
+    },
+    {
+      "path": "icons/prompt-bar.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1095
+    },
+    {
+      "path": "icons/sparkles.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 831
+    },
+    {
+      "path": "icons/rolodex.svg",
+      "width": 64,
+      "height": 64,
+      "bytes": 1189
+    },
+    {
+      "path": "icons/folder-closed.svg",
+      "width": 48,
+      "height": 40,
+      "bytes": 1079
+    },
+    {
+      "path": "icons/folder-open.svg",
+      "width": 48,
+      "height": 40,
+      "bytes": 1168
+    },
+    {
+      "path": "inline/browser.svg",
+      "width": 56,
+      "height": 40,
+      "bytes": 1627
+    },
+    {
+      "path": "inline/notebook.svg",
+      "width": 56,
+      "height": 40,
+      "bytes": 1777
+    },
+    {
+      "path": "inline/plane.svg",
+      "width": 56,
+      "height": 40,
+      "bytes": 1065
+    },
+    {
+      "path": "footer/earth-land.json",
+      "bytes": 76510,
+      "copiedFrom": "components/landing/footer-earth-land.json"
+    },
+    {
+      "path": "footer/original-footer-earth.tsx",
+      "bytes": 9578,
+      "copiedFrom": "components/landing/footer-earth.tsx"
+    },
+    {
+      "path": "footer/satellite.svg",
+      "width": 64,
+      "height": 48,
+      "bytes": 1065
+    },
+    {
+      "path": "footer/earth-static.svg",
+      "width": 360,
+      "height": 100,
+      "bytes": 219992
+    },
+    {
+      "path": "stickers/coffee.webp",
+      "bytes": 104050,
+      "copiedFrom": "public/images/profile-stickers/coffee.webp"
+    },
+    {
+      "path": "stickers/keyboard.webp",
+      "bytes": 141644,
+      "copiedFrom": "public/images/profile-stickers/keyboard.webp"
+    },
+    {
+      "path": "stickers/notebook.webp",
+      "bytes": 82856,
+      "copiedFrom": "public/images/profile-stickers/notebook.webp"
+    },
+    {
+      "path": "stickers/plane.webp",
+      "bytes": 72710,
+      "copiedFrom": "public/images/profile-stickers/plane.webp"
+    },
+    {
+      "path": "stickers/original-profile-mascot.webp",
+      "bytes": 72890,
+      "copiedFrom": "public/images/profile-mascot-sticker.webp"
+    },
+    {
+      "path": "sounds/coffee-cup.mp3",
+      "bytes": 10028,
+      "copiedFrom": "public/coffee-cup.mp3"
+    },
+    {
+      "path": "sounds/keyboard-click.mp3",
+      "bytes": 17708,
+      "copiedFrom": "public/keyboard-click.mp3"
+    },
+    {
+      "path": "sounds/notebook-page-turn.mp3",
+      "bytes": 10028,
+      "copiedFrom": "public/notebook-page-turn.mp3"
+    },
+    {
+      "path": "sounds/plane-whoosh.mp3",
+      "bytes": 22316,
+      "copiedFrom": "public/plane-whoosh.mp3"
+    },
+    {
+      "path": "sounds/profile-pop.mp3",
+      "bytes": 5804,
+      "copiedFrom": "public/profile-pop.mp3"
+    },
+    {
+      "path": "books/steve-jobs.svg",
+      "bytes": 1024572,
+      "copiedFrom": "public/images/books/steve-jobs.svg"
+    },
+    {
+      "path": "books/steve-jobs-spine.svg",
+      "bytes": 17317,
+      "copiedFrom": "public/images/books/steve-jobs-spine.svg"
+    },
+    {
+      "path": "LICENSE.adityaojha.txt",
+      "bytes": 1068,
+      "copiedFrom": "LICENSE"
+    },
+    {
+      "path": "NOTICE.md",
+      "bytes": 1504
+    }
+  ],
+  "totalBytes": 1949513
+}
