@@ -58,11 +58,17 @@ def parse_calendar(html, today):
     parser.feed(html)
     parser.close()
     cells = sorted((day, cell_id) for cell_id, day in parser.cells.items())
-    if len(cells) not in (365, 366):
+    if len(cells) < 365:
         raise ValueError(f'Expected a year of contribution days, received {len(cells)}')
     first, last = cells[0][0], cells[-1][0]
     if last not in (today, today - timedelta(days=1)):
         raise ValueError(f'Contribution calendar ends on {last}, expected today or yesterday')
+
+    annual_starts = (last - timedelta(days=364), last - timedelta(days=365))
+    # GitHub can include the days before the annual window to start on Sunday.
+    week_starts = tuple(day - timedelta(days=(day.weekday() + 1) % 7) for day in annual_starts)
+    if first not in annual_starts + week_starts:
+        raise ValueError(f'Unexpected start date {first} for contribution calendar ending {last}')
 
     weeks = []
     total = 0

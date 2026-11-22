@@ -15,11 +15,12 @@ FIRST = TODAY - timedelta(days=364)
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def calendar_html():
+def calendar_html(first=FIRST, last=TODAY):
     cells = []
-    for index in range(365):
-        day = FIRST + timedelta(days=index)
-        label = {0: 'No contributions', 1: '1,234 contributions', 364: '1 contribution'}.get(index, 'No contributions')
+    last_index = (last - first).days
+    for index in range(last_index + 1):
+        day = first + timedelta(days=index)
+        label = {1: '1,234 contributions', last_index: '1 contribution'}.get(index, 'No contributions')
         cells.append(
             f'<td class="ContributionCalendar-day" data-date="{day}" id="day-{index}"></td>'
             f'<tool-tip for="day-{index}">{label} on a day.</tool-tip>'
@@ -58,20 +59,33 @@ class RefreshTests(unittest.TestCase):
             self.assertIn('1,235 contributions ↗', html)
             self.assertIn('Nov 26, 2025 — Nov 25, 2026', html)
 
+    def test_accepts_a_full_year_with_a_sunday_aligned_start(self):
+        today = date(2026, 7, 15)
+        first = date(2025, 7, 13)
+        calendar, start, end = parse_calendar(calendar_html(first, today), today)
+        self.assertEqual((start, end), (first, today))
+        self.assertEqual(calendar['totalContributions'], 1235)
+        self.assertEqual(sum(len(week['contributionDays']) for week in calendar['weeks']), 368)
+        self.assertEqual(len(calendar['weeks'][0]['contributionDays']), 7)
+
     def test_rejects_unusable_calendars(self):
         html = calendar_html()
         cases = [
             ('<title>Unavailable</title>', TODAY, 'Expected a year'),
             (html, TODAY + timedelta(days=2), 'ends on'),
             (html, TODAY - timedelta(days=1), 'ends on'),
-            (html.replace(f'data-date="{FIRST}"', f'data-date="{FIRST + timedelta(days=1)}"'), TODAY, 'repeated date'),
+            (html.replace(f'data-date="{FIRST + timedelta(days=1)}"',
+                          f'data-date="{FIRST + timedelta(days=2)}"'), TODAY, 'repeated date'),
             (html.replace('for="day-364"', 'for="unrelated"'), TODAY, 'invalid contribution count'),
             (html.replace('1,235 contributions', '1,236 contributions'), TODAY, 'total does not match'),
+            (calendar_html(FIRST - timedelta(days=2)), TODAY, 'Unexpected start date'),
+            (calendar_html(FIRST - timedelta(days=10)), TODAY, 'Unexpected start date'),
         ]
         for source, date_to_check, error in cases:
             with self.subTest(error=error), self.assertRaisesRegex(ValueError, error):
                 parse_calendar(source, date_to_check)
         parse_calendar(html, TODAY + timedelta(days=1))
+        parse_calendar(calendar_html(FIRST - timedelta(days=1)), TODAY)
 
     def test_failed_refresh_leaves_artifact_untouched(self):
         with TemporaryDirectory() as directory:
