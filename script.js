@@ -170,6 +170,11 @@
   const days = data.github.contributionsCollection.contributionCalendar.weeks.flatMap(w => w.contributionDays);
   function describe(day) { return `${day.date} · ${day.contributionCount} contributions`; }
   const heatmap = $('#contribution-grid');
+  // Leave the earlier weekdays in the first partial week empty.
+  const leadingDays = new Date(days[0].date).getUTCDay();
+  for (let day = 0; day < leadingDays; day++) {
+    heatmap.append(document.createElement('span'));
+  }
   days.forEach((day, index) => {
     const cell = document.createElement('button'); cell.type = 'button';
     const value = day.contributionCount;
@@ -183,7 +188,7 @@
       else if (event.key === 'ArrowDown') target++; else if (event.key === 'ArrowUp') target--;
       else if (event.key === 'Home') target = 0; else if (event.key === 'End') target = days.length - 1; else return;
       event.preventDefault(); target = Math.max(0, Math.min(days.length - 1, target));
-      const next = heatmap.children[target]; cell.tabIndex = -1; next.tabIndex = 0; next.focus();
+      const next = heatmap.children[target + leadingDays]; cell.tabIndex = -1; next.tabIndex = 0; next.focus();
     });
     heatmap.append(cell);
   });

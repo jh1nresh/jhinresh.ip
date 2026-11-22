@@ -32,6 +32,9 @@ jobs:
       - name: Validate portfolio integrity
         run: python3 scripts/validate.py
 
+      - name: Test GitHub contribution refresh
+        run: python3 scripts/test-refresh-contributions.py
+
       - name: Check JavaScript syntax
         run: |
           node --check script.js

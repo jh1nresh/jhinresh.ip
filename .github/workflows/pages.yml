@@ -3,6 +3,8 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '23 4 * * *'
 
 permissions:
   contents: read
@@ -35,6 +37,7 @@ jobs:
       - name: Prepare and validate site artifact
         run: |
           python3 scripts/build-site.py
+          python3 scripts/refresh_contributions.py
           python3 scripts/validate.py _site
 
       - name: Upload GitHub Pages artifact
